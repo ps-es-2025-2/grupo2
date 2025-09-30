@@ -4,7 +4,7 @@
 
 | Data | Versão | Descrição | Autor |
 | :--- | :--- | :--- | :--- |
-| 29/09/2025 | 2.2 | Reunião com o stakeholder para entendimento do problema e expectativas. | Ana Carolyne |
+| 29/09/2025 | 2.2 | Reunião com o stakeholder para entendimento do problema e expectativas. | Ana Carolyne e Brenna Amorim |
 | 24/09/2025 | 2.1 | Adequação de requisitos básicos | Ana Carolyne |
 | 24/09/2025 | 2.0 | Adequação ao template formal da UFLA. | Gemini 2.5 Pro |
 | 24/09/2025 | 1.1 | Adição do escopo e orientação do entrevistado. | Luiz Felipe |
