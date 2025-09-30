@@ -10,8 +10,6 @@ Ele mostra **quem usa o sistema** e **quais funcionalidades principais estão di
 - **Caixa**: principal usuário do sistema, responsável pelo registro de vendas, emissão de fichas, devoluções e controle de estoque.  
 - **Administrador**: responsável por definir estoque mínimo, cadastrar produtos e analisar relatórios.  
 - **Cliente**: compra fichas e as utiliza para retirar bebidas.  
-- **Entregador (Barman)**: valida fichas no balcão e entrega o produto ao cliente.  
-
 ---
 
 ## 3. Casos de Uso
@@ -24,20 +22,19 @@ Ele mostra **quem usa o sistema** e **quais funcionalidades principais estão di
 - **Consultar relatórios de vendas e estoque**: permite visualizar desempenho e perdas por evento.  
 - **Comprar fichas**: interação do cliente no caixa para adquirir fichas.  
 - **Entregar ficha para receber produto**: interação do cliente no balcão.  
-- **Validar fichas**: realizada pelo entregador no momento da entrega.  
+- **Validar fichas**: realizada pelo caixa no momento da entrega.  
 
 ---
 
 ## 4. Relações entre Atores e Casos de Uso
 - O **Administrador** se relaciona com: Definir estoque mínimo, Cadastrar produtos, Consultar relatórios.  
 - O **Caixa** se relaciona com: Registrar vendas, Emitir fichas, Registrar devoluções, Validar fichas, Dar baixa no estoque, Consultar relatórios, Cadastrar produtos, Definir estoque mínimo.  
-- O **Cliente** se relaciona com: Comprar fichas, Entregar ficha para receber produto.  
-- O **Entregador** se relaciona com: Validar fichas, Dar baixa no estoque.  
+- O **Cliente** se relaciona com: Comprar fichas, Entregar ficha para receber produto.    
 
 ---
 
 ## 5. Observações
 - O **Caixa é o principal usuário do sistema** e centraliza a maioria das operações.  
-- O **Cliente e o Entregador** interagem mais de forma indireta, mas foram representados no diagrama para dar uma visão completa do fluxo no evento.  
+- O **Cliente interage mais de forma indireta, mas foi representado no diagrama para dar uma visão completa do fluxo no evento.  
 - O **Administrador** pode ser a mesma pessoa que o caixa em eventos menores, mas foi separado para destacar responsabilidades diferentes.  
 
