@@ -40,7 +40,7 @@ O gerenciamento de bebidas em festas e eventos de pequeno e médio porte é pred
 
 - **Organizadores do Evento:** São diretamente afetados pelo impacto financeiro das perdas e pela falta de dados para planejar eventos futuros.
 - **Gerentes de Bar:** Sofrem com a dificuldade de controlar a equipe, gerenciar o estoque em tempo real e realizar o fechamento de caixa de forma precisa.
-- **Equipe de Vendas (Caixas e Barmans):** Enfrentam a pressão de um atendimento lento e a complexidade de registrar vendas em sistemas manuais ou inadequados.
+- **Equipe de Vendas (Caixas):** Enfrentam a pressão de um atendimento lento e a complexidade de registrar vendas em sistemas manuais ou inadequados.
 - **Clientes do Evento:** São indiretamente afetados por longas filas e possíveis erros nos pedidos.
 
 #### 2.1.3. Impacto
@@ -49,7 +49,7 @@ O impacto principal é financeiro, com perdas de receita diretas. A lentidão na
 
 #### 2.1.4. Solução de Sucesso
 
-Uma solução de sucesso automatizará o registro de vendas, baixa de estoque e distribuição de fichas, fornecerá relatórios em tempo real sobre o desempenho das vendas e a situação do inventário, e simplificará o processo de abertura e fechamento de caixa para a equipe.
+Uma solução de sucesso automatizará o registro de vendas, baixa de estoque e distribuição de fichas, fornecerá relatórios em tempo real sobre o desempenho das vendas e a situação do estoque, e simplificará o processo de abertura e fechamento de caixa para a equipe.
 
 ### 2.2. Alternativas
 
@@ -77,7 +77,7 @@ Uma solução de sucesso automatizará o registro de vendas, baixa de estoque e 
 | Tipo do usuário | Representante(s) | Descrição | Responsabilidades |
 | :--- | :--- | :--- | :--- |
 | Administrador | Marcilino (dono da distribuidora) | Usuário com acesso total ao sistema, responsável por configurar o evento e analisar os resultados. | - Cadastrar produtos, preços e estoque inicial |
-| Entregador / Barman | Funcionários do evento | Usuário responsável por validar a ficha e entregar o produto ao cliente. | - Realizar a baixa da ficha no sistema (via leitor de código ou inserção manual). <br> - Entregar o produto correspondente ao cliente. |
+| Caixa | Funcionários do evento | Usuário responsável por validar a ficha e entregar o produto ao cliente. | - Realizar a baixa da ficha no sistema (via leitor de código ou inserção manual). <br> - Entregar o produto correspondente ao cliente. |
 
 ### 3.3. Necessidades das Partes Interessadas ou Usuários
 
