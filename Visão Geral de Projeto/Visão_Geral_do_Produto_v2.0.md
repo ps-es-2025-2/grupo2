@@ -67,7 +67,7 @@ Uma solução de sucesso automatizará o registro de vendas, baixa de estoque e 
 
 | Unidade | Representada por | Envolvimento com o projeto |
 | :--- | :--- | :--- |
-| Equipe de Desenvolvimento | Brenna Amorin | Responsável pela construção e entrega do software. |
+| Equipe de Desenvolvimento | Brenna Amorim | Responsável pela construção e entrega do software. |
 | Equipe de Desenvolvimento | Fernanda Marques de Abreu | Responsável por projetar a estrutura técnica do software |
 | Equipe de Desenvolvimento | Luiz Felipe Belisário Macedo | Responsável por desenvolver as funcionalidades do sistema (Desenvolvedor Backend e Frontend) |
 | Equipe de Desenvolvimento | Ana Carolyne Pereira de Souza | Responsável por garantir a qualidade do software |
