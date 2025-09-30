@@ -34,7 +34,7 @@ Ele mostra **quem usa o sistema** e **quais funcionalidades principais estão di
 ---
 
 ## 5. Observações
-- O **Caixa** é o principal usuário do sistema** e centraliza a maioria das operações.  
+- O **Caixa** é o principal usuário do sistema e centraliza a maioria das operações.  
 - O **Cliente** interage mais de forma indireta, mas foi representado no diagrama para dar uma visão completa do fluxo no evento.  
 - O **Administrador** pode ser a mesma pessoa que o caixa em eventos menores, mas foi separado para destacar responsabilidades diferentes.  
 
