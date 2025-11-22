@@ -1,0 +1,21 @@
+feat: Estrutura Inicial do Backend (GEB)
+
+Criação da estrutura completa do backend do sistema "Gestor de Eventos de Bebidas" (GEB) usando Spring Boot.
+
+- Definição da arquitetura em camadas (Model, Repository, Service, Controller).
+- Implementação completa do domínio (Model e Enums) baseado nos diagramas.
+
+## Camadas Implementadas:
+
+1.  **Model/Enums**: Criação de todas as entidades (Usuario, Evento, Caixa, Venda, Estoque, etc.) e enums de apoio.
+2.  **Repository**: Interfaces JPA para todas as entidades, habilitando operações CRUD.
+3.  **Service**: Lógica de Negócio implementada para todos os Casos de Uso principais:
+    - Ciclo de Caixa (Abertura, Fechamento, Sangria, Reforço).
+    - Ciclo de Venda (Registro, Baixa de Estoque, Geração de QR Code).
+    - Gerenciamento de Eventos e Estoque (Definição Inicial, Reposição, Alertas).
+4.  **Controller**: Exposição inicial da API REST para as funcionalidades de Caixa e Eventos.
+
+## Configuração:
+- Configuração do banco de dados **H2 em memória** para desenvolvimento.
+- Configuração do **Lombok** para redução de código boilerplate.
+- Exemplo de **Teste Unitário** (CaixaServiceTest) para validar a lógica de abertura de caixa.
