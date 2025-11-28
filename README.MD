@@ -15,7 +15,6 @@ A gestão manual de bebidas em eventos geralmente envolve anotações em papel, 
 - Controle ineficiente do estoque, dificultando reposições durante o evento.
 - Baixa transparência financeira.
 - Filas longas devido à lentidão no registro de compras.
-- Dificuldade em identificar produtos mais vendidos ou horários de pico.
 
 Esses desafios comprometem tanto a experiência dos visitantes quanto a lucratividade do evento.
 
@@ -28,7 +27,6 @@ O **GEB** propõe uma solução digital integrada formada pelos seguintes pilare
 - Controle de estoque totalmente automatizado.
 - Gestão completa de caixa (abertura, fechamento e sangria).
 - Painel administrativo para cadastro, consulta e análise.
-- Relatórios gerenciais para avaliação pós-evento.
 
 ## 4. Objetivos do Sistema
 
@@ -48,19 +46,17 @@ Automatizar e padronizar a gestão de vendas e estoque de bebidas em eventos, re
 - Seleção rápida de produtos.
 - Cálculo automático do total.
 - Geração de ficha digital identificada por código único.
-- Layout responsivo para tablets e dispositivos móveis.
 
 ### 5.2 Controle de Estoque
 - Redução automática do estoque a cada venda registrada.
 - Atualização em tempo real refletida para administradores.
 - Alerta de estoque mínimo configurável.
-- Registro de movimentações para auditoria.
 
 ### 5.3 Gestão de Caixa
 - Abertura de caixa com valor inicial.
 - Registro de vendas por operador.
 - Registro de sangrias quando necessário.
-- Fechamento automático e emissão de resumo financeiro.
+- Fechamento automático.
 
 ### 5.4 Validação de Fichas
 - Leitura do código da ficha (ID ou QR Code).
@@ -72,13 +68,11 @@ Automatizar e padronizar a gestão de vendas e estoque de bebidas em eventos, re
 - Cadastro de produtos, preços e categorias.
 - Definição do estoque inicial para o evento.
 - Cadastro e gerenciamento de usuários.
-- Acesso a relatórios completos.
 
 ### 5.6 Relatórios e Métricas
 - Vendas totais por produto.
 - Quantidade vendida por horário.
 - Painel de desempenho dos operadores.
-- Resumo final do evento (financeiro e de estoque).
 
 ## 6. Usuários e Perfis
 
@@ -100,14 +94,12 @@ Permissões incluem:
 - Registrar sangrias (opcional).
 
 ## 7. Arquitetura do Sistema
-*(Esta seção pode ser adaptada conforme o stack que vocês escolherem.)*
 
 ### Componentes (exemplo)
-- **Frontend:** React, Next.js ou Vue.js.
-- **Backend:** Node.js (Express), NestJS, Laravel ou Django.
-- **Banco de Dados:** PostgreSQL ou MySQL.
-- **Autenticação:** JWT.
-- **Implantação:** Docker, Render, Railway ou VPS.
+- **Frontend:** Angular.
+- **Backend:** SpringBoot, Java.
+- **Banco de Dados:** PostgreSQL.
+- **Implantação:** Docker.
 - **Impressão de fichas:** API local ou integração com impressoras térmicas.
 
 ### Fluxo Geral
@@ -116,4 +108,3 @@ Permissões incluem:
 3. A venda é registrada e o estoque é atualizado.
 4. O cliente apresenta a ficha na entrega.
 5. O funcionário valida a ficha e libera o produto.
-6. Administradores acessam relatórios durante e após o evento.
