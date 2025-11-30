@@ -1,0 +1,46 @@
+@startuml
+!theme plain
+top to bottom direction
+skinparam actorStyle awesome
+
+' ==== Atores ====
+actor "Administrador" as ADM
+actor "Caixa" as CX
+actor "Conferente" as CONF
+
+' ==== Agrupamento de Módulos em vertical ====
+
+rectangle "Autenticação" {
+    usecase "UC01 - Autenticar Usuário" as UC01
+}
+
+rectangle "Gestão de Evento" {
+    usecase "UC02 - Gerenciar Evento" as UC02
+    usecase "UC03 - Gerenciar Estoque" as UC03
+    usecase "UC07 - Gerenciar Solicitações\nde Reposição" as UC07
+}
+
+rectangle "PDV - Ponto de Venda" {
+    usecase "UC04 - Registrar Venda (PDV)" as UC04
+    usecase "UC05 - Validar Ficha QR Code" as UC05
+    usecase "UC06 - Solicitar Reposição\nde Estoque" as UC06
+    usecase "UC08 - Abrir Caixa" as UC08
+    usecase "UC09 - Fechar Caixa" as UC09
+}
+
+' ==== Relações ====
+ADM --> UC01
+CX --> UC01
+CONF --> UC01
+
+ADM --> UC02
+ADM --> UC03
+ADM --> UC07
+
+CX --> UC04
+CX --> UC06
+CX --> UC08
+CX --> UC09
+
+CONF --> UC05
+@enduml
