@@ -1,0 +1,38 @@
+@startuml
+title Arquitetura Lógica do Sistema
+
+package "Front-End (MVC JS)" {
+  component "View (HTML/CSS)" as View
+  component "Controller JS" as FEController
+  component "Model JS" as FEModel
+}
+
+package "Back-End (Spring Boot)" {
+  package "Camada Controller" {
+    component "API REST\nControllers" as BEController
+  }
+
+  package "Camada Service" {
+    component "Services\n(Regras de Negócio)" as Service
+  }
+
+  package "Camada Repository" {
+    component "Repositories\n(JPA)" as Repository
+  }
+
+  package "Camada Model" {
+    component "Entidades\n(JPA Entities)" as Entities
+  }
+}
+
+package "Banco de Dados" {
+  database "PostgreSQL" as DB
+}
+
+FEController --> BEController : HTTP/JSON
+FEModel --> FEController
+View --> FEController
+BEController --> Service
+Service --> Repository
+Repository --> DB
+@enduml
