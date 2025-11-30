@@ -1,0 +1,21 @@
+@startuml
+title Arquitetura Física do Sistema (Docker + Spring + PostgreSQL)
+
+node "Máquina / Host" {
+  
+  node "Container Docker: Front-End" {
+    artifact "Nginx (opcional) \nArquivos estáticos: HTML/CSS/JS" as Front
+  }
+
+  node "Container Docker: Back-End" {
+    artifact "Spring Boot App\n(JAR via Maven)" as Backend
+  }
+
+  node "Container Docker: PostgreSQL" {
+    database "PostgreSQL DB" as Database
+  }
+}
+
+Front --> Backend : HTTP (REST)
+Backend --> Database : JDBC (Port 5432)
+@enduml
