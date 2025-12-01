@@ -1,0 +1,59 @@
+<div class="container" style="padding: 20px;">
+  
+  <div *ngIf="!vendaConcluida">
+    <h2>PDV - Nova Venda</h2>
+    <button routerLink="/dashboard">Voltar</button>
+    <hr>
+
+    <div style="display: flex; gap: 20px;">
+      <div style="flex: 1; background: #f0f0f0; padding: 20px;">
+        <h3>1. Produto</h3>
+        <select [(ngModel)]="itemAtual.produtoId" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+          <option [ngValue]="null">Selecione...</option>
+          <option *ngFor="let p of listaProdutos" [value]="p.id">
+            {{ p.nome }} - R$ {{ p.preco }}
+          </option>
+        </select>
+        <input type="number" [(ngModel)]="itemAtual.quantidade" min="1" style="width: 100%; padding: 10px;">
+        <button (click)="adicionarAoCarrinho()" style="width: 100%; margin-top: 10px; padding: 10px; background: blue; color: white;">+ ADICIONAR</button>
+      </div>
+
+      <div style="flex: 1; border: 1px solid #ccc; padding: 20px;">
+        <h3>2. Carrinho</h3>
+        <table width="100%">
+          <tr *ngFor="let item of carrinho; let i = index">
+            <td>{{ item.nome }}</td>
+            <td>x{{ item.quantidade }}</td>
+            <td>R$ {{ item.subtotal }}</td>
+            <td><button (click)="removerDoCarrinho(i)">X</button></td>
+          </tr>
+        </table>
+        <h2 style="text-align: right;">Total: R$ {{ calcularTotal() }}</h2>
+        <button (click)="finalizarVenda()" [disabled]="carrinho.length === 0" style="width: 100%; padding: 15px; background: green; color: white;">FINALIZAR ($)</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="vendaConcluida" style="text-align: center;">
+    <h2 style="color: green;">✅ Venda Realizada com Sucesso!</h2>
+    <p>Entregue os códigos abaixo para o cliente:</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px;">
+      <div *ngFor="let ficha of ultimasFichasGeradas" 
+           style="border: 2px dashed #333; padding: 20px; width: 200px; background: #fffde7;">
+        <h3>🍺 VALE {{ ficha.produto }}</h3>
+        <p style="font-size: 0.8em;">CÓDIGO:</p>
+        <div style="background: black; color: white; padding: 5px; font-weight: bold; font-size: 1.2em;">
+          {{ ficha.codigo }}
+        </div>
+        <p style="font-size: 0.7em; margin-top: 10px;">*Apresente no bar</p>
+      </div>
+    </div>
+
+    <hr>
+    <button (click)="novaVenda()" style="padding: 15px 30px; background: #007bff; color: white; font-size: 1.2em; border: none; cursor: pointer;">
+      FAZER NOVA VENDA 🔄
+    </button>
+  </div>
+
+</div>

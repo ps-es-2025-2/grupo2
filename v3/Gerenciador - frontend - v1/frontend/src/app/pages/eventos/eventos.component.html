@@ -1,0 +1,69 @@
+<div class="container" style="padding: 20px;">
+  <h2>Gerenciar Eventos</h2>
+  <button routerLink="/dashboard" style="margin-bottom: 20px;">Voltar ao Menu</button>
+  <hr>
+
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+    <h3>Novo Evento</h3>
+    <form (ngSubmit)="salvar()">
+      
+      <div style="margin-bottom: 10px;">
+        <label>Nome do Evento:</label>
+        <input type="text" [(ngModel)]="novoEvento.nome" name="nome" required style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Descrição:</label>
+        <input type="text" [(ngModel)]="novoEvento.descricao" name="descricao" required style="width: 100%;">
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Local:</label>
+        <input type="text" [(ngModel)]="novoEvento.local" name="local" required style="width: 100%;">
+      </div>
+
+      <div style="display: flex; gap: 20px;">
+        <div style="flex: 1;">
+          <label>Início:</label>
+          <input type="datetime-local" [(ngModel)]="novoEvento.dataInicio" name="dataInicio" required style="width: 100%;">
+        </div>
+        <div style="flex: 1;">
+          <label>Fim:</label>
+          <input type="datetime-local" [(ngModel)]="novoEvento.dataFim" name="dataFim" required style="width: 100%;">
+        </div>
+      </div>
+
+      <br>
+      <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+        Criar Evento
+      </button>
+    </form>
+  </div>
+
+  <hr>
+
+  <h3>Eventos Cadastrados</h3>
+  <table border="1" width="100%" cellpadding="10" style="border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #343a40; color: white;">
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Local</th>
+        <th>Início</th>
+        <th>Fim</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of listaEventos">
+        <td>{{ e.id }}</td>
+        <td>{{ e.nome }}</td>
+        <td>{{ e.local }}</td>
+        <td>{{ e.dataInicio }}</td>
+        <td>{{ e.dataFim }}</td>
+      </tr>
+      <tr *ngIf="listaEventos.length === 0">
+        <td colspan="5" style="text-align: center;">Nenhum evento encontrado.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

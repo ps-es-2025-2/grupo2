@@ -1,0 +1,35 @@
+<div class="container" style="padding: 20px;">
+  <h2>Controle de Estoque</h2>
+  <button routerLink="/dashboard" style="margin-bottom: 20px;">Voltar</button>
+  <hr>
+
+  <table border="1" width="100%" cellpadding="10" style="border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #343a40; color: white;">
+        <th>ID</th>
+        <th>Produto</th>
+        <th>Categoria</th>
+        <th>Quantidade Atual</th>
+        <th>Situação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listaEstoque">
+        <td>{{ item.id }}</td>
+        <td>{{ item.nome }}</td>
+        <td>{{ item.categoria }}</td>
+        <td style="font-weight: bold; font-size: 1.2em;">
+          {{ item.quantidade || item.estoque || 'N/A' }}
+        </td>
+        <td>
+            <span *ngIf="(item.quantidade || 0) > 10" style="color: green;">OK</span>
+            <span *ngIf="(item.quantidade || 0) <= 10 && (item.quantidade || 0) > 0" style="color: orange;">BAIXO</span>
+            <span *ngIf="!item.quantidade || item.quantidade == 0" style="color: red;">ZERADO</span>
+        </td>
+      </tr>
+      <tr *ngIf="listaEstoque.length === 0">
+        <td colspan="5" style="text-align: center;">Nenhum produto encontrado.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
