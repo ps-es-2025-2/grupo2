@@ -37,7 +37,8 @@ public class EstoqueService {
 
     @Transactional
     public void decrementar(Long produtoId, int quantidade){
-        EstoqueProduto e = repo.findByProdutoId(produtoId).orElseThrow();
+        EstoqueProduto e = repo.findByProdutoId(produtoId)
+                .orElseThrow(() -> new RuntimeException("Estoque não cadastrado para o produto id " + produtoId));
         int novaQuantidade = Math.max(0, e.getQuantidadeAtual() - quantidade);
         e.setQuantidadeAtual(novaQuantidade);
 

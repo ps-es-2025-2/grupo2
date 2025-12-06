@@ -1,0 +1,94 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa" routerLinkActive="active">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Gerenciamento de Caixa</h2>
+    </div>
+
+    <div class="status-panel">
+      <h3>Status do Caixa</h3>
+      <div class="status-grid">
+        <div class="status-card">
+          <h4>Status Atual</h4>
+          <div class="status-value" [class.status-open]="status === 'ABERTO'" [class.status-closed]="status === 'FECHADO'">
+            {{ status }}
+          </div>
+        </div>
+        <div class="status-card">
+          <h4>Saldo em Gaveta</h4>
+          <div class="status-value">R$ {{ saldo | number:'1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <h3>Ações do Caixa</h3>
+      <div class="actions-grid">
+        <button *ngIf="status === 'FECHADO'" (click)="abrirCaixa()" class="action-btn btn-open">
+          🔓 ABRIR CAIXA
+        </button>
+
+        <button *ngIf="status === 'ABERTO'" routerLink="/venda" class="action-btn btn-add">
+          🛒 FRENTE DE CAIXA (PDV)
+        </button>
+
+        <button *ngIf="status === 'ABERTO'" (click)="realizarSangria()" class="action-btn btn-remove">
+          💸 SANGRIA / RETIRADA
+        </button>
+
+        <button (click)="toggleDetalhes()" class="action-btn btn-report">
+          📜 MOVIMENTO DO CAIXA
+        </button>
+
+        <button *ngIf="status === 'ABERTO'" (click)="fecharCaixa()" class="action-btn btn-close">
+          🚫 FECHAR CAIXA
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="mostrarDetalhes" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-top: 2rem;">
+      <h3 style="font-family: var(--font-heading); color: var(--primary); margin-top: 0; margin-bottom: 1.5rem;">Últimas Movimentações</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hora</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mov of movimentacoes">
+              <td>{{ mov.data | date:'HH:mm' }}</td>
+              <td><span class="status-badge" [class.status-danger]="mov.tipo === 'SANGRIA'" [class.status-ok]="mov.tipo !== 'SANGRIA'">{{ mov.tipo }}</span></td>
+              <td>{{ mov.descricao }}</td>
+              <td [style.color]="mov.tipo === 'SANGRIA' ? '#dc3545' : '#28a745'" style="font-weight: bold;">
+                R$ {{ mov.valor | number:'1.2-2' }}
+              </td>
+            </tr>
+            <tr *ngIf="movimentacoes.length === 0">
+              <td colspan="4" class="no-data">Nenhum movimento registrado hoje.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos" routerLinkActive="active">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Gerenciar Produtos</h2>
+    </div>
+
+    <div class="form-card">
+      <h3>Novo Produto</h3>
+      <form (ngSubmit)="salvar()" class="product-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Nome:</label>
+            <input type="text" [(ngModel)]="novoProduto.nome" name="nome" required />
+          </div>
+          <div class="form-field">
+            <label>Preço (R$):</label>
+            <input type="number" step="0.01" [(ngModel)]="novoProduto.preco" name="preco" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Estoque Inicial:</label>
+          <input type="number" [(ngModel)]="novoProduto.quantidade" name="quantidade" required />
+        </div>
+
+        <div class="form-field">
+          <label>Categoria:</label>
+          <select [(ngModel)]="novoProduto.categoria" name="categoria" required>
+            <option value="ALCOOLICA">Bebida Alcoólica</option>
+            <option value="NAO_ALCOOLICA">Bebida Não Alcoólica</option>
+            <option value="COMESTIVEL">Comestível / Lanche</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary">Cadastrar com Estoque</button>
+      </form>
+    </div>
+
+    <div class="table-section">
+      <h3>Lista Atual</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of listaProdutos">
+              <td>{{ p.nome }}</td>
+              <td>{{ p.categoria }}</td>
+              <td>R$ {{ p.preco }}</td>
+              <td style="font-weight: bold;">{{ p.quantidade || 0 }}</td>
+            </tr>
+            <tr *ngIf="listaProdutos.length === 0">
+              <td colspan="4" class="no-data">Nenhum produto encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

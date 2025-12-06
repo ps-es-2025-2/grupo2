@@ -1,0 +1,390 @@
+.page-container {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-top: 80px;
+}
+
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.header-brand h1 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.top-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.top-nav a {
+  padding: 0.75rem 1.25rem;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.top-nav a:hover {
+  background: rgba(117, 7, 12, 0.1);
+  color: var(--primary);
+}
+
+.top-nav a.active {
+  background: var(--primary);
+  color: white;
+}
+
+.logout-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #5a0509;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(117, 7, 12, 0.3);
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.form-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 2rem;
+}
+
+.form-card h3 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.form-field input {
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(117, 7, 12, 0.1);
+}
+
+.input-grande {
+  font-size: 1.5rem !important;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn-primary {
+  padding: 1rem 2rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: #5a0509;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(117, 7, 12, 0.3);
+}
+
+.tickets-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-header h3 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-action {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-print {
+  background: #007bff;
+  color: white;
+}
+
+.btn-print:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-clear {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-clear:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+.tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.ticket {
+  border: 2px dashed var(--primary);
+  background: var(--bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  page-break-inside: avoid;
+}
+
+.ticket:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(117, 7, 12, 0.2);
+}
+
+.ticket-header {
+  font-weight: bold;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ticket-valor {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin: 1rem 0;
+  font-family: var(--font-heading);
+}
+
+.ticket-code {
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  font-size: 1rem;
+  border-radius: 4px;
+  word-break: break-all;
+  font-family: 'Courier New', monospace;
+}
+
+.ticket-footer {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.no-tickets {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #999;
+  font-style: italic;
+}
+
+/* Print Styles */
+@media print {
+  .page-container {
+    padding-top: 0;
+    background: white;
+  }
+  
+  .top-header,
+  .page-header,
+  .form-card,
+  .section-header,
+  .no-tickets {
+    display: none !important;
+  }
+  
+  .tickets-section {
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+  
+  .tickets-grid {
+    display: block;
+  }
+  
+  .ticket {
+    display: inline-block;
+    width: 220px;
+    margin: 10px;
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+  
+  .ticket:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .top-nav a {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .header-brand h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .top-header {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .page-container {
+    padding-top: 140px;
+  }
+  
+  .top-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .top-nav a {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .tickets-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .form-card,
+  .tickets-section {
+    padding: 1rem;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .action-buttons {
+    width: 100%;
+  }
+  
+  .btn-action {
+    flex: 1;
+  }
+}

@@ -1,0 +1,57 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao" routerLinkActive="active">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Validar Ficha / QR Code</h2>
+    </div>
+
+    <div class="validation-card">
+      <h3>Digite o Código da Ficha</h3>
+      <form class="validation-form" (ngSubmit)="consultarFicha()">
+        <div class="form-field">
+          <label>Código da Ficha:</label>
+          <input type="text" [(ngModel)]="codigoInput" name="codigo" placeholder="Ex: a1b2-c3d4..." required />
+        </div>
+        <button type="submit" class="btn-validate">🔍 CONSULTAR</button>
+      </form>
+
+      <div *ngIf="mensagemErro" class="result-card result-error">
+        <h4>❌ Erro</h4>
+        <p>{{ mensagemErro }}</p>
+      </div>
+
+      <div *ngIf="fichaEncontrada" class="result-card" [class.result-success]="fichaEncontrada.status === 'GERADA'" [class.result-error]="fichaEncontrada.status !== 'GERADA'">
+        <h4>{{ fichaEncontrada.status === 'GERADA' ? '✅ FICHA VÁLIDA' : '❌ ' + fichaEncontrada.status }}</h4>
+        <p><strong>Produto:</strong> {{ fichaEncontrada.item?.produto?.nome || 'Produto não identificado' }}</p>
+        <p><strong>Cliente:</strong> {{ fichaEncontrada.venda?.cliente?.nome || 'Consumidor Final' }}</p>
+        <p><strong>Código:</strong> <code>{{ fichaEncontrada.codigo }}</code></p>
+        
+        <button *ngIf="fichaEncontrada.status === 'GERADA'" 
+                (click)="entregarProduto()"
+                class="btn-validate" style="margin-top: 1rem;">
+          ENTREGAR BEBIDA 🍺
+        </button>
+        
+        <p *ngIf="fichaEncontrada.status !== 'GERADA'" style="margin-top: 1rem; font-style: italic;">
+          Esta ficha não pode ser usada novamente.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

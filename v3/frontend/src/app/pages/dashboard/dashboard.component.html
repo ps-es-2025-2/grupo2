@@ -1,0 +1,36 @@
+<div class="dashboard-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos" routerLinkActive="active">Gerenciar Produtos</a>
+      <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
+      <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
+      <a routerLink="/venda" routerLinkActive="active">Nova Venda (PDV)</a>
+      <a routerLink="/caixa" routerLinkActive="active">Controle de Caixa</a>
+      <a routerLink="/validacao" routerLinkActive="active">Validar Ficha</a>
+      <a routerLink="/venda-fichas" routerLinkActive="active">Vender Ficha</a>
+      <a routerLink="/consultar-fichas" routerLinkActive="active">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" (click)="logout()">Sair</button>
+  </header>
+
+  <div class="main-content">
+    <div class="welcome-section">
+      <h2>Bem-vindo ao Sistema!</h2>
+      <p>Selecione uma opção no menu acima para começar.</p>
+      
+      <div class="quick-cards">
+        <div class="card" routerLink="/venda-fichas">
+          <h3>💰 Vender Ficha</h3>
+          <p>Créditos em Valor</p>
+        </div>
+        <div class="card" routerLink="/consultar-fichas">
+          <h3>📋 Relatório de Fichas</h3>
+          <p>Ver todas emitidas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

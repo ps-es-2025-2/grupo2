@@ -1,4 +1,4 @@
-package br.com.geb.api.config;
+package br.com.geb.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +17,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
-// IMPORTAÇÃO QUE ESTAVA FALTANDO
-import br.com.geb.api.config.JwtAuthenticationFilter;
+// IMPORTAÇÃO CORRETA: ESSA LINHA RESOLVE O ERRO "cannot be resolved to a type"
+import br.com.geb.api.config.JwtAuthenticationFilter; 
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -47,7 +48,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:3000")); 
+        // Permite o seu Front-end (localhost:3000)
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);

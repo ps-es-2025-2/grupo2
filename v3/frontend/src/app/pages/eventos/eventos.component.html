@@ -1,0 +1,87 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Gerenciar Eventos</h2>
+    </div>
+
+    <div class="form-card">
+      <h3>Novo Evento</h3>
+      <form (ngSubmit)="salvar()" class="event-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Nome do Evento:</label>
+            <input type="text" [(ngModel)]="novoEvento.nome" name="nome" required />
+          </div>
+          <div class="form-field">
+            <label>Local:</label>
+            <input type="text" [(ngModel)]="novoEvento.local" name="local" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Descrição:</label>
+          <input type="text" [(ngModel)]="novoEvento.descricao" name="descricao" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Início:</label>
+            <input type="datetime-local" [(ngModel)]="novoEvento.dataInicio" name="dataInicio" required />
+          </div>
+          <div class="form-field">
+            <label>Fim:</label>
+            <input type="datetime-local" [(ngModel)]="novoEvento.dataFim" name="dataFim" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Criar Evento</button>
+      </form>
+    </div>
+
+    <div class="table-section">
+      <h3>Eventos Cadastrados</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Local</th>
+              <th>Início</th>
+              <th>Fim</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of listaEventos">
+              <td>{{ e.id }}</td>
+              <td>{{ e.nome }}</td>
+              <td>{{ e.local }}</td>
+              <td>{{ e.dataInicio }}</td>
+              <td>{{ e.dataFim }}</td>
+            </tr>
+            <tr *ngIf="listaEventos.length === 0">
+              <td colspan="5" class="no-data">Nenhum evento encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

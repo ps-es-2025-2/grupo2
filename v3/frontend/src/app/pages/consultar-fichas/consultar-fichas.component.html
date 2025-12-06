@@ -1,0 +1,94 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas" routerLinkActive="active">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>📋 Relatório de Fichas Emitidas</h2>
+    </div>
+
+    <div class="filter-card">
+      <h3>Filtros</h3>
+      <div class="filter-grid">
+        <div class="form-field">
+          <label>Pesquisar:</label>
+          <input type="text" [(ngModel)]="filtro" placeholder="🔍 Código ou status..." />
+        </div>
+        <div class="form-field" style="display: flex; align-items: flex-end;">
+          <div style="background: var(--bg); padding: 1rem; border-radius: 8px; flex: 1; text-align: center;">
+            <strong style="color: var(--primary);">Total Emitido:</strong>
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-top: 0.5rem;">
+              R$ {{ calcularTotalVendido() | number:'1.2-2' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-header">
+        <h3>Fichas Registradas</h3>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data/Hora</th>
+              <th>Código</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ficha of fichasFiltradas; let i = index">
+              <td>{{ ficha.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td style="font-family: monospace; font-weight: bold; font-size: 1.1em; color: var(--primary);">
+                {{ ficha.codigo }}
+              </td>
+              <td>R$ {{ ficha.valor | number:'1.2-2' }}</td>
+              <td>
+                <span class="status-badge" [class.status-used]="ficha.status === 'ATIVA'" [class.status-cancelled]="ficha.status === 'BAIXADA'">
+                  {{ ficha.status }}
+                </span>
+                <div *ngIf="ficha.status === 'BAIXADA'" style="font-size: 0.75em; color: #666; margin-top: 0.25rem;">
+                  {{ ficha.dataBaixa | date:'HH:mm' }}
+                </div>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button *ngIf="ficha.status === 'ATIVA'" (click)="darBaixa(ficha)" class="btn-action btn-view" title="Marcar como usada">
+                    ⬇️ Baixar
+                  </button>
+                  <button *ngIf="ficha.status === 'BAIXADA'" (click)="reativar(ficha)" class="btn-action btn-view" title="Reativar ficha">
+                    🔄 Reativar
+                  </button>
+                  <button (click)="excluir(i)" class="btn-action btn-delete" title="Remover registro">
+                    🗑️ Excluir
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="fichasFiltradas.length === 0">
+              <td colspan="5" class="no-data">Nenhuma ficha encontrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

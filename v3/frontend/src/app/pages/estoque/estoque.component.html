@@ -1,0 +1,59 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Controle de Estoque</h2>
+    </div>
+
+    <div class="table-section">
+      <h3>Produtos em Estoque</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Quantidade Atual</th>
+              <th>Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listaEstoque">
+              <td>{{ item.id }}</td>
+              <td>{{ item.nome }}</td>
+              <td>{{ item.categoria }}</td>
+              <td style="font-weight: bold; font-size: 1.2em;">
+                {{ item.quantidade || item.estoque || 'N/A' }}
+              </td>
+              <td>
+                <span *ngIf="(item.quantidade || 0) > 10" class="status-badge status-ok">OK</span>
+                <span *ngIf="(item.quantidade || 0) <= 10 && (item.quantidade || 0) > 0" class="status-badge status-warning">BAIXO</span>
+                <span *ngIf="!item.quantidade || item.quantidade == 0" class="status-badge status-danger">ZERADO</span>
+              </td>
+            </tr>
+            <tr *ngIf="listaEstoque.length === 0">
+              <td colspan="5" class="no-data">Nenhum produto encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

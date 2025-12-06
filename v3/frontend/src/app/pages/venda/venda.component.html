@@ -1,0 +1,91 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda" routerLinkActive="active">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>PDV - Nova Venda</h2>
+    </div>
+
+    <div *ngIf="!vendaConcluida" class="pdv-container">
+      <div class="product-selection">
+        <h3>Selecionar Produtos</h3>
+        <div class="product-grid" *ngIf="listaProdutos.length > 0">
+          <div class="product-card" *ngFor="let p of listaProdutos" (click)="adicionarProduto(p)">
+            <h4>{{ p.nome }}</h4>
+            <p>Estoque: {{ p.quantidade }}</p>
+            <p class="product-price">R$ {{ p.preco }}</p>
+          </div>
+        </div>
+        <div class="no-products" *ngIf="listaProdutos.length === 0">
+          Nenhum produto disponível
+        </div>
+      </div>
+
+      <div class="cart-section">
+        <h3>Carrinho</h3>
+        <div class="cart-items">
+          <div class="cart-item" *ngFor="let item of carrinho; let i = index">
+            <div class="cart-item-info">
+              <h4>{{ item.nome }}</h4>
+              <p>R$ {{ item.preco }} cada</p>
+            </div>
+            <div class="cart-item-actions">
+              <div class="qty-control">
+                <button class="qty-btn" (click)="diminuirQtd(item)">-</button>
+                <span>{{ item.quantidade }}</span>
+                <button class="qty-btn" (click)="aumentarQtd(item)">+</button>
+              </div>
+              <button class="remove-btn" (click)="removerDoCarrinho(i)">Remover</button>
+            </div>
+          </div>
+          <div class="empty-cart" *ngIf="carrinho.length === 0">
+            Carrinho vazio
+          </div>
+        </div>
+        <div class="cart-total">
+          <h4>Total</h4>
+          <div class="total-value">R$ {{ calcularTotal() }}</div>
+        </div>
+        <button class="btn-finalize" [disabled]="carrinho.length === 0" (click)="finalizarVenda()">
+          FINALIZAR VENDA
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="vendaConcluida" style="text-align: center; background: white; padding: 3rem; border-radius: 12px;">
+      <h2 style="color: #28a745; margin-bottom: 2rem;">✅ Venda Realizada com Sucesso!</h2>
+      <p style="font-size: 1.1rem; margin-bottom: 2rem;">Entregue os códigos abaixo para o cliente:</p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 2rem 0;">
+        <div *ngFor="let ficha of ultimasFichasGeradas" 
+             style="border: 2px dashed var(--primary); padding: 20px; width: 200px; background: var(--bg); border-radius: 8px;">
+          <h3 style="color: var(--primary);">🍺 VALE {{ ficha.produto }}</h3>
+          <p style="font-size: 0.8em; color: #666;">CÓDIGO:</p>
+          <div style="background: var(--primary); color: white; padding: 8px; font-weight: bold; font-size: 1.2em; border-radius: 4px;">
+            {{ ficha.codigo }}
+          </div>
+          <p style="font-size: 0.7em; margin-top: 10px; color: #666;">*Apresente no bar</p>
+        </div>
+      </div>
+
+      <button (click)="novaVenda()" class="btn-finalize" style="max-width: 300px; margin: 2rem auto;">
+        FAZER NOVA VENDA 🔄
+      </button>
+    </div>
+  </div>
+</div>

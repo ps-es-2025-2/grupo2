@@ -1,0 +1,67 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/validacao">Validar Ficha</a>
+      <a routerLink="/venda-fichas" routerLinkActive="active">Vender Ficha</a>
+      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>💰 Venda de Fichas (Crédito)</h2>
+    </div>
+
+    <div class="form-card">
+      <h3>Emitir Nova Ficha</h3>
+      <form (ngSubmit)="gerarFichas()" class="fichas-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Valor da Ficha (R$):</label>
+            <input type="number" [(ngModel)]="valorInput" name="valor" placeholder="0,00" class="input-grande" required />
+          </div>
+          <div class="form-field">
+            <label>Quantidade:</label>
+            <input type="number" [(ngModel)]="quantidadeInput" name="quantidade" min="1" value="1" required />
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">GERAR FICHAS 🖨️</button>
+      </form>
+    </div>
+
+    <div *ngIf="fichasGeradas.length > 0" class="tickets-section">
+      <div class="section-header">
+        <h3>Fichas Emitidas Agora</h3>
+        <div class="action-buttons">
+          <button (click)="imprimir()" class="btn-action btn-print">📄 Imprimir</button>
+          <button (click)="limparTela()" class="btn-action btn-clear">🗑️ Limpar Tela</button>
+        </div>
+      </div>
+
+      <div class="tickets-grid">
+        <div *ngFor="let ficha of fichasGeradas" class="ticket">
+          <div class="ticket-header">Ficha de Consumo</div>
+          <div class="ticket-valor">R$ {{ ficha.valor | number:'1.2-2' }}</div>
+          <div class="ticket-code">{{ ficha.codigo }}</div>
+          <div class="ticket-footer">
+            {{ ficha.data | date:'dd/MM/yyyy HH:mm' }}<br>
+            *Válido apenas hoje
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="fichasGeradas.length === 0" class="tickets-section">
+      <div class="no-tickets">Nenhuma ficha emitida ainda. Preencha o formulário acima para gerar fichas.</div>
+    </div>
+  </div>
+</div>
