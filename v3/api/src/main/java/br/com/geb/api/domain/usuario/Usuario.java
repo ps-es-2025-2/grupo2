@@ -8,13 +8,11 @@ import lombok.*;
 @Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Setter
-@Getter
-@EqualsAndHashCode(callSuper = false)
 public class Usuario {
 
     @Id

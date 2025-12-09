@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/caixa")
 public class CaixaController {
+
     private final CaixaService service;
 
     public CaixaController(CaixaService service) {

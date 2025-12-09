@@ -3,14 +3,13 @@ package br.com.geb.api.domain.caixa;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "sangria")
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Setter
-@Getter
+@Entity
+@Table(name = "sangria")
 public class Sangria {
 
     @Id

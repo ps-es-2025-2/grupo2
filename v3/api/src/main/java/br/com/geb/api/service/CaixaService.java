@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class CaixaService {
+
     private final CaixaRepository repo;
 
     public CaixaService(CaixaRepository repo) {

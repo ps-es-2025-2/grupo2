@@ -5,31 +5,32 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "estoque")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
-@Getter
+@Entity
+@Table(name = "estoque")
 public class EstoqueProduto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(optional = false)  //Garante que produto sempre exista
+    @JoinColumn(name = "produto_id", unique = true)
     private Produto produto;
 
-    private Integer quantidadeAtual;
+    private Integer quantidadeAtual = 0; //Evita null - caso nao tenha, quantidade sera 0
 
-    private Integer quantidadeMinima;
+    private Integer quantidadeMinima = 0; //Evita null - caso nao tenha, quantidade sera 0
 
     private LocalDateTime dataSolicitacao;
 
-    @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL)
-    private List<HistoricoMovimentacaoEstoque> historico;
+    @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoricoMovimentacaoEstoque> historico = new ArrayList<>();
 }

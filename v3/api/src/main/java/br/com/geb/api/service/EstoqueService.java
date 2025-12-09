@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 public class EstoqueService {
+
     private final EstoqueRepository repo;
     private final ProdutoRepository produtoRepo;
 
@@ -23,17 +25,27 @@ public class EstoqueService {
     }
 
     public EstoqueProduto criarOuAtualizar(Long produtoId, Integer qtd){
-        Produto p = produtoRepo.findById(produtoId).orElseThrow();
-        Optional<EstoqueProduto> e = repo.findByProdutoId(produtoId);
-        EstoqueProduto estoque;
-        if(e.isPresent()){
-            estoque = e.get();
-            estoque.setQuantidadeAtual(qtd);
-        } else {
-            estoque = EstoqueProduto.builder().produto(p).quantidadeAtual(qtd).build();
-        }
+        Produto p = produtoRepo.findById(produtoId)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        EstoqueProduto estoque = repo.findByProdutoId(produtoId)
+                .orElse(EstoqueProduto.builder()
+                        .produto(p)
+                        .quantidadeAtual(0)
+                        .quantidadeMinima(0)
+                        .historico(new ArrayList<>())
+                        .build());
+
+        estoque.setQuantidadeAtual(estoque.getQuantidadeAtual() + qtd);
+
         return repo.save(estoque);
     }
+
+    public Integer buscarQuantidadePorProdutoId(Long produtoId) {
+        return repo.findByProdutoId(produtoId)
+                .map(EstoqueProduto::getQuantidadeAtual)
+                .orElse(0);
+    }
+
 
     @Transactional
     public void decrementar(Long produtoId, int quantidade){
@@ -42,7 +54,7 @@ public class EstoqueService {
         int novaQuantidade = Math.max(0, e.getQuantidadeAtual() - quantidade);
         e.setQuantidadeAtual(novaQuantidade);
 
-        // Registrar no histórico
+        //Registrar no histórico
         HistoricoMovimentacaoEstoque historico = HistoricoMovimentacaoEstoque.builder()
                 .estoque(e)
                 .tipo(TipoMovimento.SAIDA)
@@ -51,9 +63,6 @@ public class EstoqueService {
                 .origem("VENDA")
                 .build();
 
-        if(e.getHistorico() == null) {
-            e.setHistorico(new java.util.ArrayList<>());
-        }
         e.getHistorico().add(historico);
         repo.save(e);
     }
@@ -77,5 +86,11 @@ public class EstoqueService {
         }
         e.getHistorico().add(historico);
         repo.save(e);
+    }
+
+    //Busca informacao do estoque por produtoId
+    public EstoqueProduto buscarPorProdutoId(Long produtoId) {
+        return repo.findByProdutoId(produtoId)
+                .orElseThrow(() -> new RuntimeException("Estoque não encontrado para o produto id " + produtoId));
     }
 }

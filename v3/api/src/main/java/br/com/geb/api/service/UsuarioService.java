@@ -2,13 +2,14 @@ package br.com.geb.api.service;
 
 import br.com.geb.api.domain.usuario.Usuario;
 import br.com.geb.api.dto.RegisterRequest;
+import br.com.geb.api.exception.ResourceNotFoundException;
 import br.com.geb.api.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
+
     private final UsuarioRepository repo;
     private final PasswordEncoder encoder;
 
@@ -32,8 +33,10 @@ public class UsuarioService {
         return repo.save(novoUsuario);
     }
 
-    public Optional<Usuario> findByEmail(String email){
-        return repo.findByEmail(email);
+
+    public Usuario buscarPorEmail(String email){
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: email " + email));
     }
 
     public boolean checkPassword(Usuario u, String raw){

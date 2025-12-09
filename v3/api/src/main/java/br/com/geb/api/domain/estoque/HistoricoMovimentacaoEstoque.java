@@ -1,20 +1,18 @@
 package br.com.geb.api.domain.estoque;
 
-import br.com.geb.api.domain.produto.Produto;
 import br.com.geb.api.enums.TipoMovimento;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "historico_movimentacao_estoque")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
-@Getter
+@Entity
+@Table(name = "historico_movimentacao_estoque")
 public class HistoricoMovimentacaoEstoque {
 
     @Id

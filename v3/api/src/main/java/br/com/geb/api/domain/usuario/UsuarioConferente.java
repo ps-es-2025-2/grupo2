@@ -6,5 +6,9 @@ import jakarta.persistence.*;
 @DiscriminatorValue("CONFERENTE")
 public class UsuarioConferente extends Usuario {
 
+    public UsuarioConferente() {
+        super();
+    } //opcional
+
 }
 

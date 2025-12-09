@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/sangria")
 public class SangriaController {
+
     private final SangriaService service;
 
     public SangriaController(SangriaService service) {

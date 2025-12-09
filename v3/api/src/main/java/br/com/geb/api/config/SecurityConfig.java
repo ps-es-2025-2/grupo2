@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll() 
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/api/fichas/validar/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/movimentacao-caixa")
 public class MovimentacaoCaixaController {
+
     private final MovimentacaoCaixaService service;
     private final CaixaService caixaService;
 
