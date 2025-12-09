@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/fichas")
 public class FichaController {
+
     private final FichaService fichaService;
+
     public FichaController(FichaService fichaService){ this.fichaService = fichaService; }
 
     @GetMapping("/{codigo}")

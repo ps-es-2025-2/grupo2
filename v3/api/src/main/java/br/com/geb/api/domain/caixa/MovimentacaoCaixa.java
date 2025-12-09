@@ -6,14 +6,13 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "movimentacao_caixa")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Setter
-@Getter
 public class MovimentacaoCaixa {
 
     @Id

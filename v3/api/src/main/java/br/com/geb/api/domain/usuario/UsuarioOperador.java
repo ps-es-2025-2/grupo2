@@ -6,5 +6,9 @@ import jakarta.persistence.*;
 @DiscriminatorValue("OPERADOR")
 public class UsuarioOperador extends Usuario {
 
+    public UsuarioOperador() {
+        super();
+    } //opcional
+
 }
 

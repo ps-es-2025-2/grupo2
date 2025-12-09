@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "validacao_ficha")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

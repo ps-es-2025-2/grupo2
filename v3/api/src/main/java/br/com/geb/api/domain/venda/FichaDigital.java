@@ -7,7 +7,6 @@ import lombok.*;
 
 @Entity
 @Table(name = "fichas")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

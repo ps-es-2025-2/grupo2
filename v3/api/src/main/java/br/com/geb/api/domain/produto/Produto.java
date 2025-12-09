@@ -4,14 +4,13 @@ import br.com.geb.api.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "produtos")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
-@Getter
+@Entity
+@Table(name = "produtos")
 public class Produto {
 
     @Id

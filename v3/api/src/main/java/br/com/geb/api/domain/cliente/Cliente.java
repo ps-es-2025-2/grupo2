@@ -5,14 +5,13 @@ import lombok.*;
 
 import java.util.Set;
 
-@Entity
-@Table(name = "clientes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Entity
+@Table(name = "clientes")
 public class Cliente {
 
     @Id
