@@ -1,0 +1,26 @@
+/* Header layout without logo; brand text only */
+.top-header {
+	display: flex;
+	align-items: center;
+	padding: 12px 20px;
+	background: #ffffff;
+	border-bottom: 1px solid #e0e0e0;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.header-brand {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+}
+
+.brand-title {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: #1f2937;
+}
+
