@@ -1,203 +1,123 @@
-# Documentação de Boas Práticas de Uso de Padrões de Projeto no Sistema
+# Documentação de Boas Práticas do Projeto
 
-Esta documentação apresenta as boas práticas e os padrões de projeto recomendados para a arquitetura do sistema, considerando o uso de **Spring Boot**, **PostgreSQL**, **Docker**, **Maven** na API e **HTML/CSS/JavaScript** no front-end seguindo **MVC**.  
-Os padrões aqui descritos visam garantir **clareza de código**, **extensibilidade**, **baixo acoplamento**, **alta coesão** e **facilidade de manutenção**.
+## 1. Arquitetura em Camadas
 
----
+O projeto segue a estrutura **Controller → Service → Repository → Entity**.
 
-# 1. Arquitetura Geral
+**Exemplos no código:**
+- VendaController, VendaService, VendaRepository, Venda
+- UsuarioController, UsuarioService, UsuarioRepository, Usuario
 
-A arquitetura do sistema é dividida em camadas:
+**Boas práticas aplicadas:**
+* Controllers apenas recebem requisições e chamam services.
+* Services concentram a lógica de negócio.
+* Repositórios somente acessam o banco.
+* Uso de DTOs/Requests para entrada e saída de dados.
 
-### • Camada de Apresentação (Front-End)
-Interface desenvolvida em **HTML**, **CSS** e **JavaScript**, seguindo o padrão **MVC** do lado do cliente.
+## 2. Repository Pattern
 
-### • Camada de API (Back-End)
-Desenvolvida em **Spring Boot**, organizada por **controllers**, **services** e **repositories**. Comunicação **RESTful**.
-
-### • Camada de Persistência
-Banco **PostgreSQL** executando em **container Docker**.
-
-### • Camada de Build e Gestão
-**Maven** para dependências e empacotamento.
-
-Os padrões de projeto descritos se aplicam principalmente ao lado do back-end e aos fluxos gerais do sistema.
-
----
-
-# 2. Padrões de Projeto Aplicados
-
-## 2.1 MVC (Model–View–Controller)
-
-### **Front-end**
-- **Model:** estruturas de dados JS e responses da API  
-- **View:** HTML + CSS  
-- **Controller:** scripts JS que manipulam eventos, chamam a API e atualizam a interface  
-
-### **Back-end**
-- **Model:** entidades JPA (Produto, Estoque, Venda, ItemVenda, Usuario etc.)  
-- **Controller:** endpoints REST  
-- **Service:** lógica de negócio  
-- **Repository:** acesso ao banco  
-
-**Boas práticas:**
-- Nunca colocar lógica de negócio no controller  
-- Nunca acessar o banco direto no controller  
-- Garantir validações no serviço e no domínio  
-
----
-
-## 2.2 Repository (Spring Data JPA)
-
-Cada agregado possui seu próprio repositório (ProdutoRepository, VendaRepository etc).
-
-**Boas práticas:**
-- Usar repositories apenas para CRUD e queries específicas  
-- Evitar lógica de negócio dentro dos repositórios  
-- Usar *interfaces*, não implementações manuais  
-
----
-
-## 2.3 Service Layer (padrão Service)
-
-Isola a lógica de negócio em classes de serviço.
+Implementado com Spring Data JPA, usando interfaces que estendem JpaRepository.
 
 **Exemplos:**
-- `VendaService` registra venda, valida estoque, gera ficha  
-- `EventoService` gerencia estados do evento  
+- VendaRepository extends JpaRepository<Venda, Long>
+- UsuarioRepository extends JpaRepository<Usuario, Long>
 
 **Boas práticas:**
-- Toda regra de negócio deve estar nos services ou nas entidades  
-- Controllers devem apenas orquestrar  
-- Evitar dependência circular entre serviços  
+* Uso de métodos derivados (findByEmail, findByUsername, etc.).
+* Queries customizadas somente quando necessário.
 
----
+## 3. DTO Pattern
 
-## 2.4 DTO (Data Transfer Object)
-
-Usado para padronizar entrada e saída da API.
-
-**Benefícios:**
-- Segurança  
-- Controle sobre informação enviada ao cliente  
-- Evita acoplamento do front-end com entidades  
-
-**Boas práticas:**
-- Criar DTOs para criar, atualizar e visualizar  
-- Converter Entidade ↔ DTO no service ou via mapper  
-
----
-
-## 2.5 Dependency Injection (DI)
-
-Baseado em Spring.
-
-**Boas práticas:**
-- Nunca usar `new` para classes gerenciadas pelo Spring  
-- Sempre usar **injeção via construtor**  
-- Evitar `@Autowired` em atributos  
-
----
-
-## 2.6 Factory (Opcional)
-
-Para criação de objetos complexos como Venda, ItemVenda, Ficha, Usuario etc.
-
-**Boas práticas:**
-- Usar quando a criação exigir regras  
-- Evitar uso se não houver necessidade real  
-
----
-
-## 2.7 Strategy (pagamentos, descontos, cálculos)
-
-Recomendado quando houver diferentes regras intercambiáveis.
+Uso de DTOs e classes Request/Response para não expor entidades diretamente.
 
 **Exemplos:**
-- Dinheiro  
-- Pix  
-- Pagamento online  
-- Políticas de desconto  
+- UsuarioRequest, UsuarioResponse
+- VendaRequest, VendaResponse
 
 **Boas práticas:**
-- Interface `PagamentoStrategy`  
-- Uma implementação por tipo  
-- Service decide qual estratégia usar  
+* Validação com @NotNull, @NotEmpty, etc.
+* Conversão entre Entity ↔ DTO feita nos serviços.
 
----
+## 4. Builder Pattern (Lombok)
 
-## 2.8 Observer / Event Publisher (Spring Events)
+Entidades usam @Builder para facilitar criação de objetos.
 
-Útil para acoplamento leve.
+**Exemplo baseado no código real de Venda:**
+
+```java
+Venda venda = Venda.builder()
+    .cliente(cliente)
+    .dataHora(LocalDateTime.now())
+    .valorTotal(valorTotal)
+    .operador(operador)
+    .itens(listaDeItens)
+    .ficha(fichaDigital)
+    .evento(evento)
+    .validacoes(validacoes)
+    .build();
+```
+
+## 5. Transações (@Transactional)
+
+Serviços que alteram o estado usam @Transactional.
+
+**Exemplos do projeto:**
+* Métodos de salvar venda
+* Processos de validação de ficha
+* Lógica de movimentação de estoque
+
+Consultas usam @Transactional(readOnly = true) quando necessário.
+
+## 6. Injeção de Dependências
+
+Feita pelo Spring, normalmente com Lombok.
+
+**Exemplo:**
+
+```java
+@Service
+@RequiredArgsConstructor
+public class VendaService {
+    private final VendaRepository vendaRepository;
+}
+```
+
+**Boas práticas:**
+* Uso de constructor injection.
+* Classes anotadas com @Service, @Repository, @Component.
+
+## 7. Exception Handling Centralizado
+
+O projeto possui um @RestControllerAdvice.
 
 **Exemplos:**
-- Registrar venda → atualizar estoque  
-- Estoque baixo → notificar administrador  
+* Tratamento de MethodArgumentNotValidException retornando erros padronizados.
+* Tratamento de ResourceNotFoundException.
 
-**Boas práticas:**
-- Usar apenas quando necessário  
-- Evitar cadeias longas de eventos  
+## 8. Segurança (JWT)
 
----
+Autenticação via JWT com filtro personalizado.
 
-## 2.9 Singleton (Gerenciado pelo Spring)
+**Implementado no código:**
+* JwtAuthenticationFilter
+* JwtUtils
+* TokenService
+* SecurityConfig
 
-Todos os services são singletons por padrão.
-
-**Boas práticas:**
-- Não criar singletons manuais  
-- Confiar no container do Spring  
-
----
-
-# 3. Boas Práticas Gerais
-
-- Toda lógica crítica deve ter testes unitários  
-- Nunca confiar no front-end para validações  
-- Controllers devem ser finos; services, robustos  
-- Campos obrigatórios devem ser validados  
-- Regras de negócio ficam no domínio ou no service  
-- Relacionamentos JPA bem definidos  
-- Evitar métodos longos com `@Transactional`  
-- Nunca expor entidades diretamente na API  
-- Evitar regras de negócio nos repositórios  
+**Observações:**
+* Duas classes geram/validam tokens (JwtUtils e TokenService).
+* A chave jwt.secret está exposta no application.properties.
 
 ---
 
-# 4. Padrões Aplicados ao Seu Sistema Específico
+## Recomendações de Melhoria
 
-Com base no sistema (evento, caixa, vendas, conferente, administrador), aplicam-se:
+### Segurança
+- [ ] Mover jwt.secret para variáveis de ambiente
+- [ ] Consolidar JwtUtils e TokenService em uma única classe
+- [ ] Implementar refresh tokens
 
-- **MVC** — organização das telas e da API  
-- **Service** — VendaService, EstoqueService, EventoService  
-- **Repository** — ProdutoRepository, VendaRepository  
-- **DTO** — VendaDTO, ItemDTO, EventoDTO  
-- **Strategy (opcional)** — formas de pagamento  
-- **Factory (opcional)** — criação de fichas, vendas  
-- **Observer** — notificações de estoque baixo  
-- **Singleton** — serviços Spring  
-
-Infraestrutura complementa:
-
-- Controllers REST separados  
-- Front-end independente  
-- Docker padronizando execução  
-- PostgreSQL isolado em container  
-
----
-
-# 5. Recomendações Finais
-
-- Domínio limpo: Evento, Caixa, Venda, ItemVenda, Produto, Usuario  
-- Services coordenando o fluxo:  
-  *venda → valida estoque → registra → atualiza → gera ficha → evento*  
-- Utilizar DTOs para toda exposição de dados  
-- Criar diagramas (classes, sequência, estados e BPM) para clareza  
-- Regras como:  
-  - estoque mínimo  
-  - encerramento de evento  
-  - fechamento de caixa  
-  - validação de ficha  
-  Devem ficar sempre nos **services**, nunca nos controllers.
-
----
+### Código
+- [ ] Adicionar testes unitários e de integração
+- [ ] Implementar logging estruturado
+- [ ] Adicionar documentação Swagger/OpenAPI
