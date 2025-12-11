@@ -1,8 +1,8 @@
-# GEB — Gestor de Eventos de Bebidas
+# Caneco Cheio
 
 ## 1. Introdução
 
-O **Gestor de Eventos de Bebidas (GEB)** é um sistema web projetado para otimizar o controle de vendas, estoque e caixa em eventos temporários, como quermesses, festas comunitárias, eventos beneficentes e festivais.
+O **Caneco Cheio** é um sistema web projetado para otimizar o controle de vendas, estoque e caixa em eventos temporários, como quermesses, festas comunitárias, eventos beneficentes e festivais.
 
 O sistema substitui o modelo manual tradicional por uma solução digital prática, segura e organizada, permitindo maior eficiência operacional e mais precisão na apuração dos resultados.
 
@@ -20,7 +20,7 @@ Esses desafios comprometem tanto a experiência dos visitantes quanto a lucrativ
 
 ## 3. Proposta da Solução
 
-O **GEB** propõe uma solução digital integrada formada pelos seguintes pilares:
+O **Caneco Cheio** propõe uma solução digital integrada formada pelos seguintes pilares:
 
 - Ponto de Venda (PDV) moderno e rápido.
 - Geração de fichas digitais com código único.
@@ -108,3 +108,4 @@ Permissões incluem:
 3. A venda é registrada e o estoque é atualizado.
 4. O cliente apresenta a ficha na entrega.
 5. O funcionário valida a ficha e libera o produto.
+
