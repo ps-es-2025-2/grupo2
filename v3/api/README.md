@@ -97,6 +97,12 @@ Utilizamos o **Flyway** para versionamento do banco.
 
 -----
 
+## Postman
+
+Caso queira testar pelo postman a API, no diretorio raiz da api está um arquivo json para importar os endpoint para o seu proprio postman
+
+-----
+
 ## 🤝 Contribuindo
 
 1.  Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`).

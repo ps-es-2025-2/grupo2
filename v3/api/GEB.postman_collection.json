@@ -1,0 +1,1795 @@
+{
+	"info": {
+		"_postman_id": "c481f735-acd1-4af2-acf8-1bee741c5803",
+		"name": "GEB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37506059",
+		"_collection_link": "https://eb-documentation.postman.co/workspace/Team-Workspace~f74a8ebe-7084-4d58-8552-3fe720c73540/collection/37506059-c481f735-acd1-4af2-acf8-1bee741c5803?action=share&source=collection_link&creator=37506059"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "/vendas",
+					"item": [
+						{
+							"name": "/cadastrar",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\": \"João da Silva\",\n    \"username\": \"joaos\",\n    \"telefone\": \"11999999999\",\n    \"email\": \"joao@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/clientes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"clientes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "venda com cliente existente",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"clienteId\": 1,\r\n    \"operadorEmail\": \"op@op.com\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": 1,\r\n            \"quantidade\": 2\r\n        },\r\n        {\r\n            \"produtoId\": 2,\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registrar venda sem clienteId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU1MDcxNzIsImV4cCI6MTc2NTU5MzU3Mn0.H3v_JfxRsmmi8MdpK2QeRMxOmgOg7tr2wIPdmSBA5fs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registrar venda com clienteId inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU1MDczMzEsImV4cCI6MTc2NTU5MzczMX0.tRTMQH2BW3d1tk2HaYOF0N2GlomBtl-uK2iQEkf7HR4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clienteId\": 9999,\n    \"operadorEmail\": \"novoemail@teste.com\",\n    \"itens\": [\n        {\n            \"produtoId\": 101,\n            \"quantidade\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registrar venda sem clienteId e sem clienteNovo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU1MDczMzEsImV4cCI6MTc2NTU5MzczMX0.tRTMQH2BW3d1tk2HaYOF0N2GlomBtl-uK2iQEkf7HR4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"operadorEmail\": \"novoemail@teste.com\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": 101,\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/cliente",
+					"item": [
+						{
+							"name": "/",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clienteId\": 2,\n    \"itens\": [\n        {\n            \"produtoId\": 2,\n            \"quantidade\": 3\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "clienteNovo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clienteNovo\": {\n        \"nome\": \"Maria Silva\",\n        \"telefone\": \"1199999-8888\",\n        \"email\": \"maria@teste.com\"\n    },\n    \"operadorEmail\": \"operador@teste.com\",\n    \"itens\": [\n        {\n            \"produtoId\": 5,\n            \"quantidade\": 3\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "id cliente nao existe",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clienteId\": 999999,\n    \"operadorEmail\": \"operador@teste.com\",\n    \"itens\": [\n        {\n            \"produtoId\": 10,\n            \"quantidade\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sem id e sem cliente novo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"operadorEmail\": \"operador@teste.com\",\n    \"itens\": [\n        {\n            \"produtoId\": 3,\n            \"quantidade\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "quantidade invalida",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clienteId\": 1,\n    \"operadorEmail\": \"operador@teste.com\",\n    \"itens\": [\n        {\n            \"produtoId\": 10,\n            \"quantidade\": 0\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/vendas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"vendas"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/caixa",
+					"item": [
+						{
+							"name": "/abrir",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvcGVyYWRvckBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9PUEVSQURPUiIsImlhdCI6MTc2NTczNTkzOSwiZXhwIjoxNzY1ODIyMzM5fQ.QeNuHwlJWuhAFgNPYn3iwxJmOHie-PF234j8igrK_PY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"operadorEmail\": \"op@op.com\",\n  \"saldoInicial\": 500.00\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/caixa/abrir",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"caixa",
+										"abrir"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/fechar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"saldoFinal\": 1200.50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/caixa/1/fechar",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"caixa",
+										"1",
+										"fechar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/caixa/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"caixa",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/listarCaixas",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/caixa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"caixa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/deletarCaixa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/caixa/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"caixa",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/evento",
+					"item": [
+						{
+							"name": "/criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\": \"Feira de Tecnologia\",\n    \"descricao\": \"Evento de tecnologia para startups\",\n    \"dataInicio\": \"2025-12-15T09:00:00\",\n    \"dataFim\": \"2025-12-15T18:00:00\",\n    \"local\": \"Centro de Convenções\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/eventos",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"eventos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/atualizar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\": \"Feira de Tecnologia Atualizada\",\n    \"descricao\": \"Descrição atualizada do evento\",\n    \"dataInicio\": \"2025-12-16T09:00:00\",\n    \"dataFim\": \"2025-12-16T18:00:00\",\n    \"local\": \"Centro de Convenções - Sala B\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/eventos/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"eventos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/eventos/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"eventos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/listarEventos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/eventos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"eventos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/deletarEvento",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/eventos/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"eventos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/ficha",
+					"item": [
+						{
+							"name": "/validar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/fichas/validar/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"fichas",
+										"validar",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/fichas/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"fichas",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/movimentacaoCaixa",
+					"item": [
+						{
+							"name": "/criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDUwNjAsImV4cCI6MTc2NTMzMTQ2MH0.4B_ZSmzHonD6gl6NmZJHivnq6qwmU0pKp7q_H05L04I",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"caixaId\": 2,\n    \"tipo\": \"ENTRADA\",\n    \"valor\": 150.0,\n    \"justificativa\": \"Depósito inicial\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/movimentacao-caixa",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"movimentacao-caixa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/movimentacao-caixa/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"movimentacao-caixa",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/listarMovimentacoes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/movimentacao-caixa",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"movimentacao-caixa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/deletarMovimentacao",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/movimentacao-caixa/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"movimentacao-caixa",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/produto",
+					"item": [
+						{
+							"name": "/criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDMzMjgsImV4cCI6MTc2NTMyOTcyOH0.bLwYKmxYpuyJOqR5i62cOhRI-G1MQ6chSkbwl0hHxy0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\": \"Produto C\",\n    \"preco\": 30.0,\n    \"categoria\": \"ALIMENTACAO\",\n    \"quantidade\": 20\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/produtos",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjUyNDU2MTMsImV4cCI6MTc2NTMzMjAxM30.fOWp94unhhvzx8eXhpDuAdrBR-XpAG5mxGsOHuY4PNM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/produtos/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"produtos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/listarProdutos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU1MDcxNzIsImV4cCI6MTc2NTU5MzU3Mn0.H3v_JfxRsmmi8MdpK2QeRMxOmgOg7tr2wIPdmSBA5fs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/produtos",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/sangria",
+					"item": [
+						{
+							"name": "/criar",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"valor\": 153.50,\n    \"justificativa\": \"Retirada de excesso de caixa\",\n    \"operadorUsername\": \"joao.silva\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/sangrias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"sangrias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/buscarPorId",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/sangrias/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"sangrias",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/listarSangrias",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/sangrias",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"sangrias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/deletarSangria",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJub3ZvZW1haWxAdGVzdGUuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NjU0MjQ4ODUsImV4cCI6MTc2NTUxMTI4NX0.n7tKXtLwQy2tbyPXp4B-_J35gfORpGZp4C9_oAFKu9g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/api/sangrias/1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"sangrias",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/auth",
+					"item": [
+						{
+							"name": "/login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@local\",\n    \"senha\": \"admin123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nome\": \"Operador Teste\",\n    \"email\": \"op@op.com\",\n    \"senha\": \"123456\",\n    \"papel\": \"ROLE_OPERADOR\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/estoque",
+					"item": [
+						{
+							"name": "/estoque/{[produtoId]}",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/estoque/{{produtoId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estoque",
+										"{{produtoId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/estoque/{{produtoId}}",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantidadeAtual\": \"100\",\r\n    \"quantidadeMinima\": \"1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/estoque/{{produtoId}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"estoque",
+										"{{produtoId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/solicitacoes",
+					"item": [
+						{
+							"name": "/api/solicitacoes",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"produtoId\": 2,\r\n    \"quantidade\": 11,\r\n    \"observacao\": \"Repor GALO\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/solicitacoes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"solicitacoes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/solicitacoes",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"produtoId\": 2,\r\n    \"quantidade\": 11,\r\n    \"observacao\": \"Repor GALO\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/solicitacoes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"solicitacoes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/solicitacoes/{id}/status",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/solicitacoes/6/status?novoStatus=CONCLUIDA",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"solicitacoes",
+										"6",
+										"status"
+									],
+									"query": [
+										{
+											"key": "novoStatus",
+											"value": "CONCLUIDA"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/usuarios",
+					"item": [
+						{
+							"name": "/api/usuarios",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/usuarios",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/usuarios/{id}",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/usuarios/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"usuarios",
+										"{id}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/usuarios/{id}",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Teste Troca\",\r\n    \"email\": \"testeTroca@teste.com\",\r\n    \"papel\": \"ROLE_ADMIN\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/usuarios/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"usuarios",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/usuarios/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/api/usuarios/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"usuarios",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBsb2NhbCIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzY1NzQ3NjkxLCJleHAiOjE3NjU4MzQwOTF9.ZVkEVCx09mMC_Gt5VTkpkq4cuWN-X1kJHAGukH-oNFc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": ""
+		},
+		{
+			"key": "produtoId",
+			"value": ""
+		}
+	]
+}
