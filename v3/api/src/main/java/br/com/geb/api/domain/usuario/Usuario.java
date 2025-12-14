@@ -30,4 +30,8 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     private Papel papel;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean ativo = true;
 }

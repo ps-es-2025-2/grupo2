@@ -2,71 +2,48 @@ package br.com.geb.api.controller;
 
 import br.com.geb.api.dto.LoginRequest;
 import br.com.geb.api.dto.RegisterRequest;
-import br.com.geb.api.domain.usuario.Usuario;
-import br.com.geb.api.exception.ResourceNotFoundException;
-import br.com.geb.api.service.UsuarioService;
-import br.com.geb.api.config.JwtUtils;
+import br.com.geb.api.service.AuthService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-@RestController
-@RequestMapping("/api/auth")
+@RestController //essa classe é um controlador REST, por isso precisa dessa anotacao
+@RequestMapping("/api/auth") //prefixo da rota para todos os endpoints deste controller
 public class AuthController {
 
-    private final UsuarioService usuarioService;
-    private final JwtUtils jwtUtils;
+    /*
+        Responsável por gerenciar a autenticação e o registro de usuários na aplicação.
+        Login (/login): verifica as credenciais de um usuário existente e retorna um token ou uma sessão válida.
+        Registro (/register): cria um novo usuário no sistema com as informações fornecidas.
+        Implementa ações críticas de segurança e controle de acesso.
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+        No front-end, a classe tem uso direto nos fluxos de login e cadastro:
 
-    public AuthController(UsuarioService usuarioService, JwtUtils jwtUtils){
-        this.usuarioService = usuarioService;
-        this.jwtUtils = jwtUtils;
+        1. Tela de login: Usuário digita email/username e senha.
+        2. Tela de registro: Usuário ou operador preenche formulário de cadastro.
+
+        OBSERVACAO: Alterei a classe para deixar o controller mais limpo e seguir boas praticas,
+         como facilitar a manutencao e separar responsabilidades
+    */
+
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
+    /*
+        O metodo POST e usado para criar novos dados, enviar informacoes ao servidor e/ou executar acoes que alteram o back.
+        Deve ser enviado dados no corpo (body) da requisicao.
+    */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest req){
-        try {
-            if (req.getEmail() == null || req.getSenha() == null) {
-                return ResponseEntity.badRequest().body("Email e senha são obrigatórios");
-            }
-
-            Usuario u = usuarioService.buscarPorEmail(req.getEmail());
-
-            if (!usuarioService.checkPassword(u, req.getSenha())) {
-                return ResponseEntity.status(401).body("Senha inválida");
-            }
-
-            String token = jwtUtils.generateToken(u.getEmail(), u.getPapel());
-
-            return ResponseEntity.ok(Map.of("token", token));
-
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(401).body("Usuário não encontrado");
-        } catch (Exception e) {
-            logger.error("Erro durante login", e);
-            return ResponseEntity.status(500).body("Erro interno no servidor");
-        }
+    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        return authService.login(req);
     }
+
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req){
-        try {
-            Usuario u = usuarioService.register(req);
-            String token = jwtUtils.generateToken(u.getEmail(), u.getPapel());
-
-            return ResponseEntity.ok(java.util.Map.of(
-                    "message", "Usuário criado com sucesso",
-                    "token", token
-            ));
-        } catch (Exception e) {
-            logger.error("Erro no registro", e);
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
+        return authService.register(req);
     }
 }

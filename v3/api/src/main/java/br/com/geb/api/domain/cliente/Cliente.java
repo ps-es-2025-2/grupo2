@@ -3,8 +3,6 @@ package br.com.geb.api.domain.cliente;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,8 +24,4 @@ public class Cliente {
 
     private String email;
 
-    private String senha;
-
-    @ElementCollection
-    private Set<String> papeis;
 }
