@@ -1,5 +1,6 @@
 package br.com.geb.api.domain.estoque;
 
+import br.com.geb.api.domain.evento.Evento;
 import br.com.geb.api.domain.produto.Produto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,16 +22,23 @@ public class EstoqueProduto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)  //Garante que produto sempre exista
+    @ManyToOne(optional = false)
     @JoinColumn(name = "produto_id", unique = true)
     private Produto produto;
 
-    private Integer quantidadeAtual = 0; //Evita null - caso nao tenha, quantidade sera 0
+    @Builder.Default
+    private Integer quantidadeAtual = 0;
 
-    private Integer quantidadeMinima = 0; //Evita null - caso nao tenha, quantidade sera 0
+    @Builder.Default
+    private Integer quantidadeMinima = 0;
 
     private LocalDateTime dataSolicitacao;
 
     @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<HistoricoMovimentacaoEstoque> historico = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evento_id", nullable = true)
+    private Evento evento;
 }

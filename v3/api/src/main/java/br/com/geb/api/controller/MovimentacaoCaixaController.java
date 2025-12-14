@@ -2,46 +2,48 @@ package br.com.geb.api.controller;
 
 import br.com.geb.api.domain.caixa.MovimentacaoCaixa;
 import br.com.geb.api.dto.MovimentacaoCaixaRequest;
-import br.com.geb.api.service.CaixaService;
 import br.com.geb.api.service.MovimentacaoCaixaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/movimentacao-caixa")
 public class MovimentacaoCaixaController {
 
-    private final MovimentacaoCaixaService service;
-    private final CaixaService caixaService;
+    /*
+        Gerencia movimentações de caixa, ou seja, entradas e saídas de dinheiro em um caixa de loja ou sistema financeiro interno.
+        No negócio, uma movimentação de caixa representa:
+        - Um valor financeiro (positivo ou negativo)
+        - Um tipo de operação (ex.: entrada, saída)
+        - Uma justificativa (por que a movimentação foi feita)
+        Está associada a um caixa específico (Caixa aberto).
 
-    public MovimentacaoCaixaController(MovimentacaoCaixaService service, CaixaService caixaService) {
+        O controller expõe operações que permitem ao sistema de gestão:
+        - Registrar novas movimentações
+        - Consultar movimentações
+        - Listar movimentações por caixa ou globalmente
+        - Excluir movimentações incorretas ou canceladas
+     */
+
+    private final MovimentacaoCaixaService service;
+
+    public MovimentacaoCaixaController(MovimentacaoCaixaService service) {
         this.service = service;
-        this.caixaService = caixaService;
     }
 
-    @PostMapping
-    public ResponseEntity<MovimentacaoCaixa> criar(@RequestBody MovimentacaoCaixaRequest request) {
-        var caixa = caixaService.buscarPorId(request.getCaixaId())
-                .orElseThrow(() -> new RuntimeException("Caixa não encontrada"));
-
-        MovimentacaoCaixa movimentacao = MovimentacaoCaixa.builder()
-                .caixa(caixa)
-                .tipo(request.getTipo())
-                .valor(request.getValor())
-                .justificativa(request.getJustificativa())
-                .dataHora(LocalDateTime.now())
-                .build();
-        return ResponseEntity.status(201).body(service.criar(movimentacao));
+    @PostMapping("/{caixaId}")
+    public ResponseEntity<MovimentacaoCaixa> criar(@PathVariable Long caixaId,
+                                                   @Valid @RequestBody MovimentacaoCaixaRequest request) {
+        MovimentacaoCaixa movimentacao = service.criar(caixaId, toEntity(request));
+        return ResponseEntity.status(201).body(movimentacao);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovimentacaoCaixa> buscar(@PathVariable Long id) {
-        return service.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @GetMapping
@@ -49,10 +51,23 @@ public class MovimentacaoCaixaController {
         return ResponseEntity.ok(service.listarTodos());
     }
 
+    @GetMapping("/caixa/{caixaId}")
+    public ResponseEntity<List<MovimentacaoCaixa>> listarPorCaixa(@PathVariable Long caixaId) {
+        return ResponseEntity.ok(service.listarPorCaixa(caixaId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private MovimentacaoCaixa toEntity(MovimentacaoCaixaRequest request) {
+        return MovimentacaoCaixa.builder()
+            .tipo(request.getTipo())
+            .valor(request.getValor())
+            .justificativa(request.getJustificativa())
+            .build();
     }
 }
 

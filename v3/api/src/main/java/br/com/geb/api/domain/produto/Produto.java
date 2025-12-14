@@ -4,6 +4,8 @@ import br.com.geb.api.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,14 +19,22 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
-    private Double preco;
-
-    private Double precoUnitario;
+    @Column(nullable = false, scale = 2, precision = 12)
+    private BigDecimal preco;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Categoria categoria;
 
+    @Builder.Default
     private Boolean ativo = true;
+
+    @PrePersist
+    public void prePersist() {
+        if (ativo == null) ativo = true;
+    }
+
 }

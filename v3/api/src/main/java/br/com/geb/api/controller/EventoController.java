@@ -3,6 +3,7 @@ package br.com.geb.api.controller;
 import br.com.geb.api.domain.evento.Evento;
 import br.com.geb.api.dto.EventoRequest;
 import br.com.geb.api.service.EventoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,10 @@ import java.util.List;
 @RequestMapping("/api/eventos")
 public class EventoController {
 
+    /*
+        Responsável por gerenciar eventos de uma empresa, organização ou sistema.
+    */
+
     private final EventoService service;
 
     public EventoController(EventoService service) {
@@ -19,22 +24,16 @@ public class EventoController {
     }
 
     @PostMapping
-    public ResponseEntity<Evento> criar(@RequestBody EventoRequest request) {
-        Evento evento = Evento.builder()
-                .nome(request.getNome())
-                .descricao(request.getDescricao())
-                .dataInicio(request.getDataInicio())
-                .dataFim(request.getDataFim())
-                .local(request.getLocal())
-                .build();
-        return ResponseEntity.status(201).body(service.criar(evento));
+    public ResponseEntity<Evento> criar(@RequestBody @Valid EventoRequest request) {
+        Evento evento = mapToEntity(request);
+        Evento criado = service.criar(evento);
+        return ResponseEntity.status(201).body(criado);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Evento> buscar(@PathVariable Long id) {
-        return service.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Evento evento = service.buscarPorId(id);
+        return ResponseEntity.ok(evento);
     }
 
     @GetMapping
@@ -43,16 +42,10 @@ public class EventoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody EventoRequest request) {
-        Evento evento = Evento.builder()
-                .id(id)
-                .nome(request.getNome())
-                .descricao(request.getDescricao())
-                .dataInicio(request.getDataInicio())
-                .dataFim(request.getDataFim())
-                .local(request.getLocal())
-                .build();
-        return ResponseEntity.ok(service.atualizar(id, evento));
+    public ResponseEntity<Evento> atualizar(@PathVariable Long id, @RequestBody @Valid EventoRequest request) {
+        Evento evento = mapToEntity(request);
+        Evento atualizado = service.atualizar(id, evento);
+        return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
@@ -60,5 +53,21 @@ public class EventoController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    private Evento mapToEntity(EventoRequest request) {
+        return Evento.builder()
+            .nome(request.getNome())
+            .descricao(request.getDescricao())
+            .dataInicio(request.getDataInicio())
+            .dataFim(request.getDataFim())
+            .local(request.getLocal())
+            .build();
+    }
+
+    /*
+        Esse metodo foi criado pois esse controller lida com entrada de dados, ou seja,
+        recebe um DTO (EventoRequest) e precisa transformar em uma entidade (Evento) para passar ao service.
+        Deve-se mantê-lo como private dentro do controller para evitar poluição da classe e deixar o código organizado.
+     */
 }
 
