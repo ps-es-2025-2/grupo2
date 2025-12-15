@@ -1,21 +1,53 @@
 @startuml
-title Arquitetura Física do Sistema (Docker + Spring + PostgreSQL)
+title Arquitetura Física — Caneco Cheio
 
-node "Máquina / Host" {
-  
-  node "Container Docker: Front-End" {
-    artifact "Nginx (opcional) \nArquivos estáticos: HTML/CSS/JS" as Front
-  }
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam packageStyle rectangle
+skinparam nodeStyle rectangle
 
-  node "Container Docker: Back-End" {
-    artifact "Spring Boot App\n(JAR via Maven)" as Backend
-  }
-
-  node "Container Docker: PostgreSQL" {
-    database "PostgreSQL DB" as Database
-  }
+cloud "Internet" as INTERNET {
+  node "Cliente Web\n(Navegador Angular)" as CLIENT_WEB <<client>>
 }
 
-Front --> Backend : HTTP (REST)
-Backend --> Database : JDBC (Port 5432)
+rectangle "DMZ (Zona Pública)" as DMZ {
+  node "API Gateway / Nginx\n(Reverse Proxy, HTTPS)" as GATEWAY <<gateway>>
+}
+
+rectangle "Servidor A — Aplicação (Backend)" as SRV_APP {
+  node "GEB API\n(Spring Boot / Java 17)" as API <<app>>
+  database "Banco de Dados\nPostgreSQL" as DB
+}
+
+rectangle "Servidor B — Build & Deploy" as SRV_BUILD {
+  node "Maven Build" as MAVEN <<tool>>
+  node "Docker Container" as DOCKER <<container>>
+}
+
+CLIENT_WEB --> GATEWAY : HTTPS
+GATEWAY --> API : REST (/api/**)
+API --> DB : CRUD
+
+MAVEN --> API : Build & Package
+DOCKER --> DB : PostgreSQL (5432)
+
+note top of SRV_APP
+Servidor A — Backend Principal
+• Autenticação JWT
+• Gestão de caixa, estoque e eventos
+• Persistência em PostgreSQL
+end note
+
+note right of SRV_BUILD
+Servidor B — Build & Deploy
+• Maven
+• Docker Compose
+end note
+
+note right of GATEWAY
+API Gateway (DMZ)
+• Proxy reverso
+• Roteamento seguro
+end note
+
 @enduml
