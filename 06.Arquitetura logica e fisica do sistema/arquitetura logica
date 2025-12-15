@@ -1,38 +1,198 @@
 @startuml
-title Arquitetura Lógica do Sistema
+title Arquitetura Lógica — Caneco Cheio
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultTextAlignment left
 
-package "Front-End (MVC JS)" {
-  component "View (HTML/CSS)" as View
-  component "Controller JS" as FEController
-  component "Model JS" as FEModel
+' ==== Camada de Apresentação (UI) ====
+package "Apresentação (Interface REST)" as UI {
+  component "AuthController\n(REST)" as AuthController <<controller>>
+  component "CaixaController\n(REST)" as CaixaController <<controller>>
+  component "EstoqueController\n(REST)" as EstoqueController <<controller>>
+  component "EventoController\n(REST)" as EventoController <<controller>>
+  component "FichaController\n(REST)" as FichaController <<controller>>
+  component "VendaController\n(REST)" as VendaController <<controller>>
+  component "ProdutoController\n(REST)" as ProdutoController <<controller>>
+  component "SolicitacaoReposicaoController\n(REST)" as SolicitacaoController <<controller>>
 }
 
-package "Back-End (Spring Boot)" {
-  package "Camada Controller" {
-    component "API REST\nControllers" as BEController
+' ==== Camada de Aplicação (Serviços) ====
+package "Aplicação (Serviços / Casos de Uso)" as APP {
+  component "AuthService" as AuthService <<usecase>>
+  component "UsuarioService" as UsuarioService <<usecase>>
+  component "CaixaService" as CaixaService <<usecase>>
+  component "MovimentacaoCaixaService" as MovCaixaService <<usecase>>
+  component "SangriaService" as SangriaService <<usecase>>
+  component "EstoqueService" as EstoqueService <<usecase>>
+  component "EventoService" as EventoService <<usecase>>
+  component "FichaService" as FichaService <<usecase>>
+  component "VendaService" as VendaService <<usecase>>
+  component "ProdutoService" as ProdutoService <<usecase>>
+  component "SolicitacaoReposicaoService" as SolicitacaoService <<usecase>>
+  component "ClienteService" as ClienteService <<usecase>>
+}
+
+' ==== Camada de Domínio (Negócio) ====
+package "Domínio (Regras de Negócio)" as DOM {
+  package "Entidades" as ENT {
+    component "Usuario" as Usuario <<entity>>
+    component "UsuarioOperador" as UsuarioOp <<entity>>
+    component "UsuarioAdmin" as UsuarioAdmin <<entity>>
+    component "Caixa" as Caixa <<entity>>
+    component "MovimentacaoCaixa" as MovCaixa <<entity>>
+    component "Sangria" as Sangria <<entity>>
+    component "EstoqueProduto" as Estoque <<entity>>
+    component "HistoricoMovimentacaoEstoque" as HistEstoque <<entity>>
+    component "Evento" as Evento <<entity>>
+    component "FichaDigital" as Ficha <<entity>>
+    component "Venda" as Venda <<entity>>
+    component "ItemVenda" as ItemVenda <<entity>>
+    component "Produto" as Produto <<entity>>
+    component "SolicitacaoReposicao" as SolicitacaoRep <<entity>>
+    component "Cliente" as Cliente <<entity>>
   }
 
-  package "Camada Service" {
-    component "Services\n(Regras de Negócio)" as Service
+  package "Serviços de Domínio" as SDS {
+    component "RegraValidacaoEstoque" as RegraEstoque <<domain service>>
+    component "RegraMovimentacaoCaixa" as RegraCaixa <<domain service>>
+    component "RegraCalculoVenda" as RegraVenda <<domain service>>
   }
 
-  package "Camada Repository" {
-    component "Repositories\n(JPA)" as Repository
-  }
-
-  package "Camada Model" {
-    component "Entidades\n(JPA Entities)" as Entities
+  package "Contratos (Portas)" as PORTS {
+    interface "RepositorioUsuarios" as IUserRepo
+    interface "RepositorioCaixas" as ICaixaRepo
+    interface "RepositorioEstoque" as IEstoqueRepo
+    interface "RepositorioEventos" as IEventoRepo
+    interface "RepositorioFichas" as IFichaRepo
+    interface "RepositorioVendas" as IVendaRepo
+    interface "RepositorioProdutos" as IProdutoRepo
+    interface "RepositorioSolicitacoes" as ISolicitacaoRepo
+    interface "RepositorioClientes" as IClienteRepo
   }
 }
 
-package "Banco de Dados" {
-  database "PostgreSQL" as DB
+' ==== Camada de Infraestrutura (Adaptadores) ====
+package "Infraestrutura (Adaptadores / Implementações)" as INFRA {
+  package "Persistência (JPA)" as PERS {
+    component "UsuarioRepository" as UserRepo <<repository>>
+    component "CaixaRepository" as CaixaRepo <<repository>>
+    component "MovimentacaoCaixaRepository" as MovCaixaRepo <<repository>>
+    component "SangriaRepository" as SangriaRepo <<repository>>
+    component "EstoqueRepository" as EstoqueRepo <<repository>>
+    component "HistoricoMovimentacaoEstoqueRepository" as HistEstoqueRepo <<repository>>
+    component "EventoRepository" as EventoRepo <<repository>>
+    component "FichaRepository" as FichaRepo <<repository>>
+    component "VendaRepository" as VendaRepo <<repository>>
+    component "ProdutoRepository" as ProdutoRepo <<repository>>
+    component "SolicitacaoReposicaoRepository" as SolicitacaoRepo <<repository>>
+    component "ClienteRepository" as ClienteRepo <<repository>>
+  }
+
+  package "Segurança" as SEC {
+    component "JwtTokenProvider" as JWT <<adapter>>
+    component "SecurityConfig\n(Spring Security)" as SecurityConfig <<adapter>>
+  }
 }
 
-FEController --> BEController : HTTP/JSON
-FEModel --> FEController
-View --> FEController
-BEController --> Service
-Service --> Repository
-Repository --> DB
+' ==== Dependências entre camadas ====
+
+' --- UI -> Aplicação ---
+AuthController --> AuthService
+CaixaController --> CaixaService
+CaixaController --> MovCaixaService
+CaixaController --> SangriaService
+EstoqueController --> EstoqueService
+EventoController --> EventoService
+FichaController --> FichaService
+VendaController --> VendaService
+ProdutoController --> ProdutoService
+SolicitacaoController --> SolicitacaoService
+
+' --- Aplicação -> Domínio ---
+AuthService --> Usuario
+AuthService --> IUserRepo
+AuthService ..> JWT
+UsuarioService --> Usuario
+UsuarioService --> UsuarioOp
+UsuarioService --> UsuarioAdmin
+UsuarioService --> IUserRepo
+CaixaService --> Caixa
+CaixaService --> ICaixaRepo
+CaixaService --> RegraCaixa
+MovCaixaService --> MovCaixa
+MovCaixaService --> ICaixaRepo
+SangriaService --> Sangria
+SangriaService --> ICaixaRepo
+EstoqueService --> Estoque
+EstoqueService --> HistEstoque
+EstoqueService --> IEstoqueRepo
+EstoqueService --> RegraEstoque
+EventoService --> Evento
+EventoService --> IEventoRepo
+FichaService --> Ficha
+FichaService --> IFichaRepo
+VendaService --> Venda
+VendaService --> ItemVenda
+VendaService --> IVendaRepo
+VendaService --> RegraVenda
+ProdutoService --> Produto
+ProdutoService --> IProdutoRepo
+SolicitacaoService --> SolicitacaoRep
+SolicitacaoService --> ISolicitacaoRepo
+ClienteService --> Cliente
+ClienteService --> IClienteRepo
+
+' --- Domínio interno ---
+UsuarioOp --|> Usuario
+UsuarioAdmin --|> Usuario
+Venda --> ItemVenda
+ItemVenda --> Produto
+Ficha --> Cliente
+Ficha --> Evento
+Estoque --> Produto
+Estoque --> Evento
+SolicitacaoRep --> Estoque
+MovCaixa --> Caixa
+Sangria --> Caixa
+
+' --- Infraestrutura implementa portas ---
+UserRepo -down-|> IUserRepo
+CaixaRepo -down-|> ICaixaRepo
+EstoqueRepo -down-|> IEstoqueRepo
+EventoRepo -down-|> IEventoRepo
+FichaRepo -down-|> IFichaRepo
+VendaRepo -down-|> IVendaRepo
+ProdutoRepo -down-|> IProdutoRepo
+SolicitacaoRepo -down-|> ISolicitacaoRepo
+ClienteRepo -down-|> IClienteRepo
+
+' ==== Notas ====
+note top of DOM
+Camada de Domínio
+- Contém regras de negócio e entidades principais
+- Define contratos (portas) para persistência
+- Gestão de Caixa, Estoque, Eventos e Vendas
+end note
+
+note right of APP
+Camada de Aplicação
+- Orquestra casos de uso
+- Coordena entidades do domínio
+- Gestão de transações
+end note
+
+note left of UI
+Camada de Apresentação
+- Interação via REST API
+- Controllers expõem endpoints
+- Não acessa diretamente o domínio
+end note
+
+note bottom of INFRA
+Camada de Infraestrutura
+- Implementa portas do domínio
+- Persistência JPA/Hibernate
+- Segurança JWT e Spring Security
+end note
 @enduml
