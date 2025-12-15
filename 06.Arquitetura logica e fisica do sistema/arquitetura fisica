@@ -1,5 +1,5 @@
 @startuml
-title Arquitetura Física — Sistema GEB (Gerenciamento de Eventos e Bilheteria)
+title Arquitetura Física — Caneco Cheio
 
 skinparam shadowing false
 skinparam defaultTextAlignment left
