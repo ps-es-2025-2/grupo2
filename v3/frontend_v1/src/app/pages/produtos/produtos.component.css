@@ -224,7 +224,6 @@
   font-style: italic;
 }
 
-<<<<<<< HEAD
 .btn-edit {
   padding: 8px 16px;
   background: #3b82f6;
@@ -244,8 +243,6 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 .btn-delete {
   padding: 8px 16px;
   background: #ef4444;
@@ -264,7 +261,6 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
-<<<<<<< HEAD
 /* Modal */
 .modal-overlay {
   position: fixed;
@@ -369,8 +365,6 @@
   background: #4b5563;
 }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 @media (max-width: 768px) {
   .top-header {
     flex-wrap: wrap;

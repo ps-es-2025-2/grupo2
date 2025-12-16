@@ -6,7 +6,6 @@
     <nav class="top-nav">
       <a routerLink="/produtos" routerLinkActive="active">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
-      <a routerLink="/usuarios">Gerenciar Usuários</a>
       <a routerLink="/estoque">Estoque</a>
       <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
@@ -72,16 +71,11 @@
               <td>{{ p.categoria }}</td>
               <td>R$ {{ p.preco }}</td>
               <td>
-<<<<<<< HEAD
                 <button (click)="abrirEdicao(p)" class="btn-edit" title="Editar produto">
                   Editar
                 </button>
                 <button (click)="excluirProduto(p.id)" class="btn-delete" title="Excluir produto">
                   Excluir
-=======
-                <button (click)="excluirProduto(p.id)" class="btn-delete" title="Excluir produto">
-                  🗑️ Excluir
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                 </button>
               </td>
             </tr>

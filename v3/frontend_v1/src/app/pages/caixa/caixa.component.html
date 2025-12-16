@@ -6,7 +6,6 @@
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
-      <a routerLink="/usuarios">Gerenciar Usuários</a>
       <a routerLink="/estoque">Estoque</a>
       <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
@@ -58,11 +57,9 @@
           MOVIMENTO DO CAIXA
         </button>
 
-        <button (click)="carregarHistoricoCaixas()" class="action-btn btn-history">
-          HISTÓRICO DE CAIXAS
-        </button>
+        <!-- botão de histórico removido conforme solicitado -->
 
-        <button *ngIf="status === 'ABERTO'" (click)="fecharCaixa()" class="action-btn btn-close">
+        <button *ngIf="status === 'ABERTO'" (click)="fecharCaixa()" class="action-btn btn-fechar">
           FECHAR CAIXA
         </button>
       </div>

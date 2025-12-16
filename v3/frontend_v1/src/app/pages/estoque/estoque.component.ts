@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
 import { RouterLink, Router } from '@angular/router';
-=======
-import { RouterLink } from '@angular/router';
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
@@ -54,7 +50,6 @@ export class EstoqueComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   verificarEstoqueBaixo(dados: any[]) {
     const produtosBaixos = dados.filter(item => {
       const qtdMinima = item.quantidadeMinima || 10;
@@ -90,8 +85,6 @@ export class EstoqueComponent implements OnInit {
     this.router.navigate(['/solicitacoes'], { queryParams: { produtoId } });
   }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
   abrirModal(tipo: 'entrada' | 'saida', item: any) {
     this.modalTipo = tipo;
     this.produtoSelecionado = item;

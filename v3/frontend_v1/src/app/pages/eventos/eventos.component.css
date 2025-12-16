@@ -314,20 +314,16 @@
   color: #7b1fa2;
 }
 
-<<<<<<< HEAD
 .badge-cancelado {
   background: #ffebee;
   color: #c62828;
 }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 .badge-default {
   background: #e0e0e0;
   color: #616161;
 }
 
-<<<<<<< HEAD
 /* Botões de status inline na tabela */
 .status-actions {
   display: flex;
@@ -503,8 +499,6 @@
   background: #4b5563;
 }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 @media (max-width: 768px) {
   .top-header {
     flex-wrap: wrap;

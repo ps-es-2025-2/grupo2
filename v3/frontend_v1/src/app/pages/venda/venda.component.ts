@@ -217,13 +217,10 @@ export class VendaComponent implements OnInit {
           this.vendaConcluida = true;
           this.carrinho = [];
           this.carregando = false;
-<<<<<<< HEAD
           
           // Atualiza o saldo do caixa no localStorage após a venda
           this.atualizarSaldoCaixaAposVenda(venda.valorTotal);
           
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           alert('✅ Venda realizada com sucesso!');
         },
         error: (erro) => {
@@ -271,13 +268,10 @@ export class VendaComponent implements OnInit {
                         this.vendaConcluida = true;
                         this.carrinho = [];
                         this.carregando = false;
-<<<<<<< HEAD
                         
                         // Atualiza o saldo do caixa no localStorage após a venda
                         this.atualizarSaldoCaixaAposVenda(venda2.valorTotal);
                         
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                         alert('✅ Venda realizada com sucesso!');
                       },
                       error: (e2) => {
