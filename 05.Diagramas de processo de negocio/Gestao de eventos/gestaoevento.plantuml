@@ -1,0 +1,50 @@
+@startuml
+title Processo de Gestão de Eventos 
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' =========================
+' Planejamento do Evento
+' =========================
+start
+:Admin planeja evento;
+
+:Definir Nome do Evento;
+:Adicionar Descrição;
+:Definir Data e Hora de Início;
+:Definir Data e Hora de Fim;
+:Definir Local do Evento;
+:Definir Status como PLANEJADO;
+
+:Selecionar Produtos Disponíveis;
+:Vincular Produtos ao Evento;
+:Configurar Estoque Inicial por Produto;
+
+:Salvar Evento;
+:Evento criado;
+
+' =========================
+' Execução do Evento
+' =========================
+:Aguardar Data de Início;
+:Alterar Status para EM_ANDAMENTO;
+:Abrir Caixas para o Evento;
+
+repeat
+  :Processar Vendas do Evento;
+  :Monitorar Estoque em Tempo Real;
+repeat while (Evento finalizado?) is (Não)
+
+' =========================
+' Encerramento do Evento
+' =========================
+:Fechar Todos os Caixas;
+:Alterar Status para CONCLUIDO;
+:Gerar Relatório do Evento;
+:Calcular Total de Vendas;
+:Calcular Total Movimentado nos Caixas;
+:Gerar Relatório de Estoque Final;
+
+stop
+@enduml

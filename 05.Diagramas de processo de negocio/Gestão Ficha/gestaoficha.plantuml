@@ -1,0 +1,58 @@
+@startuml
+title Processo de Gestão de Fichas Digitais 
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' ==================================================
+' SUBPROCESSO 1 — Criação de Ficha Digital
+' ==================================================
+start
+:Cliente solicita ficha;
+:Verificar Cadastro do Cliente;
+
+if (Cliente cadastrado?) then (Sim)
+  :Criar Ficha Digital;
+else (Não)
+  :Cadastrar Novo Cliente;
+  :Criar Ficha Digital;
+endif
+
+:Gerar Código Único;
+:Definir Saldo Inicial\n(R$ 0,00);
+:Definir Limite de Crédito;
+:Definir Status como ATIVA;
+:Registrar Data de Criação;
+:Entregar Código ao Cliente;
+stop
+
+' ==================================================
+' SUBPROCESSO 2 — Recarga de Ficha
+' ==================================================
+start
+:Cliente solicita recarga;
+:Identificar Ficha pelo Código;
+
+if (Ficha encontrada e ativa?) then (Sim)
+  :Informar Valor da Recarga;
+  :Receber Pagamento;
+  :Atualizar Saldo da Ficha;
+  :Registrar Transação no Caixa;
+  :Emitir Comprovante de Recarga;
+  stop
+else (Não)
+  :Ficha inválida;
+  stop
+endif
+
+' ==================================================
+' SUBPROCESSO 3 — Consulta de Saldo
+' ==================================================
+start
+:Cliente consulta saldo;
+:Identificar Ficha pelo Código;
+:Exibir Saldo Atual;
+:Exibir Limite Disponível;
+:Exibir Status da Ficha;
+stop
+@enduml

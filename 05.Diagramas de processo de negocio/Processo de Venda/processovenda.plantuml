@@ -1,0 +1,36 @@
+@startuml
+title Processo de Venda 
+
+' ==== Estilo ====
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' ==== Processo ====
+start
+:Cliente solicita compra;
+
+:Identificar Cliente;
+:Selecionar Produtos;
+:Adicionar Itens à Venda;
+:Calcular Subtotal dos Itens;
+:Calcular Valor Total;
+
+if (Cliente possui ficha digital?) then (Sim)
+  :Verificar Saldo da Ficha;
+
+  if (Saldo suficiente?) then (Sim)
+    :Debitar da Ficha;
+  else (Não)
+    :Receber Pagamento\n(Dinheiro / Outros);
+  endif
+
+else (Não)
+  :Receber Pagamento\n(Dinheiro / Outros);
+endif
+
+:Registrar Venda no Caixa;
+:Atualizar Estoque dos Produtos;
+:Emitir Comprovante;
+
+stop
+@enduml

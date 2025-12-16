@@ -1,0 +1,53 @@
+@startuml
+title Processo de Gestão de Estoque e Reposição (BPMN)
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' =========================
+' Início
+' =========================
+start
+:Verificação de estoque;
+:Consultar Estoque Atual;
+
+' =========================
+' Verificação de quantidade
+' =========================
+if (Quantidade abaixo do mínimo?) then (Sim)
+
+  :Gerar Solicitação de Reposição;
+  :Informar Quantidade Solicitada;
+  :Adicionar Observação\n(opcional);
+  :Registrar Data da Solicitação;
+  :Definir Status como PENDENTE;
+
+  :Solicitação enviada;
+
+  :Admin analisa Solicitação;
+
+  if (Solicitação aprovada?) then (Sim)
+    :Atualizar Status para APROVADO;
+  else (Não)
+    :Atualizar Status para REJEITADO;
+  endif
+
+  :Registrar Data de Resposta;
+
+  if (Foi aprovado?) then (Sim)
+    :Receber Produtos;
+    :Atualizar Quantidade em Estoque;
+    :Registrar Movimentação\n(ENTRADA);
+    :Adicionar ao Histórico de Estoque;
+    stop
+  else (Não)
+    :Solicitação rejeitada;
+    stop
+  endif
+
+else (Não)
+  :Estoque suficiente;
+  stop
+endif
+
+@enduml

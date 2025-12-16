@@ -1,0 +1,47 @@
+@startuml
+title Processo de Gestão de Caixa 
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+
+' =========================
+' Abertura de Caixa
+' =========================
+start
+:Início do turno;
+
+:Operador faz Login;
+:Selecionar Evento;
+:Informar Saldo Inicial;
+:Abrir Caixa;
+:Registrar Data/Hora de Abertura;
+
+:Caixa Aberto;
+
+' =========================
+' Operações do Caixa
+' =========================
+repeat
+  :Processar Vendas;
+
+  if (Necessário realizar sangria?) then (Sim)
+    :Realizar Sangria;
+    :Registrar Justificativa da Sangria;
+    :Atualizar Saldo do Caixa;
+  else (Não)
+    :Atualizar Saldo do Caixa;
+  endif
+
+repeat while (Fim do turno?) is (Não)
+
+' =========================
+' Fechamento de Caixa
+' =========================
+:Contabilizar Vendas do Turno;
+:Calcular Saldo Final;
+:Registrar Data/Hora de Fechamento;
+:Gerar Relatório de Fechamento;
+:Fechar Caixa;
+
+stop
+@enduml
