@@ -22,10 +22,11 @@ export class EventosComponent implements OnInit {
     descricao: '',
     local: '',
     dataInicio: '',
-    dataFim: ''
+    dataFim: '',
+    status: 'PLANEJADO'
   };
 
-  apiUrl = 'http://localhost:8080/api/eventos'; 
+  apiUrl = '/api/eventos'; 
 
   constructor(private http: HttpClient, private el: ElementRef) {}
 
@@ -47,6 +48,23 @@ export class EventosComponent implements OnInit {
     });
   }
 
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'PLANEJADO':
+        return 'badge-planejado';
+      case 'PREPARACAO':
+        return 'badge-preparacao';
+      case 'EXECUCAO':
+        return 'badge-execucao';
+      case 'PAUSADO':
+        return 'badge-pausado';
+      case 'FINALIZADO':
+        return 'badge-finalizado';
+      default:
+        return 'badge-default';
+    }
+  }
+
   salvar() {
     // O input datetime-local do HTML precisa ser convertido para ISO string se o Java reclamar,
     // mas geralmente o Spring aceita o formato padrão do input se estiver como String ou LocalDateTime.
@@ -56,7 +74,7 @@ export class EventosComponent implements OnInit {
         alert('Evento criado com sucesso!');
         this.carregarEventos();
         // Limpa o form
-        this.novoEvento = { nome: '', descricao: '', local: '', dataInicio: '', dataFim: '' };
+        this.novoEvento = { nome: '', descricao: '', local: '', dataInicio: '', dataFim: '', status: 'PLANEJADO' };
       },
       error: (erro) => {
         console.error('Erro ao salvar:', erro);

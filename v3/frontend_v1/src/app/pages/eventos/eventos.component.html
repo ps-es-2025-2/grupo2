@@ -6,12 +6,12 @@
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
+      <a routerLink="/usuarios">Gerenciar Usuários</a>
       <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
       <a routerLink="/caixa">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -40,6 +40,17 @@
           <input type="text" [(ngModel)]="novoEvento.descricao" name="descricao" required />
         </div>
 
+        <div class="form-field">
+          <label>Status do Evento:</label>
+          <select [(ngModel)]="novoEvento.status" name="status" required>
+            <option value="PLANEJADO">Planejado</option>
+            <option value="PREPARACAO">Preparação</option>
+            <option value="EXECUCAO">Execução</option>
+            <option value="PAUSADO">Pausado</option>
+            <option value="FINALIZADO">Finalizado</option>
+          </select>
+        </div>
+
         <div class="form-row">
           <div class="form-field">
             <label>Início:</label>
@@ -64,6 +75,7 @@
               <th>ID</th>
               <th>Nome</th>
               <th>Local</th>
+              <th>Status</th>
               <th>Início</th>
               <th>Fim</th>
             </tr>
@@ -73,11 +85,16 @@
               <td>{{ e.id }}</td>
               <td>{{ e.nome }}</td>
               <td>{{ e.local }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(e.status)">
+                  {{ e.status }}
+                </span>
+              </td>
               <td>{{ e.dataInicio }}</td>
               <td>{{ e.dataFim }}</td>
             </tr>
             <tr *ngIf="listaEventos.length === 0">
-              <td colspan="5" class="no-data">Nenhum evento encontrado.</td>
+              <td colspan="6" class="no-data">Nenhum evento encontrado.</td>
             </tr>
           </tbody>
         </table>

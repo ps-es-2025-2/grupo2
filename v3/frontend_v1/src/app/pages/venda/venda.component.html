@@ -9,9 +9,7 @@
       <a routerLink="/estoque">Estoque</a>
       <a routerLink="/venda" routerLinkActive="active">Nova Venda (PDV)</a>
       <a routerLink="/caixa">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -24,11 +22,25 @@
     <div *ngIf="!vendaConcluida" class="pdv-container">
       <div class="product-selection">
         <h3>Selecionar Produtos</h3>
+        
+        <!-- Formulário do Cliente -->
+        <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <h4>Dados do Cliente</h4>
+          <div style="display: grid; gap: 10px;">
+            <input type="text" [(ngModel)]="clienteNovo.nome" placeholder="Nome do cliente *" required 
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
+            <input type="tel" [(ngModel)]="clienteNovo.telefone" placeholder="Telefone (opcional)" 
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
+            <input type="email" [(ngModel)]="clienteNovo.email" placeholder="Email (opcional)" 
+                   style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
+          </div>
+        </div>
+
         <div class="product-grid" *ngIf="listaProdutos.length > 0">
           <div class="product-card" *ngFor="let p of listaProdutos" (click)="adicionarProduto(p)">
             <h4>{{ p.nome }}</h4>
-            <p>Estoque: {{ p.quantidade }}</p>
-            <p class="product-price">R$ {{ p.preco }}</p>
+            <p style="font-size: 0.9em; color: #666;">{{ p.categoria }}</p>
+            <p class="product-price">R$ {{ p.preco.toFixed(2) }}</p>
           </div>
         </div>
         <div class="no-products" *ngIf="listaProdutos.length === 0">
@@ -61,30 +73,33 @@
           <h4>Total</h4>
           <div class="total-value">R$ {{ calcularTotal() }}</div>
         </div>
-        <button class="btn-finalize" [disabled]="carrinho.length === 0" (click)="finalizarVenda()">
-          FINALIZAR VENDA
+        <button class="btn-finalize" 
+                [disabled]="carrinho.length === 0 || !clienteNovo.nome.trim() || carregando" 
+                (click)="finalizarVenda()">
+          {{ carregando ? 'PROCESSANDO...' : 'FINALIZAR VENDA' }}
         </button>
       </div>
     </div>
 
-    <div *ngIf="vendaConcluida" style="text-align: center; background: white; padding: 3rem; border-radius: 12px;">
+    <div *ngIf="vendaConcluida && fichaGerada" style="text-align: center; background: white; padding: 3rem; border-radius: 12px;">
       <h2 style="color: #28a745; margin-bottom: 2rem;">✅ Venda Realizada com Sucesso!</h2>
-      <p style="font-size: 1.1rem; margin-bottom: 2rem;">Entregue os códigos abaixo para o cliente:</p>
+      <p style="font-size: 1.1rem; margin-bottom: 2rem;">Ficha gerada para o cliente:</p>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 2rem 0;">
-        <div *ngFor="let ficha of ultimasFichasGeradas" 
-             style="border: 2px dashed var(--primary); padding: 20px; width: 200px; background: var(--bg); border-radius: 8px;">
-          <h3 style="color: var(--primary);">🍺 VALE {{ ficha.produto }}</h3>
-          <p style="font-size: 0.8em; color: #666;">CÓDIGO:</p>
-          <div style="background: var(--primary); color: white; padding: 8px; font-weight: bold; font-size: 1.2em; border-radius: 4px;">
-            {{ ficha.codigo }}
+      <div style="border: 3px solid #28a745; padding: 2rem; max-width: 400px; margin: 2rem auto; background: #f8f9fa; border-radius: 12px;">
+        <h3 style="color: #28a745; margin-bottom: 1rem;">🎫 FICHA DIGITAL</h3>
+        <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <p><strong>Cliente:</strong> {{ fichaGerada.cliente.nome }}</p>
+          <p style="margin-top: 0.5rem;"><strong>Código:</strong></p>
+          <div style="background: #28a745; color: white; padding: 15px; font-weight: bold; font-size: 1.5em; border-radius: 8px; letter-spacing: 2px; margin-top: 0.5rem;">
+            {{ fichaGerada.codigo }}
           </div>
-          <p style="font-size: 0.7em; margin-top: 10px; color: #666;">*Apresente no bar</p>
+          <p style="font-size: 0.9em; color: #666; margin-top: 1rem;">Status: {{ fichaGerada.status }}</p>
         </div>
+        <p style="font-size: 0.85em; color: #666;">⚠️ Guarde este código para validação</p>
       </div>
 
-      <button (click)="novaVenda()" class="btn-finalize" style="max-width: 300px; margin: 2rem auto;">
-        FAZER NOVA VENDA 🔄
+      <button (click)="novaVenda()" class="btn-finalize" style="max-width: 300px; margin: 2rem auto; background: #28a745;">
+        🔄 FAZER NOVA VENDA
       </button>
     </div>
   </div>

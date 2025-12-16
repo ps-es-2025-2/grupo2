@@ -1,4 +1,4 @@
-/* Padrão do Dashboard - Paleta Oat/Cherry */
+/* Padrï¿½o do Dashboard - Paleta Oat/Cherry */
 
 .page-container {
   min-height: 100vh;
@@ -148,7 +148,7 @@
   font-weight: 700;
 }
 
-/* Formulário */
+/* Formulï¿½rio */
 .form-card {
   background: var(--surface);
   border-radius: 12px;
@@ -278,6 +278,45 @@
   text-align: center;
   color: var(--muted);
   font-style: italic;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-planejado {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.badge-preparacao {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.badge-execucao {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.badge-pausado {
+  background: #fff9c4;
+  color: #f57f17;
+}
+
+.badge-finalizado {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.badge-default {
+  background: #e0e0e0;
+  color: #616161;
 }
 
 @media (max-width: 768px) {

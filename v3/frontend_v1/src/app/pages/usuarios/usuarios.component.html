@@ -1,0 +1,138 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Gestão de Eventos e Bebidas</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/usuarios" routerLinkActive="active">Gerenciar Usuários</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/fichas">Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Gerenciar Usuários (Admin)</h2>
+    </div>
+
+    <!-- Formulário de Novo Usuário -->
+    <div class="form-card" *ngIf="!modoEdicao">
+      <h3>Novo Usuário</h3>
+      <form (ngSubmit)="salvarNovoUsuario()" class="user-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Username (Login):</label>
+            <input type="text" [(ngModel)]="novoUsuario.username" name="username" required />
+          </div>
+          <div class="form-field">
+            <label>Senha:</label>
+            <input type="password" [(ngModel)]="novoUsuario.password" name="password" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Nome Completo:</label>
+            <input type="text" [(ngModel)]="novoUsuario.nome" name="nome" required />
+          </div>
+          <div class="form-field">
+            <label>Perfil:</label>
+            <select [(ngModel)]="novoUsuario.role" name="role">
+              <option value="OPERADOR">OPERADOR</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Criar Usuário</button>
+      </form>
+    </div>
+
+    <!-- Formulário de Edição -->
+    <div class="form-card" *ngIf="modoEdicao">
+      <h3>Editar Usuário</h3>
+      <form (ngSubmit)="salvarEdicao()" class="user-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Username (Login):</label>
+            <input type="text" [(ngModel)]="usuarioEdit.username" name="username" required />
+          </div>
+          <div class="form-field">
+            <label>Nome Completo:</label>
+            <input type="text" [(ngModel)]="usuarioEdit.nome" name="nome" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Perfil:</label>
+            <select [(ngModel)]="usuarioEdit.role" name="role">
+              <option value="OPERADOR">OPERADOR</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Status:</label>
+            <select [(ngModel)]="usuarioEdit.ativo" name="ativo">
+              <option [ngValue]="true">Ativo</option>
+              <option [ngValue]="false">Inativo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Salvar Alterações</button>
+          <button type="button" class="btn-secondary" (click)="cancelarEdicao()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabela de Usuários -->
+    <div class="table-section">
+      <h3>Usuários Cadastrados</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Nome</th>
+              <th>Perfil</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of listaUsuarios">
+              <td>{{ u.id }}</td>
+              <td>{{ u.username }}</td>
+              <td>{{ u.nome }}</td>
+              <td>
+                <span class="badge" [ngClass]="getRoleBadgeClass(u.role)">
+                  {{ u.role }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(u.ativo)">
+                  {{ u.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="action-buttons">
+                <button class="btn-edit" (click)="editarUsuario(u)">Editar</button>
+                <button class="btn-delete" (click)="deletarUsuario(u.id)">Deletar</button>
+              </td>
+            </tr>
+            <tr *ngIf="listaUsuarios.length === 0">
+              <td colspan="6" class="no-data">Nenhum usuário encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

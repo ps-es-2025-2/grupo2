@@ -1,4 +1,4 @@
-/* Padrão do Dashboard - Paleta Oat/Cherry */
+/* Padrï¿½o do Dashboard - Paleta Oat/Cherry */
 
 .page-container {
   min-height: 100vh;
@@ -90,7 +90,7 @@
   font-weight: 700;
 }
 
-/* Formulário */
+/* Formulï¿½rio */
 .form-card {
   background: var(--surface);
   border-radius: 12px;
@@ -222,6 +222,24 @@
   text-align: center;
   color: var(--muted);
   font-style: italic;
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 @media (max-width: 768px) {
