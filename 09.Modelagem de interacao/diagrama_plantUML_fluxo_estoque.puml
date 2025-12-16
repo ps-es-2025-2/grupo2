@@ -1,0 +1,94 @@
+@startuml
+title Fluxo de Gestão de Estoque - Sistema Caneco Cheio
+
+actor Operador
+actor Admin
+participant "PDV\n(Frontend)" as PDV
+participant "EstoqueController\n(Backend)" as EC
+participant "EstoqueService" as ES
+participant "ReposicaoService" as RS
+participant "Database\n(JPA)" as DB
+
+== 1. Monitorar Estoque ==
+ES -> DB: consultar EstoqueProduto.quantidadeAtual
+activate DB
+DB --> ES: retornar quantidades
+deactivate DB
+ES -> ES: verificarEstoqueMinimo()
+
+alt Estoque OK
+    ES -> ES: sem ação necessária
+else Estoque em Mínimo
+    ES -> Operador:  Alerta de estoque baixo!
+end
+
+== 2. Solicitar Reposição ==
+Operador -> PDV: Clica em "Solicitar Reposição"
+PDV -> EC: POST /reposicoes/solicitar
+activate EC
+EC -> RS: solicitarReposicao(produtoId, quantidade)
+activate RS
+RS -> DB: criar SolicitacaoReposicao(status=PENDENTE)
+activate DB
+DB --> RS: confirmação
+deactivate DB
+RS --> EC: confirmação
+deactivate RS
+EC --> PDV: HTTP 201 Created
+deactivate EC
+PDV -> Operador:  Solicitação enviada!
+
+== 3. Análise de Solicitação ==
+Admin -> PDV: Abre painel de solicitações
+PDV -> EC: GET /reposicoes/pendentes
+activate EC
+EC -> ES: listarSolicitacoesPendentes()
+activate ES
+ES -> DB: consultar SolicitacaoReposicao(status=PENDENTE)
+activate DB
+DB --> ES: lista
+deactivate DB
+ES --> EC: lista de solicitações
+deactivate ES
+EC --> PDV: HTTP 200 OK
+deactivate EC
+PDV -> Admin: Exibe solicitações
+
+== 4a. Aprovar Reposição ==
+Admin -> PDV: Clica em "Aprovar"
+PDV -> EC: PUT /reposicoes/{id}/aprovar
+activate EC
+EC -> RS: aprovarReposicao(reposicaoId)
+activate RS
+RS -> RS: calcularNovaQuantidade()
+RS -> ES: aumentarEstoque(estoque, quantidade)
+activate ES
+ES -> DB: atualizar EstoqueProduto.quantidadeAtual
+ES -> DB: criar HistoricoMovimentacaoEstoque(ENTRADA)
+DB --> ES: confirmação
+ES --> RS: confirmação
+deactivate ES
+RS -> DB: atualizar SolicitacaoReposicao(status=APROVADA)
+DB --> RS: confirmação
+RS --> EC: confirmação
+deactivate RS
+EC --> PDV: HTTP 200 OK
+deactivate EC
+PDV -> Admin:  Reposição aprovada!
+
+== 4b. Negar Reposição ==
+Admin -> PDV: Clica em "Negar"
+PDV -> EC: PUT /reposicoes/{id}/negar
+activate EC
+EC -> RS: negarReposicao(reposicaoId)
+activate RS
+RS -> DB: atualizar SolicitacaoReposicao(status=NEGADA)
+DB --> RS: confirmação
+deactivate DB
+RS --> EC: confirmação
+deactivate RS
+EC --> PDV: HTTP 200 OK
+deactivate EC
+PDV -> Admin:  Reposição negada!
+
+@enduml

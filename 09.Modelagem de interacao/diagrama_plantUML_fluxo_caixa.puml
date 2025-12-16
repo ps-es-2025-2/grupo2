@@ -1,0 +1,117 @@
+@startuml
+title Fluxo de Gestão de Caixa - Sistema Caneco Cheio
+
+actor Operador
+participant "PDV\n(Frontend)" as PDV
+participant "CaixaController\n(Backend)" as CC
+participant "CaixaService" as CS
+participant "MovimentacaoService" as MS
+participant "Database\n(JPA)" as DB
+
+== Etapa 1 - Abrir Caixa ==
+Operador -> PDV: Informa saldo inicial
+PDV -> CC: POST /caixa/abrir
+activate CC
+CC -> CS: abrirCaixa(operadorId, saldoInicial)
+activate CS
+
+CS -> DB: criar Caixa(status=ABERTO)
+CS -> MS: registrarMovimentacao(ABERTURA, saldoInicial)
+activate MS
+MS -> DB: criar MovimentacaoCaixa(tipo=ABERTURA)
+MS --> CS: confirmação
+deactivate MS
+
+CS --> CC: CaixaDTO
+deactivate CS
+CC --> PDV: HTTP 201 Created
+deactivate CC
+PDV -> Operador: Caixa aberto com saldo inicial: R$ XXX
+
+== Etapa 2 - Registrar Vendas ==
+note over Operador, MS
+    Cada venda automaticamente cria
+    MovimentacaoCaixa(tipo=VENDA)
+end note
+
+loop Operador registra vendas
+    Operador -> PDV: Confirma venda (R$ YYY)
+    PDV -> CC: POST /vendas
+    activate CC
+    CC -> CS: registrarMovimentacao(VENDA, valor)
+    activate CS
+    CS -> MS: registrarMovimentacao(VENDA, valor)
+    activate MS
+    MS -> DB: criar MovimentacaoCaixa(tipo=VENDA)
+    MS --> CS: confirmação
+    deactivate MS
+    CS --> CC: confirmação
+    deactivate CS
+    CC --> PDV: HTTP 201 Created
+    deactivate CC
+end
+
+== Etapa 3 - Registrar Sangrias ==
+Operador -> PDV: Solicita sangria (R$ ZZZ)
+PDV -> CC: POST /caixa/sangria
+activate CC
+CC -> CS: registrarSangria(caixaId, valor, justificativa)
+activate CS
+
+CS -> MS: registrarMovimentacao(SANGRIA, valor)
+activate MS
+MS -> DB: criar MovimentacaoCaixa(tipo=SANGRIA)
+MS --> CS: confirmação
+deactivate MS
+
+CS -> DB: criar Sangria(valor, justificativa)
+CS --> CC: confirmação
+deactivate CS
+CC --> PDV: HTTP 201 Created
+deactivate CC
+PDV -> Operador:  Sangria registrada: R$ ZZZ
+
+== Etapa 4 - Fechar Caixa ==
+Operador -> PDV: Clica em "Fechar Caixa"
+PDV -> CC: PUT /caixa/fechar
+activate CC
+CC -> CS: fecharCaixa(caixaId)
+activate CS
+
+CS -> CS: calcularSaldoFinal()
+note right of CS
+    saldoFinal = saldoInicial
+                 + Σ(VENDA)
+                 - Σ(SANGRIA)
+end note
+
+CS -> MS: registrarMovimentacao(FECHAMENTO, 0)
+activate MS
+MS -> DB: criar MovimentacaoCaixa(tipo=FECHAMENTO)
+MS --> CS: confirmação
+deactivate MS
+
+CS -> DB: atualizar Caixa(status=FECHADO, saldoFinal)
+CS --> CC: CaixaFechadoDTO
+deactivate CS
+CC --> PDV: HTTP 200 OK
+deactivate CC
+
+PDV -> Operador: Caixa fechado!
+PDV -> Operador: Resumo:\nSaldo Inicial: R$ XXX\nVendas: R$ AAA\nSangrias: R$ BBB\nSaldo Final: R$ CCC
+
+== Etapa 5 - Consultar Movimentações ==
+Operador -> PDV: Abre histórico de movimentações
+PDV -> CC: GET /caixa/{id}/movimentacoes
+activate CC
+CC -> MS: listarMovimentacoes(caixaId)
+activate MS
+MS -> DB: consultar MovimentacaoCaixa[]
+DB --> MS: lista ordenada por dataHora
+MS --> CC: MovimentacaoDTO[]
+deactivate MS
+CC --> PDV: HTTP 200 OK
+deactivate CC
+PDV -> Operador: Exibe tabela com todas as movimentações
+
+@enduml
