@@ -1,0 +1,122 @@
+@startuml
+title Fluxo de Autenticação - Sistema Caneco Cheio
+
+actor Usuario
+participant "Login\n(Frontend)" as LF
+participant "AuthController\n(Backend)" as AC
+participant "AuthService\n(Spring Security)" as AUS
+participant "UsuarioRepository\n(Database)" as UR
+participant "JwtTokenProvider\n(Token)" as JWT
+participant "Database\n(JPA)" as DB
+
+== 1. Usuario acessa Login ==
+Usuario -> LF: Insere username e senha
+LF -> LF: Valida campos obrigatórios
+activate LF
+alt Campo vazio
+    LF -> Usuario: Preencha todos os campos!
+    deactivate LF
+else Campos preenchidos
+    LF -> AC: POST /auth/login\n{username, senha}
+end
+deactivate LF
+
+== 2. Validar Credenciais ==
+activate AC
+AC -> AUS: validarCredenciais(username, senha)
+activate AUS
+
+AUS -> UR: buscarPorUsername(username)
+activate UR
+UR -> DB: SELECT * FROM usuarios WHERE username = ?
+DB --> UR: Usuario encontrado OU null
+deactivate UR
+
+alt Usuario não encontrado
+    AUS -> AC: AuthenticationException
+    deactivate AUS
+    AC -> LF: HTTP 401 Unauthorized
+    deactivate AC
+    LF -> Usuario: Usuário ou senha inválidos!
+else Usuario encontrado
+    AUS -> AUS: bcrypt.matches(senha, usuarioArmazenado.senha)
+    note right of AUS
+        A senha armazenada é um hash
+        bcrypt gerado durante cadastro
+    end note
+    alt Senha incorreta
+        AUS -> AC: AuthenticationException
+        deactivate AUS
+        AC -> LF: HTTP 401 Unauthorized
+        deactivate AC
+        LF -> Usuario: Usuário ou senha inválidos!
+    else Senha correta
+        AUS -> AUS: carregarPermissoes(usuario)
+        AUS -> JWT: gerarToken(usuario)
+        activate JWT
+        JWT -> JWT: criarJWT(userId, papel, exp)
+        note right of JWT
+            Payload contém:
+            - userId
+            - username
+            - papel (ROLE_*)
+            - data de expiração
+            - assinado com SECRET_KEY
+        end note
+        JWT --> AUS: Token JWT
+        deactivate JWT
+        AUS --> AC: retornar Token
+        deactivate AUS
+        AC --> LF: HTTP 200 OK\n{token, usuarioId, papel}
+        deactivate AC
+        LF -> LF: Armazena token em localStorage/sessionStorage
+        LF -> Usuario: ✓ Login bem-sucedido!
+        Usuario -> Usuario: Redireciona para Dashboard
+    end
+end
+
+== 3. Usar Token em Requisições Posteriores ==
+Usuario -> LF: Acessa recurso protegido
+LF -> LF: Carrega token do armazenamento
+LF -> LF: Adiciona header:\nAuthorization: Bearer {token}
+LF -> AC: GET /api/vendas\nHeaders: {Authorization: Bearer ...}
+activate AC
+
+AC -> AUS: validarToken(token)
+activate AUS
+AUS -> AUS: verificarAssinatura(token, SECRET_KEY)
+AUS -> AUS: verificarExpiração(token)
+AUS -> AUS: extrairPermissões(token)
+
+alt Token inválido
+    AUS -> AC: JwtException
+    deactivate AUS
+    AC -> LF: HTTP 401 Unauthorized
+    deactivate AC
+    LF -> Usuario: Sessão expirada!\nFaça login novamente
+else Token expirado
+    AUS -> AC: ExpiredJwtException
+    deactivate AUS
+    AC -> LF: HTTP 401 Unauthorized
+    deactivate AC
+    LF -> LF: Remove token\nRedireciona para login
+    LF -> Usuario: Sessão expirada!\nFaça login novamente
+else Token válido
+    note over AC
+        Spring Security verifica
+        se o papel do usuario
+        tem permissão para
+        acessar o endpoint
+    end note
+    alt Usuario sem permissão
+        AC -> LF: HTTP 403 Forbidden
+        LF -> Usuario: Acesso negado!
+    else Usuario autorizado
+        AC -> LF: HTTP 200 OK\n{dados da requisição}
+        LF -> Usuario: ✓ Dados carregados com sucesso!
+    end
+end
+deactivate AUS
+deactivate AC
+
+@enduml

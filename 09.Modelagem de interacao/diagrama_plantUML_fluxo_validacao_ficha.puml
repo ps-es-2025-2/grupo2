@@ -1,0 +1,66 @@
+@startuml
+title Fluxo de Validação de Ficha - Sistema Caneco Cheio
+
+actor Conferente
+participant "Conferente\n(Frontend)" as CF
+participant "ValidacaoController\n(Backend)" as VaC
+participant "ValidacaoService" as VaS
+participant "FichaService" as FS
+participant "Database\n(JPA)" as DB
+
+== Etapa 1 - Iniciar Validação ==
+Conferente -> CF: Escaneia/digita código da ficha
+CF -> VaC: POST /validacoes/validar
+activate VaC
+VaC -> VaS: validarFicha(codigo)
+activate VaS
+
+== Etapa 2 - Verificar Ficha ==
+VaS -> FS: buscarFichaByCode(codigo)
+activate FS
+FS -> DB: consultar FichaDigital
+activate DB
+DB --> FS: FichaDigital encontrada
+deactivate DB
+
+alt Ficha Inválida
+    FS --> VaS: erro - ficha não existe
+    deactivate FS
+    VaS --> VaC: Exception 404
+    deactivate VaS
+    VaC --> CF: HTTP 404 Not Found
+    deactivate VaC
+    CF -> Conferente: Código inválido!
+else Ficha Já Utilizada
+    FS --> VaS: erro - status != GERADA
+    deactivate FS
+    VaS --> VaC: Exception 409
+    deactivate VaS
+    VaC --> CF: HTTP 409 Conflict
+    deactivate VaC
+    CF -> Conferente: Ficha já foi validada!
+else Ficha Válida
+    FS --> VaS: Ficha válida
+    deactivate FS
+end
+
+== Etapa 3 - Criar Validação ==
+VaS -> VaS: criarValidacaoFicha(fichaId, conferenteUsername)
+VaS -> DB: salvar ValidacaoFicha(status da ficha ainda GERADA)
+DB --> VaS: confirmação
+
+== Etapa 4 - Atualizar Status da Ficha ==
+VaS -> FS: atualizarStatusFicha(fichaId, UTILIZADA)
+FS -> DB: atualizar FichaDigital.status = UTILIZADA
+DB --> FS: confirmação
+FS --> VaS: confirmação
+
+== Etapa 5 - Retornar Confirmação ==
+VaS --> VaC: ValidacaoFichaDTO
+deactivate VaS
+VaC --> CF: HTTP 200 OK
+deactivate VaC
+CF -> Conferente: Ficha validada com sucesso!
+Conferente -> Conferente: Autoriza entrega dos produtos
+
+@enduml

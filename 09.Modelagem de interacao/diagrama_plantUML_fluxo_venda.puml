@@ -1,0 +1,62 @@
+@startuml
+title Fluxo de Venda - Sistema Caneco Cheio
+
+actor Operador
+participant "PDV\n(Frontend)" as PDV
+participant "VendaController\n(Backend)" as VC
+participant "VendaService" as VS
+participant "EstoqueService" as ES
+participant "FichaDigitalService" as FDS
+participant "Database\n(JPA)" as DB
+
+== Etapa 1 - Iniciar Venda ==
+Operador -> PDV: Seleciona produtos e quantidades
+PDV -> VC: POST /vendas
+activate VC
+VC -> VS: criarVenda(clienteId, eventoId)
+activate VS
+VS -> ES: validarEstoque(produtos)
+activate ES
+ES -> DB: consultar EstoqueProduto
+activate DB
+DB --> ES: confirmar disponibilidade
+deactivate DB
+ES --> VS: Estoque OK
+deactivate ES
+
+== Etapa 2 - Criar Itens da Venda ==
+VS -> DB: salvar Venda
+VS -> VS: criarItensVenda(produtos)
+VS -> DB: salvar ItemVenda[]
+loop Para cada ItemVenda
+    VS -> ES: reduzirEstoque(produtoId, quantidade)
+    activate ES
+    ES -> DB: atualizar EstoqueProduto.quantidadeAtual
+    ES -> DB: criar HistoricoMovimentacaoEstoque(SAIDA)
+    DB --> ES: confirmação
+    ES --> VS: confirmação
+    deactivate ES
+end
+
+== Etapa 3 - Gerar Ficha Digital ==
+VS -> FDS: gerarFicha(vendaId, clienteId)
+activate FDS
+FDS -> FDS: gerarCodigoUnico()
+FDS -> DB: salvar FichaDigital(status=GERADA)
+DB --> FDS: confirmação
+FDS --> VS: retornar ficha
+deactivate FDS
+
+== Etapa 4 - Registrar Movimentação de Caixa ==
+VS -> VS: registrarMovimentacaoCaixa(VENDA, valorTotal)
+VS -> DB: salvar MovimentacaoCaixa
+DB --> VS: confirmação
+
+== Etapa 5 - Retornar Resultado ==
+VS --> VC: VendaDTO + FichaDigitalDTO
+deactivate VS
+VC --> PDV: HTTP 201 Created
+deactivate VC
+PDV -> Operador: Exibir ficha com código/QR Code
+
+@enduml
