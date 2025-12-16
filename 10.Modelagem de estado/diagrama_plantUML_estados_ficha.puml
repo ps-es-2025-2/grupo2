@@ -1,0 +1,38 @@
+@startuml Caneco_Cheio_Estados_FichaDigital
+title Diagrama de Estados - Entidade FichaDigital (Vertical simplificado)
+
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam ArrowThickness 1.3
+skinparam ArrowColor #444
+skinparam state {
+    BackgroundColor White
+    BorderColor #222
+    Padding 18
+    RoundCorner 10
+}
+
+top to bottom direction
+
+[*] --> GERADA : gerarFicha(venda, cliente)\n[Código único gerado]
+
+GERADA : entry / criarCodigoUnico()
+GERADA : do / consultarDetalhes(), validarCodigoAtivo()
+GERADA : exit / prepararValidacao()
+
+GERADA --> UTILIZADA : validarFicha()\n[Conferente autoriza entrega]
+
+UTILIZADA : entry / registrarUtilizacao()
+UTILIZADA : do / consultarHistoricoValidacoes()
+UTILIZADA : exit / encerrarFicha()
+
+GERADA --> INVALIDA : cancelarFicha() OR erroValidacao()\n[Duplicata/Erro]
+
+INVALIDA : entry / registrarCancelamento()
+INVALIDA : do / consultarMotivoCancelamento()
+INVALIDA : exit / arquivarFicha()
+
+UTILIZADA --> [*] : fim_do_evento
+INVALIDA --> [*] : fim_do_evento
+
+@enduml

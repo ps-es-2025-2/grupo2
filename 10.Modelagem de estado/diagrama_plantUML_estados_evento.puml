@@ -1,0 +1,51 @@
+@startuml Caneco_Cheio_Estados_Evento
+title Diagrama de Estados - Entidade Evento (Vertical simplificado)
+
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam ArrowThickness 1.3
+skinparam ArrowColor #444
+skinparam state {
+    BackgroundColor White
+    BorderColor #222
+    Padding 18
+    RoundCorner 10
+}
+
+top to bottom direction
+
+[*] --> PLANEJADO : criarEvento()\n[Evento criado]
+
+PLANEJADO : entry / inicializarEvento()
+PLANEJADO : do / editarDetalhes(), configurarEstoque(), configurarProdutos()
+PLANEJADO : exit / confirmarPreparacao()
+
+PLANEJADO --> PREPARACAO : iniciarPreparacao()\n[Admin confirma início de setup]
+
+PREPARACAO : entry / prepararSetup()
+PREPARACAO : do / definirQuantidadesEstoque(), cadastrarProdutosDoEvento(), configurarEquipe(), testarSistema()
+PREPARACAO : exit / liberarExecucao()
+
+PREPARACAO --> EXECUCAO : iniciarEvento()\n[Sistema ativo para vendas]
+
+EXECUCAO : entry / ativarOperacoes()
+EXECUCAO : do / registrarVendas(), gerenciarEstoque(), abrirFecharCaixa(), validarFichas()
+EXECUCAO : exit / encerrarOperacoes()
+
+EXECUCAO --> PAUSADO : pausarEvento()\n[Pausa temporária]
+
+PAUSADO : entry / suspenderOperacoes()
+PAUSADO : do / consultarDados()
+PAUSADO : exit / retomarOperacoes()
+
+PAUSADO --> EXECUCAO : retomar()\n[Voltam as operações]
+
+EXECUCAO --> FINALIZADO : finalizarEvento()\n[Fim do evento]
+
+FINALIZADO : entry / encerrarEvento()
+FINALIZADO : do / gerarRelatorios(), consultarHistorico(), exportarDados()
+FINALIZADO : exit / arquivarEvento()
+
+FINALIZADO --> [*]
+
+@enduml

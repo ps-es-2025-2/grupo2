@@ -1,0 +1,43 @@
+@startuml Caneco_Cheio_Estados_Venda
+title Diagrama de Estados - Entidade Venda (Vertical simplificado)
+
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam ArrowThickness 1.3
+skinparam ArrowColor #444
+skinparam state {
+    BackgroundColor White
+    BorderColor #222
+    Padding 18
+    RoundCorner 10
+}
+
+top to bottom direction
+
+[*] --> PENDENTE : iniciarVenda(operador, cliente)\n[Venda criada]
+
+PENDENTE : entry / criarVenda()
+PENDENTE : do / adicionarProduto(), removerProduto(), consultarSubtotal()
+PENDENTE : exit / validarConfirmacao()
+
+PENDENTE --> CONFIRMADA : confirmarVenda()\n[Validações OK]
+PENDENTE --> CANCELADA : cancelarVenda()\n[Antes da confirmação]
+
+CONFIRMADA : entry / registrarVenda()
+CONFIRMADA : do / consultarDetalhes()
+CONFIRMADA : exit / prepararFinalizacao()
+
+CONFIRMADA --> FINALIZADA : finalizarVenda()\n[Após validação de ficha]
+
+CANCELADA : entry / registrarCancelamento()
+CANCELADA : do / consultarMotivoCancelamento()
+CANCELADA : exit / arquivarVenda()
+
+FINALIZADA : entry / concluirVenda()
+FINALIZADA : do / consultarHistorico(), consultarValidacoes()
+FINALIZADA : exit / encerrarVenda()
+
+CANCELADA --> [*]
+FINALIZADA --> [*]
+
+@enduml
