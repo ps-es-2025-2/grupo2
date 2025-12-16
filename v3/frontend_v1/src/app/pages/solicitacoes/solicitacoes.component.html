@@ -1,11 +1,7 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-<<<<<<< HEAD
       <h1>Caneco Cheio</h1>
-=======
-      <h1>Gestão de Eventos e Bebidas</h1>
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
@@ -32,11 +28,7 @@
           <div class="form-field">
             <label>Produto:</label>
             <select [(ngModel)]="novaSolicitacao.produtoId" name="produtoId" required>
-<<<<<<< HEAD
               <option [value]="0">Selecione um produto</option>
-=======
-              <option value="0" disabled>Selecione um produto</option>
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
               <option *ngFor="let p of listaProdutos" [value]="p.id">
                 {{ p.nome }} - R$ {{ p.preco }}
               </option>
@@ -67,10 +59,7 @@
           <option value="PENDENTE">Pendente</option>
           <option value="CONCLUIDA">Concluída</option>
           <option value="REJEITADA">Rejeitada</option>
-<<<<<<< HEAD
           <option value="CANCELADA">Cancelada</option>
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         </select>
       </div>
     </div>
@@ -94,13 +83,8 @@
           <tbody>
             <tr *ngFor="let s of listaSolicitacoes">
               <td>{{ s.id }}</td>
-<<<<<<< HEAD
               <td>{{ s.nomeProduto || 'N/A' }}</td>
               <td>{{ s.quantidadeSolicitada }}</td>
-=======
-              <td>{{ s.produtoNome || 'N/A' }}</td>
-              <td>{{ s.quantidade }}</td>
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
               <td>
                 <span class="badge" [ngClass]="getStatusBadgeClass(s.status)">
                   {{ s.status }}
@@ -119,14 +103,11 @@
                         (click)="rejeitarSolicitacao(s.id)">
                   Rejeitar
                 </button>
-<<<<<<< HEAD
                 <button *ngIf="s.status === 'PENDENTE'" 
                         class="btn-cancelar" 
                         (click)="cancelarSolicitacao(s.id)">
                   Cancelar
                 </button>
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                 <span *ngIf="s.status !== 'PENDENTE'" class="status-finalizado">
                   Finalizado
                 </span>

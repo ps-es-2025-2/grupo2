@@ -184,12 +184,11 @@
   box-shadow: 0 6px 16px rgba(40, 167, 69, 0.3);
 }
 
-.btn-close {
+.btn-fechar {
   background: #dc3545;
-  width: 100%;
 }
 
-.btn-close:hover {
+.btn-fechar:hover {
   background: #c82333;
   transform: translateY(-4px);
   box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);

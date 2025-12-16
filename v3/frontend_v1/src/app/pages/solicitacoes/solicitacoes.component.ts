@@ -70,7 +70,6 @@ export class SolicitacoesComponent implements OnInit {
       return;
     }
 
-<<<<<<< HEAD
     console.log('Enviando solicitação:', this.novaSolicitacao);
 
     this.http.post(this.apiSolicitacoesUrl, this.novaSolicitacao, { headers: this.getHeaders() }).subscribe({
@@ -85,17 +84,6 @@ export class SolicitacoesComponent implements OnInit {
         console.error('Status:', erro.status);
         console.error('Mensagem:', erro.error);
         alert(`Erro ao criar solicitação! Status: ${erro.status}\n${JSON.stringify(erro.error)}`);
-=======
-    this.http.post(this.apiSolicitacoesUrl, this.novaSolicitacao, { headers: this.getHeaders() }).subscribe({
-      next: (res) => {
-        alert('Solicitação criada com sucesso!');
-        this.carregarSolicitacoes();
-        this.limparFormulario();
-      },
-      error: (erro) => {
-        console.error('Erro ao criar solicitação:', erro);
-        alert('Erro ao criar solicitação!');
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       }
     });
   }
@@ -130,7 +118,6 @@ export class SolicitacoesComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   cancelarSolicitacao(id: number) {
     if (!confirm('Tem certeza que deseja cancelar esta solicitação?')) return;
 
@@ -146,8 +133,6 @@ export class SolicitacoesComponent implements OnInit {
     });
   }
 
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
   limparFormulario() {
     this.novaSolicitacao = {
       produtoId: 0,
@@ -169,11 +154,8 @@ export class SolicitacoesComponent implements OnInit {
         return 'badge-concluida';
       case 'REJEITADA':
         return 'badge-rejeitada';
-<<<<<<< HEAD
       case 'CANCELADA':
         return 'badge-cancelada';
-=======
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       default:
         return 'badge-default';
     }

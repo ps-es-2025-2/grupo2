@@ -159,7 +159,6 @@ export class FichasComponent implements OnInit {
     // Envia `clienteId` tanto no corpo quanto como query param (compatibilidade com backend)
     const url = `${this.apiUrl}?clienteId=${clienteId}`;
 
-<<<<<<< HEAD
     this.http.post<any>(url, payload, { headers: this.getHeaders() }).subscribe({
       next: (ficha) => {
         if (ficha && ficha.codigo) {
@@ -169,12 +168,6 @@ export class FichasComponent implements OnInit {
           alert('Ficha gerada mas o servidor não retornou código.');
           this.fichasGeradas = [];
         }
-=======
-    this.http.post<any[]>(url, payload, { headers: this.getHeaders() }).subscribe({
-      next: (fichas) => {
-        this.fichasGeradas = fichas;
-        alert(`${fichas.length} ficha(s) gerada(s) com sucesso!`);
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       },
       error: (erro) => {
         console.error('Erro ao gerar fichas:', erro);
@@ -321,7 +314,6 @@ export class FichasComponent implements OnInit {
   entregarProduto() {
     if (!this.fichaEncontrada) return;
     
-<<<<<<< HEAD
     // Verifica se há saldo disponível
     if (this.fichaEncontrada.saldo <= 0) {
       alert('❌ Esta ficha não possui saldo disponível!');
@@ -375,65 +367,6 @@ export class FichasComponent implements OnInit {
         } else {
           alert('❌ Erro ao processar a entrega. Tente novamente.');
         }
-=======
-    const confirma = confirm(`Confirma a entrega do produto para ${this.fichaEncontrada.cliente?.nome || 'este cliente'}?`);
-    if (!confirma) return;
-    
-    this.carregando = true;
-    // Monta payload com dados do operador/cliente — alguns backends exigem isso no corpo
-    const operadorEmail = localStorage.getItem('userEmail') || '';
-    const clienteId = this.fichaEncontrada?.cliente?.id ?? (localStorage.getItem('clienteId') ? Number(localStorage.getItem('clienteId')) : null);
-    const patchPayload: any = {};
-    if (operadorEmail) patchPayload.operadorEmail = operadorEmail;
-    if (clienteId) patchPayload.clienteId = clienteId;
-
-    this.http.post(`${this.apiUrl}/${this.fichaEncontrada.codigo}/validar`, patchPayload, { headers: this.getHeaders() }).subscribe({
-      next: () => {
-        alert('✅ Produto entregue! Ficha validada com sucesso.');
-        this.limparBusca();
-        this.carregando = false;
-      },
-      error: (erro) => {
-        console.error('Erro ao validar ficha:', erro);
-        const serverBody = erro.error ?? erro.message ?? JSON.stringify(erro);
-        const serverMsg = typeof serverBody === 'string' ? serverBody : JSON.stringify(serverBody);
-        alert('Erro ao validar ficha: ' + (erro.error?.message || serverMsg || 'Erro desconhecido'));
-
-        // Se o backend informou que o cliente não foi encontrado, oferecer criar um cliente e tentar validar novamente
-        try {
-          const parsed = typeof serverBody === 'string' ? JSON.parse(serverBody) : serverBody;
-          const errorText = parsed?.error || parsed?.message || serverMsg;
-          if (errorText && errorText.toLowerCase().includes('cliente não encontrado')) {
-            const criar = confirm('Cliente não encontrado. Deseja criar um novo cliente automaticamente e tentar validar novamente?');
-            if (criar) {
-              // onCreated callback reenvia o PATCH com o novo clienteId
-              this.criarClienteAutomaticoAndRetry(undefined, (novoId) => {
-                // atualiza payload e reenvia validação
-                if (novoId) {
-                  patchPayload.clienteId = Number(novoId);
-                }
-                this.http.post(`${this.apiUrl}/${this.fichaEncontrada.codigo}/validar`, patchPayload, { headers: this.getHeaders() }).subscribe({
-                  next: () => {
-                    alert('✅ Produto entregue! Ficha validada com sucesso.');
-                    this.limparBusca();
-                    this.carregando = false;
-                  },
-                  error: (err2) => {
-                    console.error('Erro ao validar ficha após criar cliente:', err2);
-                    const body2 = err2.error ?? err2.message ?? JSON.stringify(err2);
-                    alert('Falha ao validar ficha após criar cliente: ' + (typeof body2 === 'string' ? body2 : JSON.stringify(body2)));
-                    this.carregando = false;
-                  }
-                });
-              });
-            }
-          }
-        } catch (e) {
-          // ignore parse errors
-        }
-
-        this.carregando = false;
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       }
     });
   }
@@ -491,7 +424,6 @@ export class FichasComponent implements OnInit {
     if (!confirma) return;
     
     const ficha = this.fichasFiltradas[index];
-<<<<<<< HEAD
     
     this.http.delete(`${this.apiUrl}/${ficha.codigo}`, { headers: this.getHeaders() }).subscribe({
       next: () => {
@@ -580,13 +512,5 @@ export class FichasComponent implements OnInit {
         alert('❌ Erro ao excluir cliente. Pode haver fichas vinculadas.');
       }
     });
-=======
-    const fichaIndex = this.listaFichas.indexOf(ficha);
-    
-    if (fichaIndex > -1) {
-      this.listaFichas.splice(fichaIndex, 1);
-      alert('Registro excluído!');
-    }
->>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
   }
 }
