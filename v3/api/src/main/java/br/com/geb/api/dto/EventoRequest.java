@@ -1,5 +1,6 @@
 package br.com.geb.api.dto;
 
+import br.com.geb.api.enums.StatusEvento;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class EventoRequest {
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private String local;
+    private StatusEvento status;
 }
 

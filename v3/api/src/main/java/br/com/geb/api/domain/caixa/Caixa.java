@@ -1,6 +1,7 @@
 package br.com.geb.api.domain.caixa;
 
 import br.com.geb.api.domain.usuario.Usuario;
+import br.com.geb.api.domain.evento.Evento;
 import br.com.geb.api.enums.StatusCaixa;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,10 @@ public class Caixa {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operador_id")
     private Usuario operador;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evento_id")
+    private Evento evento;
 
     private LocalDateTime dataAbertura;
 

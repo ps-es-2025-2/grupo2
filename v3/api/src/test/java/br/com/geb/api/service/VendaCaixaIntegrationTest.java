@@ -140,8 +140,8 @@ public class VendaCaixaIntegrationTest {
                 .thenReturn(Optional.empty());
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
                 () -> vendaService.registrarVenda(vendaRequest)
         );
 

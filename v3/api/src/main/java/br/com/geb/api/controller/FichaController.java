@@ -38,14 +38,23 @@ public class FichaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> criar(@RequestParam Long clienteId) {
+    public ResponseEntity<?> criar(@RequestParam Long clienteId, @RequestBody(required = false) java.util.Map<String, Object> payload) {
         Cliente cliente = clienteService.buscarPorId(clienteId);
 
         if (cliente == null) {
             return ResponseEntity.status(404).body("Cliente não encontrado");
         }
 
-        FichaDigital ficha = fichaService.gerarFichaParaCliente(cliente);
+        // Extrai valor do payload se fornecido
+        java.math.BigDecimal valor = java.math.BigDecimal.ZERO;
+        if (payload != null && payload.containsKey("valor")) {
+            Object valorObj = payload.get("valor");
+            if (valorObj instanceof Number) {
+                valor = new java.math.BigDecimal(valorObj.toString());
+            }
+        }
+
+        FichaDigital ficha = fichaService.gerarFichaParaCliente(cliente, valor);
 
         return ResponseEntity.status(201).body(ficha);
     }
@@ -62,13 +71,64 @@ public class FichaController {
         return fichaService.findByCodigo(codigo)
             .map(ficha -> {
                 if (ficha.getStatus() == br.com.geb.api.enums.StatusFicha.UTILIZADA) {
-                    return ResponseEntity.status(409).body("Ficha já usada");
+                    return ResponseEntity.status(409).body("Ficha já foi totalmente utilizada (saldo zerado)");
                 }
-                ficha.setStatus(br.com.geb.api.enums.StatusFicha.UTILIZADA);
-                fichaService.salvar(ficha);
+                if (ficha.getSaldo().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                    return ResponseEntity.status(409).body("Ficha sem saldo disponível");
+                }
+                // Apenas valida que a ficha está ativa e tem saldo, mas não marca como utilizada
                 return ResponseEntity.ok(ficha);
             })
             .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{codigo}/consumir")
+    public ResponseEntity<?> consumir(@PathVariable String codigo, @RequestBody(required = false) java.util.Map<String, Object> payload) {
+        Optional<FichaDigital> fichaOpt = fichaService.findByCodigo(codigo);
+        
+        if (fichaOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Ficha não encontrada");
+        }
+        
+        FichaDigital ficha = fichaOpt.get();
+        
+        // Verifica se a ficha já foi totalmente utilizada
+        if (ficha.getStatus() == br.com.geb.api.enums.StatusFicha.UTILIZADA) {
+            return ResponseEntity.status(409).body("Ficha já foi totalmente utilizada (saldo zerado)");
+        }
+        
+        // Verifica se há saldo disponível
+        if (ficha.getSaldo().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            ficha.setStatus(br.com.geb.api.enums.StatusFicha.UTILIZADA);
+            fichaService.salvar(ficha);
+            return ResponseEntity.status(409).body("Ficha sem saldo disponível");
+        }
+        
+        // Extrai o valor a ser consumido do payload (padrão: consumir todo o saldo)
+        java.math.BigDecimal valorConsumir = ficha.getSaldo();
+        if (payload != null && payload.containsKey("valor")) {
+            Object valorObj = payload.get("valor");
+            if (valorObj instanceof Number) {
+                valorConsumir = new java.math.BigDecimal(valorObj.toString());
+            }
+        }
+        
+        // Valida que o valor a consumir não é maior que o saldo disponível
+        if (valorConsumir.compareTo(ficha.getSaldo()) > 0) {
+            return ResponseEntity.status(400).body("Valor a consumir (" + valorConsumir + ") é maior que o saldo disponível (" + ficha.getSaldo() + ")");
+        }
+        
+        // Desconta o valor do saldo
+        java.math.BigDecimal novoSaldo = ficha.getSaldo().subtract(valorConsumir);
+        ficha.setSaldo(novoSaldo);
+        
+        // Se o saldo chegou a zero, marca a ficha como UTILIZADA
+        if (novoSaldo.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+            ficha.setStatus(br.com.geb.api.enums.StatusFicha.UTILIZADA);
+        }
+        
+        fichaService.salvar(ficha);
+        return ResponseEntity.ok(ficha);
     }
 
     @GetMapping

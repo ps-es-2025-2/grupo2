@@ -1,17 +1,16 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
       <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
+      <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
       <a routerLink="/caixa">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -19,40 +18,144 @@
   <div class="main-content">
     <div class="page-header">
       <h2>Controle de Estoque</h2>
+      <p style="color: #666; margin-top: 8px;">Gerencie as quantidades de produtos disponíveis</p>
+    </div>
+
+    <!-- Alertas de Estoque Baixo -->
+    <div class="alert-section" *ngIf="getProdutosComEstoqueBaixo().length > 0">
+      <div class="alert alert-warning">
+        <div class="alert-icon">!</div>
+        <div class="alert-content">
+          <h4>Atenção: Produtos com Estoque Baixo</h4>
+          <p>Os seguintes produtos precisam de reposição:</p>
+          <ul>
+            <li *ngFor="let item of getProdutosComEstoqueBaixo()">
+              <strong>{{ item.produto.nome }}</strong> - Apenas {{ item.quantidadeAtual }} unidades restantes
+              <button class="btn-solicitar-mini" (click)="irParaSolicitacoes(item.produto.id)">
+                Solicitar Reposição
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-section" *ngIf="getProdutosZerados().length > 0">
+      <div class="alert alert-danger">
+        <div class="alert-icon">X</div>
+        <div class="alert-content">
+          <h4>Alerta Crítico: Produtos Zerados</h4>
+          <p>Os seguintes produtos estão sem estoque:</p>
+          <ul>
+            <li *ngFor="let item of getProdutosZerados()">
+              <strong>{{ item.produto.nome }}</strong> - ZERADO
+              <button class="btn-solicitar-mini urgent" (click)="irParaSolicitacoes(item.produto.id)">
+                Solicitar Urgente
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="table-section">
-      <h3>Produtos em Estoque</h3>
+      <div class="table-header">
+        <h3>Produtos em Estoque</h3>
+        <span class="total-produtos">Total: {{ listaEstoque.length }} produto(s)</span>
+      </div>
       <div class="table-wrapper">
         <table class="data-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Produto</th>
               <th>Categoria</th>
-              <th>Quantidade Atual</th>
+              <th>Qtd. Atual</th>
+              <th>Qtd. Mínima</th>
               <th>Situação</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of listaEstoque">
-              <td>{{ item.id }}</td>
-              <td>{{ item.nome }}</td>
-              <td>{{ item.categoria }}</td>
-              <td style="font-weight: bold; font-size: 1.2em;">
-                {{ item.quantidade || item.estoque || 'N/A' }}
+              <td><strong>{{ item.produto.nome }}</strong></td>
+              <td><span class="categoria-badge">{{ item.produto.categoria }}</span></td>
+              <td class="quantidade-cell">{{ item.quantidadeAtual }}</td>
+              <td>{{ item.quantidadeMinima || 0 }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(item.quantidadeAtual, item.quantidadeMinima)">
+                  {{ getStatusText(item.quantidadeAtual, item.quantidadeMinima) }}
+                </span>
               </td>
               <td>
-                <span *ngIf="(item.quantidade || 0) > 10" class="status-badge status-ok">OK</span>
-                <span *ngIf="(item.quantidade || 0) <= 10 && (item.quantidade || 0) > 0" class="status-badge status-warning">BAIXO</span>
-                <span *ngIf="!item.quantidade || item.quantidade == 0" class="status-badge status-danger">ZERADO</span>
+                <div class="action-buttons">
+                  <button (click)="abrirModal('entrada', item)" class="btn-action btn-entrada">
+                    ➕ Entrada
+                  </button>
+                  <button (click)="abrirModal('saida', item)" 
+                          class="btn-action btn-saida" 
+                          [disabled]="item.quantidadeAtual == 0">
+                    ➖ Saída
+                  </button>
+                </div>
               </td>
             </tr>
             <tr *ngIf="listaEstoque.length === 0">
-              <td colspan="5" class="no-data">Nenhum produto encontrado.</td>
+              <td colspan="6" class="no-data">
+                Nenhum produto em estoque. Cadastre produtos primeiro!
+              </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE MOVIMENTAÇÃO -->
+  <div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ modalTipo === 'entrada' ? '➕ Entrada de Estoque' : '➖ Saída de Estoque' }}</h3>
+        <button class="btn-close" (click)="fecharModal()">X</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="produto-info">
+          <p><strong>Produto:</strong> {{ produtoSelecionado?.produto.nome }}</p>
+          <p><strong>Estoque Atual:</strong> {{ produtoSelecionado?.quantidadeAtual }} unidades</p>
+        </div>
+
+        <div class="form-field">
+          <label>Quantidade:</label>
+          <input type="number" [(ngModel)]="quantidadeModal" min="1" placeholder="Digite a quantidade" />
+        </div>
+
+        <div class="form-field" *ngIf="modalTipo === 'entrada'">
+          <label>Origem:</label>
+          <select [(ngModel)]="origemModal">
+            <option value="ENTRADA_MANUAL">Entrada Manual</option>
+            <option value="COMPRA">Compra</option>
+            <option value="DEVOLUCAO">Devolução</option>
+            <option value="AJUSTE">Ajuste de Inventário</option>
+          </select>
+        </div>
+
+        <div class="preview-result" *ngIf="quantidadeModal > 0">
+          <p>Novo estoque: 
+            <strong>
+              {{ modalTipo === 'entrada' ? 
+                 (produtoSelecionado?.quantidadeAtual + quantidadeModal) : 
+                 (produtoSelecionado?.quantidadeAtual - quantidadeModal) 
+              }}
+            </strong> unidades
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+        <button class="btn-primary" (click)="confirmarMovimentacao()">
+          Confirmar {{ modalTipo === 'entrada' ? 'Entrada' : 'Saída' }}
+        </button>
       </div>
     </div>
   </div>

@@ -29,18 +29,30 @@ public class SolicitacaoReposicaoService {
 
     @Transactional
     public SolicitacaoReposicao solicitarReposicao(Long produtoId, Integer quantidade, String observacao) {
+        // Busca ou cria o estoque para o produto
         EstoqueProduto estoque = estoqueRepository.findByProdutoId(produtoId)
-                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado para o produto ID: " + produtoId));
+                .orElseGet(() -> {
+                    System.out.println("Criando estoque para produto ID: " + produtoId);
+                    return estoqueService.criarEstoqueParaProduto(produtoId);
+                });
+
+        System.out.println("Criando solicitação para estoque ID: " + estoque.getId());
 
         SolicitacaoReposicao solicitacao = SolicitacaoReposicao.builder()
                 .estoque(estoque)
                 .quantidadeSolicitada(quantidade)
-                .observacao(observacao)
+                .observacao(observacao != null && !observacao.isBlank() ? observacao : null)
                 .dataSolicitacao(LocalDateTime.now())
                 .status(StatusReposicao.PENDENTE)
                 .build();
 
-        return repo.save(solicitacao);
+        try {
+            return repo.save(solicitacao);
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar solicitação: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Transactional
@@ -68,6 +80,18 @@ public class SolicitacaoReposicaoService {
         validarStatusPendente(solicitacao);
 
         solicitacao.setStatus(StatusReposicao.REJEITADA);
+        solicitacao.setDataResposta(LocalDateTime.now());
+
+        return repo.save(solicitacao);
+    }
+
+    @Transactional
+    public SolicitacaoReposicao cancelar(Long id) {
+        SolicitacaoReposicao solicitacao = buscarPorId(id);
+
+        validarStatusPendente(solicitacao);
+
+        solicitacao.setStatus(StatusReposicao.CANCELADA);
         solicitacao.setDataResposta(LocalDateTime.now());
 
         return repo.save(solicitacao);

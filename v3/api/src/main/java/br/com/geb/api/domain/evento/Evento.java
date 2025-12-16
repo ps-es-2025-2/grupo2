@@ -1,6 +1,9 @@
 package br.com.geb.api.domain.evento;
 
+import br.com.geb.api.domain.caixa.Caixa;
+import br.com.geb.api.domain.produto.Produto;
 import br.com.geb.api.domain.venda.Venda;
+import br.com.geb.api.enums.StatusEvento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,8 +45,35 @@ public class Evento {
     @NotBlank(message = "Local é obrigatório")
     private String local;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private StatusEvento status = StatusEvento.PLANEJADO;
+
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Venda> vendas = new ArrayList<>();
+
+    // Relacionamento Evento -> Caixa (múltiplos caixas podem ser abertos para um evento)
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Caixa> caixas = new ArrayList<>();
+
+    // Relacionamento Evento -> Produto (produtos vinculados especificamente ao evento)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "evento_produto",
+        joinColumns = @JoinColumn(name = "evento_id"),
+        inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
+    @Builder.Default
+    private List<Produto> produtos = new ArrayList<>();
+
+    @PrePersist
+    private void prePersist() {
+        if (this.status == null) {
+            this.status = StatusEvento.PLANEJADO;
+        }
+    }
 }
 

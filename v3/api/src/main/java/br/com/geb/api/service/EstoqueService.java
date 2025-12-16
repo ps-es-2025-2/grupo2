@@ -70,6 +70,15 @@ public class EstoqueService {
         registrarMovimento(estoque, TipoMovimento.SAIDA, quantidade, "VENDA");
 
         estoqueRepository.save(estoque);
+
+        // UC06: Validar se estoque está abaixo do mínimo (apenas alerta no log)
+        if (novaQuantidade <= estoque.getQuantidadeMinima() && estoque.getQuantidadeMinima() > 0) {
+            System.out.println(
+                "[ALERTA] Estoque do produto '" + estoque.getProduto().getNome() + 
+                "' está abaixo do mínimo! Atual: " + novaQuantidade + 
+                ", Mínimo: " + estoque.getQuantidadeMinima()
+            );
+        }
     }
 
     // Movimenta entrada no estoque (compras/reabastecimento)
@@ -94,6 +103,25 @@ public class EstoqueService {
     public EstoqueProduto buscarPorProdutoId(Long produtoId) {
         return estoqueRepository.findByProdutoId(produtoId)
             .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado para o produto id " + produtoId));
+    }
+
+    // Lista todos os estoques
+    public java.util.List<EstoqueProduto> listarTodos() {
+        return estoqueRepository.findAll();
+    }
+
+    // Cria estoque para um produto (usado quando não existe)
+    @Transactional
+    public EstoqueProduto criarEstoqueParaProduto(Long produtoId) {
+        Produto produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado: " + produtoId));
+        
+        // Verifica se já existe estoque para esse produto
+        return estoqueRepository.findByProdutoId(produtoId)
+            .orElseGet(() -> {
+                EstoqueProduto estoque = novoEstoque(produto);
+                return estoqueRepository.save(estoque);
+            });
     }
 
     // Cria um estoque novo com valores default

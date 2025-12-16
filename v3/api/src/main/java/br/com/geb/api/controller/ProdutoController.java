@@ -2,10 +2,14 @@ package br.com.geb.api.controller;
 
 import br.com.geb.api.domain.produto.Produto;
 import br.com.geb.api.dto.ProdutoRequest;
+import br.com.geb.api.dto.ProdutoResponseDTO;
 import br.com.geb.api.service.ProdutoService;
 import br.com.geb.api.service.EstoqueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -34,34 +38,46 @@ public class ProdutoController {
 
     //Cria produto e cria estoque
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody ProdutoRequest request) {
+    public ResponseEntity<ProdutoResponseDTO> criar(@RequestBody ProdutoRequest request) {
         Produto salvo = produtoService.criar(request);
 
         //Cria estoque inicial do produto (0 unidades)
         estoqueService.criarOuAtualizar(salvo.getId(), 0);
 
-        return ResponseEntity.status(201).body(salvo);
+        ProdutoResponseDTO response = new ProdutoResponseDTO(salvo, 0);
+        return ResponseEntity.status(201).body(response);
     }
 
     //Busca produto pelo Id
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscar(@PathVariable Long id) {
+    public ResponseEntity<ProdutoResponseDTO> buscar(@PathVariable Long id) {
         Produto produto = produtoService.buscarPorId(id);
-        return ResponseEntity.ok(produto);
+        Integer qtdEstoque = estoqueService.buscarQuantidadePorProdutoId(id);
+        ProdutoResponseDTO response = new ProdutoResponseDTO(produto, qtdEstoque);
+        return ResponseEntity.ok(response);
     }
 
-    //Lista todos os produtos
+    //Lista todos os produtos com informações de estoque
     @GetMapping
-    public ResponseEntity<?> listar() {
-        return ResponseEntity.ok(produtoService.listar());
+    public ResponseEntity<List<ProdutoResponseDTO>> listar() {
+        List<Produto> produtos = produtoService.listar();
+        List<ProdutoResponseDTO> response = produtos.stream()
+                .map(p -> {
+                    Integer qtd = estoqueService.buscarQuantidadePorProdutoId(p.getId());
+                    return new ProdutoResponseDTO(p, qtd);
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     //Atualiza um produto
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id,
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id,
                                              @RequestBody ProdutoRequest request) {
         Produto atualizado = produtoService.atualizar(id, request);
-        return ResponseEntity.ok(atualizado);
+        Integer qtdEstoque = estoqueService.buscarQuantidadePorProdutoId(id);
+        ProdutoResponseDTO response = new ProdutoResponseDTO(atualizado, qtdEstoque);
+        return ResponseEntity.ok(response);
     }
 
     //Deletar produto

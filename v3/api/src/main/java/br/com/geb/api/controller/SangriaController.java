@@ -35,13 +35,13 @@ public class SangriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Sangria> criar(@RequestBody @Valid SangriaRequest request) {
+    public ResponseEntity<Sangria> criar(@RequestParam Long caixaId, @RequestBody @Valid SangriaRequest request) {
         Sangria sangria = Sangria.builder()
             .valor(request.getValor())
             .justificativa(request.getJustificativa())
             .operadorUsername(request.getOperadorUsername())
             .build();
-        return ResponseEntity.status(201).body(service.criar(sangria));
+        return ResponseEntity.status(201).body(service.criar(sangria, caixaId));
     }
 
     @GetMapping("/{id}")

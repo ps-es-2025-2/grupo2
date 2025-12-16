@@ -1,7 +1,7 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
@@ -18,15 +18,22 @@
 
   <div class="main-content">
     <div class="page-header">
-      <h2>💰 Venda de Fichas (Crédito)</h2>
+      <h2>Venda de Fichas (Crédito)</h2>
     </div>
 
     <div class="form-card">
       <h3>Emitir Nova Ficha</h3>
       <form (ngSubmit)="gerarFichas()" class="fichas-form">
         <div class="form-row">
-          <div class="form-field">
-            <label>Valor da Ficha (R$):</label>
+          <div class="form-field">            <label>Cliente:</label>
+            <select [(ngModel)]="clienteId" name="cliente" required>
+              <option [value]="null">Selecione um cliente</option>
+              <option *ngFor="let c of clientes" [value]="c.id">{{ c.nome }} ({{ c.email }})</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">            <label>Valor da Ficha (R$):</label>
             <input type="number" [(ngModel)]="valorInput" name="valor" placeholder="0,00" class="input-grande" required />
           </div>
           <div class="form-field">
@@ -34,7 +41,7 @@
             <input type="number" [(ngModel)]="quantidadeInput" name="quantidade" min="1" value="1" required />
           </div>
         </div>
-        <button type="submit" class="btn-primary">GERAR FICHAS 🖨️</button>
+        <button type="submit" class="btn-primary">GERAR FICHAS</button>
       </form>
     </div>
 
@@ -42,8 +49,8 @@
       <div class="section-header">
         <h3>Fichas Emitidas Agora</h3>
         <div class="action-buttons">
-          <button (click)="imprimir()" class="btn-action btn-print">📄 Imprimir</button>
-          <button (click)="limparTela()" class="btn-action btn-clear">🗑️ Limpar Tela</button>
+          <button (click)="imprimir()" class="btn-action btn-print">Imprimir</button>
+          <button (click)="limparTela()" class="btn-action btn-clear">Limpar Tela</button>
         </div>
       </div>
 

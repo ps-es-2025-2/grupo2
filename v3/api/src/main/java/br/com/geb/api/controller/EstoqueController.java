@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/estoque")
 public class EstoqueController {
@@ -18,8 +21,41 @@ public class EstoqueController {
         this.estoqueService = estoqueService;
     }
 
+    // Lista todos os estoques
+    @GetMapping
+    public ResponseEntity<List<EstoqueResponseDTO>> listarEstoque() {
+        List<EstoqueProduto> estoques = estoqueService.listarTodos();
+        List<EstoqueResponseDTO> response = estoques.stream()
+                .map(EstoqueResponseDTO::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{produtoId}")
     public ResponseEntity<EstoqueResponseDTO> buscarEstoque(@PathVariable Long produtoId) {
+        EstoqueProduto estoque = estoqueService.buscarPorProdutoId(produtoId);
+        return ResponseEntity.ok(new EstoqueResponseDTO(estoque));
+    }
+
+    // Incrementar estoque (entrada de produtos)
+    @PostMapping("/produto/{produtoId}/incrementar")
+    public ResponseEntity<EstoqueResponseDTO> incrementarEstoque(
+            @PathVariable Long produtoId,
+            @RequestParam Integer quantidade,
+            @RequestParam(defaultValue = "ENTRADA_MANUAL") String origem) {
+        
+        estoqueService.incrementar(produtoId, quantidade, origem);
+        EstoqueProduto estoque = estoqueService.buscarPorProdutoId(produtoId);
+        return ResponseEntity.ok(new EstoqueResponseDTO(estoque));
+    }
+
+    // Decrementar estoque (saída de produtos)
+    @PostMapping("/produto/{produtoId}/decrementar")
+    public ResponseEntity<EstoqueResponseDTO> decrementarEstoque(
+            @PathVariable Long produtoId,
+            @RequestParam Integer quantidade) {
+        
+        estoqueService.decrementar(produtoId, quantidade);
         EstoqueProduto estoque = estoqueService.buscarPorProdutoId(produtoId);
         return ResponseEntity.ok(new EstoqueResponseDTO(estoque));
     }

@@ -61,6 +61,7 @@ public class EventoController {
             .dataInicio(request.getDataInicio())
             .dataFim(request.getDataFim())
             .local(request.getLocal())
+            .status(request.getStatus())
             .build();
     }
 

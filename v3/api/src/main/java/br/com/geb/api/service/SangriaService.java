@@ -4,6 +4,7 @@ import br.com.geb.api.domain.caixa.Sangria;
 import br.com.geb.api.exception.ResourceNotFoundException;
 import br.com.geb.api.repository.SangriaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,11 +12,21 @@ import java.util.List;
 public class SangriaService {
 
     private final SangriaRepository sangriaRepository;
+    private final CaixaService caixaService;
 
-    public SangriaService(SangriaRepository sangriaRepository) {
+    public SangriaService(SangriaRepository sangriaRepository, CaixaService caixaService) {
         this.sangriaRepository = sangriaRepository;
+        this.caixaService = caixaService;
     }
 
+    @Transactional
+    public Sangria criar(Sangria sangria, Long caixaId) {
+        // Registra a saída no caixa
+        caixaService.registrarSaida(caixaId, sangria.getValor());
+        
+        return sangriaRepository.save(sangria);
+    }
+    
     public Sangria criar(Sangria sangria) {
         return sangriaRepository.save(sangria);
     }

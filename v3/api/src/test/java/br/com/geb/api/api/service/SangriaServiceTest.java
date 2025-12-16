@@ -4,6 +4,7 @@ import br.com.geb.api.domain.caixa.Sangria;
 import br.com.geb.api.exception.ResourceNotFoundException;
 import br.com.geb.api.repository.SangriaRepository;
 import br.com.geb.api.service.SangriaService;
+import br.com.geb.api.service.CaixaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,12 +19,14 @@ import static org.mockito.Mockito.*;
 class SangriaServiceTest {
 
     private SangriaRepository sangriaRepository;
+    private CaixaService caixaService;
     private SangriaService sangriaService;
 
     @BeforeEach
     void setUp() {
         sangriaRepository = mock(SangriaRepository.class);
-        sangriaService = new SangriaService(sangriaRepository);
+        caixaService = mock(CaixaService.class);
+        sangriaService = new SangriaService(sangriaRepository, caixaService);
     }
 
     @Test

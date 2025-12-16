@@ -1,7 +1,7 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
@@ -18,7 +18,7 @@
 
   <div class="main-content">
     <div class="page-header">
-      <h2>📋 Relatório de Fichas Emitidas</h2>
+      <h2>Relatório de Fichas Emitidas</h2>
     </div>
 
     <div class="filter-card">
@@ -26,7 +26,7 @@
       <div class="filter-grid">
         <div class="form-field">
           <label>Pesquisar:</label>
-          <input type="text" [(ngModel)]="filtro" placeholder="🔍 Código ou status..." />
+          <input type="text" [(ngModel)]="filtro" placeholder="Código ou status..." />
         </div>
         <div class="form-field" style="display: flex; align-items: flex-end;">
           <div style="background: var(--bg); padding: 1rem; border-radius: 8px; flex: 1; text-align: center;">
@@ -77,8 +77,8 @@
                   <button *ngIf="ficha.status === 'BAIXADA'" (click)="reativar(ficha)" class="btn-action btn-view" title="Reativar ficha">
                     🔄 Reativar
                   </button>
-                  <button (click)="excluir(i)" class="btn-action btn-delete" title="Remover registro">
-                    🗑️ Excluir
+                  <button (click)="excluir(ficha.codigo)" class="btn-action btn-delete" title="Remover registro">
+                    Excluir
                   </button>
                 </div>
               </td>

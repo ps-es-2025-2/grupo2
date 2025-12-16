@@ -39,6 +39,9 @@ public class FichaDigital {
     @Column(nullable = false)
     private StatusFicha status;
 
+    @Column(name = "data_criacao")
+    private java.time.LocalDateTime dataCriacao;
+
     @PrePersist
     private void prePersist() {
         if (this.codigo == null || this.codigo.isBlank()) {
@@ -47,6 +50,7 @@ public class FichaDigital {
         if (this.saldo == null) this.saldo = BigDecimal.ZERO;
         if (this.limite == null) this.limite = BigDecimal.ZERO;
         if (this.status == null) this.status = StatusFicha.GERADA;
+        if (this.dataCriacao == null) this.dataCriacao = java.time.LocalDateTime.now();
     }
 
     /*

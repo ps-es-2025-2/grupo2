@@ -1,10 +1,13 @@
 package br.com.geb.api.domain.produto;
 
+import br.com.geb.api.domain.evento.Evento;
 import br.com.geb.api.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +34,11 @@ public class Produto {
 
     @Builder.Default
     private Boolean ativo = true;
+
+    // Relacionamento Produto -> Evento (produtos podem estar vinculados a eventos específicos)
+    @ManyToMany(mappedBy = "produtos", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Evento> eventos = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

@@ -1,17 +1,16 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
       <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
       <a routerLink="/caixa">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -40,6 +39,18 @@
           <input type="text" [(ngModel)]="novoEvento.descricao" name="descricao" required />
         </div>
 
+        <div class="form-field">
+          <label>Status do Evento:</label>
+          <select [(ngModel)]="novoEvento.status" name="status" required>
+            <option value="PLANEJADO">Planejado</option>
+            <option value="PREPARACAO">Preparação</option>
+            <option value="EXECUCAO">Execução</option>
+            <option value="PAUSADO">Pausado</option>
+            <option value="FINALIZADO">Finalizado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+        </div>
+
         <div class="form-row">
           <div class="form-field">
             <label>Início:</label>
@@ -64,8 +75,11 @@
               <th>ID</th>
               <th>Nome</th>
               <th>Local</th>
+              <th>Status</th>
+              <th>Alterar Status</th>
               <th>Início</th>
               <th>Fim</th>
+              <th>Gerenciar</th>
             </tr>
           </thead>
           <tbody>
@@ -73,14 +87,77 @@
               <td>{{ e.id }}</td>
               <td>{{ e.nome }}</td>
               <td>{{ e.local }}</td>
-              <td>{{ e.dataInicio }}</td>
-              <td>{{ e.dataFim }}</td>
-            </tr>
-            <tr *ngIf="listaEventos.length === 0">
-              <td colspan="5" class="no-data">Nenhum evento encontrado.</td>
-            </tr>
-          </tbody>
-        </table>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(e.status)">
+                  {{ e.status }}
+                </span>
+              </td>
+              <td>
+                <div class="status-actions">
+                  <button 
+                    *ngFor="let s of statusOptions" 
+                    class="status-action-btn" 
+                    [class.status-active]="e.status === s"
+                    [style.background]="getStatusColor(s)"
+                    (click)="changeStatus(e, s)">
+                    {{ getStatusLabel(s) }}
+                  </button>
+                </div>
+              </td>
+               <td>{{ e.dataInicio }}</td>
+               <td>{{ e.dataFim }}</td>
+               <td>
+                <button (click)="abrirEdicao(e)" class="btn-edit" title="Editar evento">
+                  Editar
+                </button>
+                <button (click)="excluirEvento(e.id)" class="btn-delete" title="Excluir evento">
+                  Excluir
+                </button>
+              </td>
+             </tr>
+             <tr *ngIf="listaEventos.length === 0">
+               <td colspan="8" class="no-data">Nenhum evento encontrado.</td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+  </div>
+
+  <!-- Modal de Edição -->
+  <div class="modal-overlay" *ngIf="eventoEditando" (click)="cancelarEdicao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Editar Evento</h3>
+        <button class="btn-close" (click)="cancelarEdicao()">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label>Nome do Evento:</label>
+          <input type="text" [(ngModel)]="eventoEdit.nome" />
+        </div>
+        <div class="form-field">
+          <label>Local:</label>
+          <input type="text" [(ngModel)]="eventoEdit.local" />
+        </div>
+        <div class="form-field">
+          <label>Descrição:</label>
+          <input type="text" [(ngModel)]="eventoEdit.descricao" />
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Início:</label>
+            <input type="datetime-local" [(ngModel)]="eventoEdit.dataInicio" />
+          </div>
+          <div class="form-field">
+            <label>Fim:</label>
+            <input type="datetime-local" [(ngModel)]="eventoEdit.dataFim" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cancelarEdicao()">Cancelar</button>
+        <button class="btn-primary" (click)="salvarEdicao()">Salvar</button>
       </div>
     </div>
   </div>

@@ -1,0 +1,124 @@
+<div class="page-container">
+  <header class="top-header">
+    <div class="header-brand">
+      <h1>Caneco Cheio</h1>
+    </div>
+    <nav class="top-nav">
+      <a routerLink="/produtos">Gerenciar Produtos</a>
+      <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/solicitacoes" routerLinkActive="active">Solicitações</a>
+      <a routerLink="/venda">Nova Venda (PDV)</a>
+      <a routerLink="/caixa">Controle de Caixa</a>
+      <a routerLink="/fichas">Fichas</a>
+    </nav>
+    <button class="logout-btn" routerLink="/dashboard">Voltar</button>
+  </header>
+
+  <div class="main-content">
+    <div class="page-header">
+      <h2>Solicitações de Reposição</h2>
+    </div>
+
+    <!-- Formulário Nova Solicitação -->
+    <div class="form-card">
+      <h3>Nova Solicitação</h3>
+      <form (ngSubmit)="salvarSolicitacao()" class="solicitacao-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Produto:</label>
+            <select [(ngModel)]="novaSolicitacao.produtoId" name="produtoId" required>
+              <option [value]="0">Selecione um produto</option>
+              <option *ngFor="let p of listaProdutos" [value]="p.id">
+                {{ p.nome }} - R$ {{ p.preco }}
+              </option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Quantidade:</label>
+            <input type="number" [(ngModel)]="novaSolicitacao.quantidade" name="quantidade" min="1" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Observação (opcional):</label>
+          <textarea [(ngModel)]="novaSolicitacao.observacao" name="observacao" rows="3" 
+                    placeholder="Adicione informações adicionais sobre a solicitação"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Criar Solicitação</button>
+      </form>
+    </div>
+
+    <!-- Filtro de Status -->
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>Filtrar por Status:</label>
+        <select [(ngModel)]="filtroStatus" (ngModelChange)="aplicarFiltro()" name="filtroStatus">
+          <option value="TODOS">Todos</option>
+          <option value="PENDENTE">Pendente</option>
+          <option value="CONCLUIDA">Concluída</option>
+          <option value="REJEITADA">Rejeitada</option>
+          <option value="CANCELADA">Cancelada</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tabela de Solicitações -->
+    <div class="table-section">
+      <h3>Solicitações Cadastradas</h3>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Status</th>
+              <th>Data Solicitação</th>
+              <th>Observação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of listaSolicitacoes">
+              <td>{{ s.id }}</td>
+              <td>{{ s.nomeProduto || 'N/A' }}</td>
+              <td>{{ s.quantidadeSolicitada }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusBadgeClass(s.status)">
+                  {{ s.status }}
+                </span>
+              </td>
+              <td>{{ formatarData(s.dataSolicitacao) }}</td>
+              <td>{{ s.observacao || '-' }}</td>
+              <td class="action-buttons">
+                <button *ngIf="s.status === 'PENDENTE'" 
+                        class="btn-aprovar" 
+                        (click)="aprovarSolicitacao(s.id)">
+                  Aprovar
+                </button>
+                <button *ngIf="s.status === 'PENDENTE'" 
+                        class="btn-rejeitar" 
+                        (click)="rejeitarSolicitacao(s.id)">
+                  Rejeitar
+                </button>
+                <button *ngIf="s.status === 'PENDENTE'" 
+                        class="btn-cancelar" 
+                        (click)="cancelarSolicitacao(s.id)">
+                  Cancelar
+                </button>
+                <span *ngIf="s.status !== 'PENDENTE'" class="status-finalizado">
+                  Finalizado
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="listaSolicitacoes.length === 0">
+              <td colspan="7" class="no-data">Nenhuma solicitação encontrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

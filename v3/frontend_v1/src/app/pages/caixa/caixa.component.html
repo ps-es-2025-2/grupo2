@@ -1,17 +1,16 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
       <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
       <a routerLink="/caixa" routerLinkActive="active">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -40,24 +39,30 @@
     <div class="actions-section">
       <h3>Ações do Caixa</h3>
       <div class="actions-grid">
+        <!-- Quando fechado, mostra só o botão de abrir -->
         <button *ngIf="status === 'FECHADO'" (click)="abrirCaixa()" class="action-btn btn-open">
-          🔓 ABRIR CAIXA
+          ABRIR CAIXA
         </button>
 
+        <!-- Quando aberto, mostra todos os botões -->
         <button *ngIf="status === 'ABERTO'" routerLink="/venda" class="action-btn btn-add">
-          🛒 FRENTE DE CAIXA (PDV)
+          FRENTE DE CAIXA (PDV)
         </button>
 
         <button *ngIf="status === 'ABERTO'" (click)="realizarSangria()" class="action-btn btn-remove">
-          💸 SANGRIA / RETIRADA
+          SANGRIA / RETIRADA
         </button>
 
         <button (click)="toggleDetalhes()" class="action-btn btn-report">
-          📜 MOVIMENTO DO CAIXA
+          MOVIMENTO DO CAIXA
+        </button>
+
+        <button (click)="carregarHistoricoCaixas()" class="action-btn btn-history">
+          HISTÓRICO DE CAIXAS
         </button>
 
         <button *ngIf="status === 'ABERTO'" (click)="fecharCaixa()" class="action-btn btn-close">
-          🚫 FECHAR CAIXA
+          FECHAR CAIXA
         </button>
       </div>
     </div>
@@ -88,6 +93,50 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal de Histórico de Caixas -->
+    <div class="modal-overlay" *ngIf="mostrarHistorico" (click)="fecharHistorico()">
+      <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Histórico de Caixas Fechados</h3>
+          <button class="btn-close" (click)="fecharHistorico()">X</button>
+        </div>
+        <div class="modal-body">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data Abertura</th>
+                  <th>Data Fechamento</th>
+                  <th>Operador</th>
+                  <th>Saldo Inicial</th>
+                  <th>Saldo Final</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let c of historicoCaixas">
+                  <td>{{ c.id }}</td>
+                  <td>{{ c.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ c.dataFechamento | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ c.operador?.nome || c.operador?.email || 'N/A' }}</td>
+                  <td>R$ {{ c.saldoInicial | number:'1.2-2' }}</td>
+                  <td>R$ {{ c.saldoFinal | number:'1.2-2' }}</td>
+                  <td><span class="badge badge-fechado">{{ c.status }}</span></td>
+                </tr>
+                <tr *ngIf="historicoCaixas.length === 0">
+                  <td colspan="7" class="no-data">Nenhum caixa fechado encontrado.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="fecharHistorico()">Fechar</button>
+        </div>
       </div>
     </div>
   </div>

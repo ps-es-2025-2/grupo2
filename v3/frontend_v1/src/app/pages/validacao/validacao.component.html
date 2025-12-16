@@ -1,7 +1,7 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
@@ -28,28 +28,66 @@
           <label>Código da Ficha:</label>
           <input type="text" [(ngModel)]="codigoInput" name="codigo" placeholder="Ex: a1b2-c3d4..." required />
         </div>
-        <button type="submit" class="btn-validate">🔍 CONSULTAR</button>
+        <button type="submit" class="btn-validate">CONSULTAR</button>
       </form>
 
       <div *ngIf="mensagemErro" class="result-card result-error">
-        <h4>❌ Erro</h4>
+        <h4>Erro</h4>
         <p>{{ mensagemErro }}</p>
       </div>
 
-      <div *ngIf="fichaEncontrada" class="result-card" [class.result-success]="fichaEncontrada.status === 'GERADA'" [class.result-error]="fichaEncontrada.status !== 'GERADA'">
-        <h4>{{ fichaEncontrada.status === 'GERADA' ? '✅ FICHA VÁLIDA' : '❌ ' + fichaEncontrada.status }}</h4>
-        <p><strong>Produto:</strong> {{ fichaEncontrada.item?.produto?.nome || 'Produto não identificado' }}</p>
-        <p><strong>Cliente:</strong> {{ fichaEncontrada.venda?.cliente?.nome || 'Consumidor Final' }}</p>
-        <p><strong>Código:</strong> <code>{{ fichaEncontrada.codigo }}</code></p>
+      <div *ngIf="carregando" style="text-align: center; padding: 2rem;">
+        <p>Carregando...</p>
+      </div>
+
+      <div *ngIf="fichaEncontrada" class="result-card" 
+           [class.result-success]="fichaEncontrada.status === 'GERADA' && fichaEncontrada.saldo > 0" 
+           [class.result-error]="fichaEncontrada.status === 'UTILIZADA' || fichaEncontrada.saldo <= 0">
+        <h4>
+          <span *ngIf="fichaEncontrada.status === 'GERADA' && fichaEncontrada.saldo > 0">✅ FICHA VÁLIDA COM SALDO</span>
+          <span *ngIf="fichaEncontrada.saldo <= 0">❌ FICHA SEM SALDO</span>
+          <span *ngIf="fichaEncontrada.status === 'UTILIZADA' && fichaEncontrada.saldo > 0">⚠️ FICHA PARCIALMENTE USADA</span>
+        </h4>
         
-        <button *ngIf="fichaEncontrada.status === 'GERADA'" 
-                (click)="entregarProduto()"
-                class="btn-validate" style="margin-top: 1rem;">
-          ENTREGAR BEBIDA 🍺
-        </button>
+        <div style="text-align: left; margin: 1rem 0;">
+          <p><strong>Cliente:</strong> {{ fichaEncontrada.cliente.nome }}</p>
+          <p *ngIf="fichaEncontrada.cliente.telefone"><strong>Telefone:</strong> {{ fichaEncontrada.cliente.telefone }}</p>
+          <p *ngIf="fichaEncontrada.cliente.email"><strong>Email:</strong> {{ fichaEncontrada.cliente.email }}</p>
+          <p><strong>Código:</strong> <code style="background: #f0f0f0; padding: 5px 10px; border-radius: 4px;">{{ fichaEncontrada.codigo }}</code></p>
+          <p style="font-size: 1.2em; font-weight: bold;" [style.color]="fichaEncontrada.saldo > 0 ? '#28a745' : '#dc3545'">
+            <strong>💰 Saldo Disponível:</strong> R$ {{ fichaEncontrada.saldo.toFixed(2) }}
+          </p>
+          <p><strong>Limite Original:</strong> R$ {{ fichaEncontrada.limite.toFixed(2) }}</p>
+          <p><strong>Status:</strong> 
+            <span [style.color]="fichaEncontrada.status === 'GERADA' ? '#28a745' : '#dc3545'" style="font-weight: bold;">
+              {{ fichaEncontrada.status }}
+            </span>
+          </p>
+        </div>
         
-        <p *ngIf="fichaEncontrada.status !== 'GERADA'" style="margin-top: 1rem; font-style: italic;">
-          Esta ficha não pode ser usada novamente.
+        <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+          <button *ngIf="fichaEncontrada.saldo > 0" 
+                  (click)="entregarProduto()"
+                  [disabled]="carregando"
+                  class="btn-validate" 
+                  style="flex: 1; background: #28a745;">
+            {{ carregando ? 'Processando...' : '🍺 CONSUMIR/ENTREGAR' }}
+          </button>
+          
+          <button (click)="limparBusca()" 
+                  class="btn-validate" 
+                  style="flex: 1; background: #6c757d;">
+            🔄 NOVA CONSULTA
+          </button>
+        </div>
+        
+        <p *ngIf="fichaEncontrada.saldo <= 0" 
+           style="margin-top: 1rem; font-style: italic; color: #dc3545;">
+          ⚠️ Esta ficha não possui mais saldo disponível. Todo o crédito já foi consumido.
+        </p>
+        <p *ngIf="fichaEncontrada.saldo > 0 && fichaEncontrada.saldo < fichaEncontrada.limite" 
+           style="margin-top: 1rem; font-style: italic; color: #ff9800;">
+          ℹ️ Esta ficha foi parcialmente utilizada. Saldo restante: R$ {{ fichaEncontrada.saldo.toFixed(2) }}
         </p>
       </div>
     </div>

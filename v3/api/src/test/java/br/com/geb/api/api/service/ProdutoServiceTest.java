@@ -5,6 +5,7 @@ import br.com.geb.api.dto.ProdutoRequest;
 import br.com.geb.api.enums.Categoria;
 import br.com.geb.api.exception.ResourceNotFoundException;
 import br.com.geb.api.repository.ProdutoRepository;
+import br.com.geb.api.repository.EstoqueRepository;
 import br.com.geb.api.service.ProdutoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +21,14 @@ import static org.mockito.Mockito.*;
 class ProdutoServiceTest {
 
     private ProdutoRepository produtoRepository;
+    private EstoqueRepository estoqueRepository;
     private ProdutoService produtoService;
 
     @BeforeEach
     void setUp() {
         produtoRepository = mock(ProdutoRepository.class);
-        produtoService = new ProdutoService(produtoRepository);
+        estoqueRepository = mock(EstoqueRepository.class);
+        produtoService = new ProdutoService(produtoRepository, estoqueRepository);
     }
 
     @Test

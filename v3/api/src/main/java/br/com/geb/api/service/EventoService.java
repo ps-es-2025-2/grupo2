@@ -46,7 +46,7 @@ public class EventoService {
         existente.setLocal(eventoAtualizado.getLocal());
         existente.setDataInicio(eventoAtualizado.getDataInicio());
         existente.setDataFim(eventoAtualizado.getDataFim());
-
+        existente.setStatus(eventoAtualizado.getStatus());
         validarEvento(existente);
 
         return repo.save(existente);

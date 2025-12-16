@@ -6,4 +6,5 @@ public enum StatusEvento {
     EXECUCAO,
     PAUSADO,
     FINALIZADO,
+    CANCELADO
 }

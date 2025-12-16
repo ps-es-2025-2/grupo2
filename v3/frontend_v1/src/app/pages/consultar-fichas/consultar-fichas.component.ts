@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-consultar-fichas',
@@ -14,42 +15,61 @@ export class ConsultarFichasComponent implements OnInit {
 
   listaFichas: any[] = [];
   filtro: string = '';
+  apiUrl = '/api/fichas';
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.carregarDados();
   }
 
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+      .set('Content-Type', 'application/json');
+  }
+
   carregarDados() {
-    // Busca do "Banco do Navegador"
-    const dados = localStorage.getItem('tb_fichas');
-    this.listaFichas = dados ? JSON.parse(dados) : [];
+    this.http.get<any[]>(this.apiUrl, { headers: this.getHeaders() }).subscribe({
+      next: (dados) => this.listaFichas = dados,
+      error: (erro) => console.error('Erro ao buscar fichas:', erro)
+    });
   }
 
   darBaixa(ficha: any) {
     if(!confirm(`Confirma dar baixa na ficha ${ficha.codigo}?`)) return;
 
-    ficha.status = 'BAIXADA'; // Muda o status
-    ficha.dataBaixa = new Date(); // Registra quando foi usada
-    
-    this.salvarAlteracoes();
+    this.http.post(`${this.apiUrl}/${ficha.codigo}/validar`, {}, { headers: this.getHeaders() }).subscribe({
+      next: () => {
+        alert('✅ Ficha baixada com sucesso!');
+        this.carregarDados();
+      },
+      error: (erro) => {
+        console.error('Erro ao dar baixa:', erro);
+        alert('❌ Erro ao dar baixa na ficha.');
+      }
+    });
   }
 
   reativar(ficha: any) {
-    ficha.status = 'ATIVA';
-    ficha.dataBaixa = null;
-    this.salvarAlteracoes();
+    // Backend não suporta reativar - funcionalidade removida ou implementar endpoint específico
+    alert('⚠️ Funcionalidade de reativar não disponível no servidor.');
   }
 
-  excluir(index: number) {
+  excluir(codigo: string) {
     if(!confirm('Tem certeza que deseja apagar este registro?')) return;
     
-    this.listaFichas.splice(index, 1);
-    this.salvarAlteracoes();
-  }
-
-  // Atualiza o "Banco"
-  salvarAlteracoes() {
-    localStorage.setItem('tb_fichas', JSON.stringify(this.listaFichas));
+    this.http.delete(`${this.apiUrl}/${codigo}`, { headers: this.getHeaders() }).subscribe({
+      next: () => {
+        alert('✅ Ficha excluída com sucesso!');
+        this.carregarDados();
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir:', erro);
+        alert('❌ Erro ao excluir ficha.');
+      }
+    });
   }
 
   // Filtro simples de busca visual

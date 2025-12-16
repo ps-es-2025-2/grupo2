@@ -49,10 +49,6 @@ public class Venda {
     @ManyToOne(fetch = FetchType.LAZY)
     private Caixa caixa;
 
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<ValidacaoFicha> validacoes = new ArrayList<>();
-
     @PrePersist
     private void prePersist() {
         if (this.dataHora == null) {

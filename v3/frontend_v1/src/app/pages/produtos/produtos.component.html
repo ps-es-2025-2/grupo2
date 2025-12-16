@@ -1,17 +1,16 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
-      <h1>Gestão de Eventos e Bebidas</h1>
+      <h1>Caneco Cheio</h1>
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos" routerLinkActive="active">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
       <a routerLink="/estoque">Estoque</a>
+      <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
       <a routerLink="/caixa">Controle de Caixa</a>
-      <a routerLink="/validacao">Validar Ficha</a>
-      <a routerLink="/venda-fichas">Vender Ficha</a>
-      <a routerLink="/consultar-fichas">Relatório de Fichas</a>
+      <a routerLink="/fichas">Fichas</a>
     </nav>
     <button class="logout-btn" routerLink="/dashboard">Voltar</button>
   </header>
@@ -35,21 +34,22 @@
           </div>
         </div>
 
-        <div class="form-field">
-          <label>Estoque Inicial:</label>
-          <input type="number" [(ngModel)]="novoProduto.quantidade" name="quantidade" required />
+        <div class="form-row">
+          <div class="form-field">
+            <label>Quantidade Inicial:</label>
+            <input type="number" [(ngModel)]="novoProduto.quantidadeInicial" name="quantidadeInicial" min="0" placeholder="Ex: 50" />
+          </div>
+          <div class="form-field">
+            <label>Categoria:</label>
+            <select [(ngModel)]="novoProduto.categoria" name="categoria" required>
+              <option value="ALCOOLICA">Bebida Alcoólica</option>
+              <option value="NAO_ALCOOLICA">Bebida Não Alcoólica</option>
+              <option value="COMESTIVEL">Comestível / Lanche</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form-field">
-          <label>Categoria:</label>
-          <select [(ngModel)]="novoProduto.categoria" name="categoria" required>
-            <option value="ALCOOLICA">Bebida Alcoólica</option>
-            <option value="NAO_ALCOOLICA">Bebida Não Alcoólica</option>
-            <option value="COMESTIVEL">Comestível / Lanche</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn-primary">Cadastrar com Estoque</button>
+        <button type="submit" class="btn-primary">Cadastrar Produto</button>
       </form>
     </div>
 
@@ -62,7 +62,7 @@
               <th>Nome</th>
               <th>Categoria</th>
               <th>Preço</th>
-              <th>Estoque</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -70,13 +70,52 @@
               <td>{{ p.nome }}</td>
               <td>{{ p.categoria }}</td>
               <td>R$ {{ p.preco }}</td>
-              <td style="font-weight: bold;">{{ p.quantidade || 0 }}</td>
+              <td>
+                <button (click)="abrirEdicao(p)" class="btn-edit" title="Editar produto">
+                  Editar
+                </button>
+                <button (click)="excluirProduto(p.id)" class="btn-delete" title="Excluir produto">
+                  Excluir
+                </button>
+              </td>
             </tr>
             <tr *ngIf="listaProdutos.length === 0">
               <td colspan="4" class="no-data">Nenhum produto encontrado.</td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Edição -->
+  <div class="modal-overlay" *ngIf="produtoEditando" (click)="cancelarEdicao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Editar Produto</h3>
+        <button class="btn-close" (click)="cancelarEdicao()">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label>Nome:</label>
+          <input type="text" [(ngModel)]="produtoEdit.nome" />
+        </div>
+        <div class="form-field">
+          <label>Preço (R$):</label>
+          <input type="number" step="0.01" [(ngModel)]="produtoEdit.preco" />
+        </div>
+        <div class="form-field">
+          <label>Categoria:</label>
+          <select [(ngModel)]="produtoEdit.categoria">
+            <option value="ALCOOLICA">Bebida Alcoólica</option>
+            <option value="NAO_ALCOOLICA">Bebida Não Alcoólica</option>
+            <option value="COMESTIVEL">Comestível / Lanche</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cancelarEdicao()">Cancelar</button>
+        <button class="btn-primary" (click)="salvarEdicao()">Salvar</button>
       </div>
     </div>
   </div>

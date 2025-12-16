@@ -6,10 +6,9 @@ import { EventosComponent } from './pages/eventos/eventos.component';
 import { CaixaComponent } from './pages/caixa/caixa.component';
 import { VendaComponent } from './pages/venda/venda.component';
 import { EstoqueComponent } from './pages/estoque/estoque.component';
-import { ValidacaoComponent } from './pages/validacao/validacao.component';
+import { FichasComponent } from './pages/fichas/fichas.component';
+import { SolicitacoesComponent } from './pages/solicitacoes/solicitacoes.component';
 import { VendaFichasComponent } from './pages/venda-fichas/venda-fichas.component';
-// 1. IMPORTAR A NOVA TELA DE CONSULTA
-import { ConsultarFichasComponent } from './pages/consultar-fichas/consultar-fichas.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,12 +16,10 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'produtos', component: ProdutosComponent },
     { path: 'eventos', component: EventosComponent },
+    { path: 'solicitacoes', component: SolicitacoesComponent },
     { path: 'caixa', component: CaixaComponent },
     { path: 'venda', component: VendaComponent },
-    { path: 'estoque', component: EstoqueComponent },
-    { path: 'validacao', component: ValidacaoComponent },
     { path: 'venda-fichas', component: VendaFichasComponent },
-    
-    // 2. REGISTRAR A NOVA ROTA
-    { path: 'consultar-fichas', component: ConsultarFichasComponent } 
+    { path: 'estoque', component: EstoqueComponent },
+    { path: 'fichas', component: FichasComponent }
 ];

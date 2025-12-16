@@ -67,9 +67,11 @@ public class SolicitacaoReposicaoController {
                 atualizada = service.aprovar(id);
             } else if (novoStatus == StatusReposicao.REJEITADA) {
                 atualizada = service.rejeitar(id);
+            } else if (novoStatus == StatusReposicao.CANCELADA) {
+                atualizada = service.cancelar(id);
             } else {
                 return ResponseEntity.badRequest()
-                        .body("Status inválido. Use CONCLUIDA ou REJEITADA.");
+                        .body("Status inválido. Use CONCLUIDA, REJEITADA ou CANCELADA.");
             }
 
             return ResponseEntity.ok(new SolicitacaoReposicaoResponseDTO(atualizada));

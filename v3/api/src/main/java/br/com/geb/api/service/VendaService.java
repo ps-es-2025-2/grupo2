@@ -58,16 +58,20 @@ public class VendaService {
         calcularTotal(venda);
         gerarFicha(venda);
 
-        // Vincular o caixa aberto do operador
+        // UC04: Validar se caixa está aberto antes de registrar venda
         Caixa caixaAberto = caixaService.buscarCaixaAbertoPorOperador(operador)
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Não existe caixa aberto para o operador: " + operador.getEmail()
+            .orElseThrow(() -> new IllegalStateException(
+                "Não é possível registrar venda. O operador " + operador.getEmail() + 
+                " não possui caixa aberto. Abra um caixa antes de realizar vendas."
             ));
         venda.setCaixa(caixaAberto);
 
         Venda vendaSalva = vendaRepository.save(venda);
 
         atualizarEstoque(itens);
+        
+        // Registra a entrada no caixa
+        caixaService.registrarEntrada(caixaAberto.getId(), venda.getValorTotal());
 
         return vendaSalva;
     }
@@ -130,8 +134,27 @@ public class VendaService {
     }
 
     private void gerarFicha(Venda venda) {
-        FichaDigital ficha = fichaService.gerarFichaParaCliente(venda.getCliente());
-        venda.setFicha(ficha);
+        // Busca ficha do cliente (qualquer status)
+        FichaDigital fichaExistente = fichaService.buscarFichaDoCliente(venda.getCliente());
+        
+        if (fichaExistente != null) {
+            // Cliente já tem ficha - adiciona o valor da venda ao saldo
+            BigDecimal novoSaldo = fichaExistente.getSaldo().add(venda.getValorTotal());
+            fichaExistente.setSaldo(novoSaldo);
+            fichaExistente.setLimite(novoSaldo);
+            
+            // Se estava utilizada, reativa
+            if (fichaExistente.getStatus() == br.com.geb.api.enums.StatusFicha.UTILIZADA) {
+                fichaExistente.setStatus(br.com.geb.api.enums.StatusFicha.GERADA);
+            }
+            
+            fichaService.salvar(fichaExistente);
+            venda.setFicha(fichaExistente);
+        } else {
+            // Cliente não tem ficha - cria nova com o valor da venda
+            FichaDigital novaFicha = fichaService.gerarFichaParaCliente(venda.getCliente(), venda.getValorTotal());
+            venda.setFicha(novaFicha);
+        }
     }
 
     private void atualizarEstoque(java.util.List<ItemVenda> itens) {

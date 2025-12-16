@@ -21,14 +21,23 @@ public class FichaService {
 
     //Gera uma ficha para um cliente
     public FichaDigital gerarFichaParaCliente(Cliente cliente) {
+        return gerarFichaParaCliente(cliente, BigDecimal.ZERO);
+    }
+
+    //Gera uma ficha para um cliente com valor específico
+    public FichaDigital gerarFichaParaCliente(Cliente cliente, BigDecimal valor) {
         if (cliente == null) {
             throw new IllegalArgumentException("Cliente obrigatório para gerar ficha");
         }
 
+        if (valor == null) {
+            valor = BigDecimal.ZERO;
+        }
+
         FichaDigital ficha = FichaDigital.builder()
             .cliente(cliente)
-            .saldo(BigDecimal.ZERO)
-            .limite(BigDecimal.ZERO)
+            .saldo(valor)
+            .limite(valor)
             .status(StatusFicha.GERADA)
             .build();
 
@@ -52,5 +61,19 @@ public class FichaService {
 
     public void deletar(FichaDigital ficha) {
         fichaRepository.delete(ficha);
+    }
+
+    // Busca a última ficha do cliente (qualquer status)
+    public FichaDigital buscarFichaDoCliente(Cliente cliente) {
+        if (cliente == null) {
+            return null;
+        }
+        
+        // Retorna a ficha mais recente do cliente
+        return fichaRepository.findAll().stream()
+            .filter(f -> f.getCliente() != null && 
+                         f.getCliente().getId().equals(cliente.getId()))
+            .reduce((first, second) -> second) // Pega a última (mais recente)
+            .orElse(null);
     }
 }
