@@ -22,10 +22,13 @@ export class ProdutosComponent implements OnInit {
     quantidadeInicial: 0
   };
 
+<<<<<<< HEAD
   // Para edição
   produtoEditando: any = null;
   produtoEdit: any = { nome: '', preco: 0, categoria: '' };
 
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
   apiUrl = '/api/produtos'; 
 
   constructor(private http: HttpClient) {}
@@ -99,6 +102,7 @@ export class ProdutosComponent implements OnInit {
       }
     });
   }
+<<<<<<< HEAD
 
   abrirEdicao(produto: any) {
     this.produtoEditando = produto;
@@ -131,4 +135,6 @@ export class ProdutosComponent implements OnInit {
       }
     });
   }
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 }

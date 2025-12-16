@@ -40,6 +40,7 @@
         <p>Carregando...</p>
       </div>
 
+<<<<<<< HEAD
       <div *ngIf="fichaEncontrada" class="result-card" 
            [class.result-success]="fichaEncontrada.status === 'GERADA' && fichaEncontrada.saldo > 0" 
            [class.result-error]="fichaEncontrada.status === 'UTILIZADA' || fichaEncontrada.saldo <= 0">
@@ -48,16 +49,25 @@
           <span *ngIf="fichaEncontrada.saldo <= 0">❌ FICHA SEM SALDO</span>
           <span *ngIf="fichaEncontrada.status === 'UTILIZADA' && fichaEncontrada.saldo > 0">⚠️ FICHA PARCIALMENTE USADA</span>
         </h4>
+=======
+      <div *ngIf="fichaEncontrada" class="result-card" [class.result-success]="fichaEncontrada.status === 'GERADA'" [class.result-error]="fichaEncontrada.status !== 'GERADA'">
+        <h4>{{ fichaEncontrada.status === 'GERADA' ? '✅ FICHA VÁLIDA' : '❌ FICHA JÁ UTILIZADA' }}</h4>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         
         <div style="text-align: left; margin: 1rem 0;">
           <p><strong>Cliente:</strong> {{ fichaEncontrada.cliente.nome }}</p>
           <p *ngIf="fichaEncontrada.cliente.telefone"><strong>Telefone:</strong> {{ fichaEncontrada.cliente.telefone }}</p>
           <p *ngIf="fichaEncontrada.cliente.email"><strong>Email:</strong> {{ fichaEncontrada.cliente.email }}</p>
           <p><strong>Código:</strong> <code style="background: #f0f0f0; padding: 5px 10px; border-radius: 4px;">{{ fichaEncontrada.codigo }}</code></p>
+<<<<<<< HEAD
           <p style="font-size: 1.2em; font-weight: bold;" [style.color]="fichaEncontrada.saldo > 0 ? '#28a745' : '#dc3545'">
             <strong>💰 Saldo Disponível:</strong> R$ {{ fichaEncontrada.saldo.toFixed(2) }}
           </p>
           <p><strong>Limite Original:</strong> R$ {{ fichaEncontrada.limite.toFixed(2) }}</p>
+=======
+          <p><strong>Saldo:</strong> R$ {{ fichaEncontrada.saldo.toFixed(2) }}</p>
+          <p><strong>Limite:</strong> R$ {{ fichaEncontrada.limite.toFixed(2) }}</p>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           <p><strong>Status:</strong> 
             <span [style.color]="fichaEncontrada.status === 'GERADA' ? '#28a745' : '#dc3545'" style="font-weight: bold;">
               {{ fichaEncontrada.status }}
@@ -66,12 +76,20 @@
         </div>
         
         <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+<<<<<<< HEAD
           <button *ngIf="fichaEncontrada.saldo > 0" 
+=======
+          <button *ngIf="fichaEncontrada.status === 'GERADA'" 
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                   (click)="entregarProduto()"
                   [disabled]="carregando"
                   class="btn-validate" 
                   style="flex: 1; background: #28a745;">
+<<<<<<< HEAD
             {{ carregando ? 'Processando...' : '🍺 CONSUMIR/ENTREGAR' }}
+=======
+            {{ carregando ? 'Processando...' : '🍺 ENTREGAR PRODUTO' }}
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           </button>
           
           <button (click)="limparBusca()" 
@@ -81,6 +99,7 @@
           </button>
         </div>
         
+<<<<<<< HEAD
         <p *ngIf="fichaEncontrada.saldo <= 0" 
            style="margin-top: 1rem; font-style: italic; color: #dc3545;">
           ⚠️ Esta ficha não possui mais saldo disponível. Todo o crédito já foi consumido.
@@ -88,6 +107,11 @@
         <p *ngIf="fichaEncontrada.saldo > 0 && fichaEncontrada.saldo < fichaEncontrada.limite" 
            style="margin-top: 1rem; font-style: italic; color: #ff9800;">
           ℹ️ Esta ficha foi parcialmente utilizada. Saldo restante: R$ {{ fichaEncontrada.saldo.toFixed(2) }}
+=======
+        <p *ngIf="fichaEncontrada.status !== 'GERADA'" 
+           style="margin-top: 1rem; font-style: italic; color: #dc3545;">
+          ⚠️ Esta ficha já foi utilizada e não pode ser reutilizada.
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         </p>
       </div>
     </div>

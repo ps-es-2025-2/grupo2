@@ -1,7 +1,11 @@
 <div class="page-container">
   <header class="top-header">
     <div class="header-brand">
+<<<<<<< HEAD
       <h1>Caneco Cheio</h1>
+=======
+      <h1>Gestão de Eventos e Bebidas</h1>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
     </div>
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
@@ -25,19 +29,31 @@
         class="tab-button" 
         [class.active]="abaAtiva === 'vender'"
         (click)="mudarAba('vender')">
+<<<<<<< HEAD
         Vender Fichas
+=======
+        💰 Vender Fichas
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       </button>
       <button 
         class="tab-button" 
         [class.active]="abaAtiva === 'validar'"
         (click)="mudarAba('validar')">
+<<<<<<< HEAD
         Validar Ficha
+=======
+        ✅ Validar Ficha
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       </button>
       <button 
         class="tab-button" 
         [class.active]="abaAtiva === 'relatorio'"
         (click)="mudarAba('relatorio')">
+<<<<<<< HEAD
         Relatório
+=======
+        📋 Relatório
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       </button>
     </div>
 
@@ -88,7 +104,11 @@
               <input type="number" [(ngModel)]="quantidadeInput" name="quantidade" min="1" value="1" required />
             </div>
           </div>
+<<<<<<< HEAD
           <button type="submit" class="btn-primary">GERAR FICHAS</button>
+=======
+          <button type="submit" class="btn-primary">GERAR FICHAS 🖨️</button>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         </form>
       </div>
 
@@ -96,19 +116,32 @@
         <div class="section-header">
           <h3>Fichas Emitidas Agora</h3>
           <div class="action-buttons">
+<<<<<<< HEAD
             <button (click)="imprimir()" class="btn-action btn-print">Imprimir</button>
             <button (click)="limparTela()" class="btn-action btn-clear">Limpar Tela</button>
+=======
+            <button (click)="imprimir()" class="btn-action btn-print">📄 Imprimir</button>
+            <button (click)="limparTela()" class="btn-action btn-clear">🗑️ Limpar Tela</button>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           </div>
         </div>
 
         <div class="tickets-grid">
           <div *ngFor="let ficha of fichasGeradas" class="ticket">
             <div class="ticket-header">Ficha de Consumo</div>
+<<<<<<< HEAD
             <div class="ticket-valor">Saldo: R$ {{ ficha.saldo | number:'1.2-2' }}</div>
             <div class="ticket-code">{{ ficha.codigo }}</div>
             <div class="ticket-footer">
               Status: {{ ficha.status }}<br>
               Limite: R$ {{ ficha.limite | number:'1.2-2' }}
+=======
+            <div class="ticket-valor">R$ {{ ficha.valor | number:'1.2-2' }}</div>
+            <div class="ticket-code">{{ ficha.codigo }}</div>
+            <div class="ticket-footer">
+              {{ ficha.data | date:'dd/MM/yyyy HH:mm' }}<br>
+              *Válido apenas hoje
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
             </div>
           </div>
         </div>
@@ -128,11 +161,19 @@
             <label>Código da Ficha:</label>
             <input type="text" [(ngModel)]="codigoInput" name="codigo" placeholder="Ex: a1b2-c3d4..." required />
           </div>
+<<<<<<< HEAD
           <button type="submit" class="btn-validate">CONSULTAR</button>
         </form>
 
         <div *ngIf="mensagemErro" class="result-card result-error">
           <h4>Erro</h4>
+=======
+          <button type="submit" class="btn-validate">🔍 CONSULTAR</button>
+        </form>
+
+        <div *ngIf="mensagemErro" class="result-card result-error">
+          <h4>❌ Erro</h4>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           <p>{{ mensagemErro }}</p>
         </div>
 
@@ -141,6 +182,7 @@
         </div>
 
         <div *ngIf="fichaEncontrada" class="result-card" 
+<<<<<<< HEAD
              [class.result-success]="fichaEncontrada.status === 'GERADA' && fichaEncontrada.saldo > 0" 
              [class.result-error]="fichaEncontrada.status === 'UTILIZADA' || fichaEncontrada.saldo <= 0">
           <h4>
@@ -148,16 +190,26 @@
             <span *ngIf="fichaEncontrada.saldo <= 0">❌ FICHA SEM SALDO</span>
             <span *ngIf="fichaEncontrada.status === 'UTILIZADA' && fichaEncontrada.saldo > 0">⚠️ FICHA PARCIALMENTE USADA</span>
           </h4>
+=======
+             [class.result-success]="fichaEncontrada.status === 'GERADA'" 
+             [class.result-error]="fichaEncontrada.status !== 'GERADA'">
+          <h4>{{ fichaEncontrada.status === 'GERADA' ? '✅ FICHA VÁLIDA' : '❌ FICHA JÁ UTILIZADA' }}</h4>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           
           <div style="text-align: left; margin: 1rem 0;">
             <p><strong>Cliente:</strong> {{ fichaEncontrada.cliente?.nome || 'N/A' }}</p>
             <p *ngIf="fichaEncontrada.cliente?.telefone"><strong>Telefone:</strong> {{ fichaEncontrada.cliente.telefone }}</p>
             <p *ngIf="fichaEncontrada.cliente?.email"><strong>Email:</strong> {{ fichaEncontrada.cliente.email }}</p>
             <p><strong>Código:</strong> <code style="background: #f0f0f0; padding: 5px 10px; border-radius: 4px;">{{ fichaEncontrada.codigo }}</code></p>
+<<<<<<< HEAD
             <p style="font-size: 1.2em; font-weight: bold;" [style.color]="fichaEncontrada.saldo > 0 ? '#28a745' : '#dc3545'">
               <strong>💰 Saldo Disponível:</strong> R$ {{ fichaEncontrada.saldo?.toFixed(2) || '0.00' }}
             </p>
             <p><strong>Limite Original:</strong> R$ {{ fichaEncontrada.limite?.toFixed(2) || '0.00' }}</p>
+=======
+            <p><strong>Saldo:</strong> R$ {{ fichaEncontrada.saldo?.toFixed(2) || '0.00' }}</p>
+            <p><strong>Limite:</strong> R$ {{ fichaEncontrada.limite?.toFixed(2) || '0.00' }}</p>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
             <p><strong>Status:</strong> 
               <span [style.color]="fichaEncontrada.status === 'GERADA' ? '#28a745' : '#dc3545'" style="font-weight: bold;">
                 {{ fichaEncontrada.status }}
@@ -166,12 +218,20 @@
           </div>
           
           <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
+<<<<<<< HEAD
             <button *ngIf="fichaEncontrada.saldo > 0" 
+=======
+            <button *ngIf="fichaEncontrada.status === 'GERADA'" 
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                     (click)="entregarProduto()"
                     [disabled]="carregando"
                     class="btn-validate" 
                     style="flex: 1; background: #28a745;">
+<<<<<<< HEAD
               {{ carregando ? 'Processando...' : '🍺 CONSUMIR/ENTREGAR' }}
+=======
+              {{ carregando ? 'Processando...' : '🍺 ENTREGAR PRODUTO' }}
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
             </button>
             
             <button (click)="limparBusca()" 
@@ -181,6 +241,7 @@
             </button>
           </div>
           
+<<<<<<< HEAD
           <p *ngIf="fichaEncontrada.saldo <= 0" 
              style="margin-top: 1rem; font-style: italic; color: #dc3545;">
             ⚠️ Esta ficha não possui mais saldo disponível. Todo o crédito já foi consumido.
@@ -188,6 +249,11 @@
           <p *ngIf="fichaEncontrada.saldo > 0 && fichaEncontrada.saldo < fichaEncontrada.limite" 
              style="margin-top: 1rem; font-style: italic; color: #ff9800;">
             ℹ️ Esta ficha foi parcialmente utilizada. Saldo restante: R$ {{ fichaEncontrada.saldo?.toFixed(2) || '0.00' }}
+=======
+          <p *ngIf="fichaEncontrada.status !== 'GERADA'" 
+             style="margin-top: 1rem; font-style: italic; color: #dc3545;">
+            ⚠️ Esta ficha já foi utilizada e não pode ser reutilizada.
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           </p>
         </div>
       </div>
@@ -200,7 +266,11 @@
         <div class="filter-grid">
           <div class="form-field">
             <label>Pesquisar:</label>
+<<<<<<< HEAD
             <input type="text" [(ngModel)]="filtro" placeholder="Código ou status..." />
+=======
+            <input type="text" [(ngModel)]="filtro" placeholder="🔍 Código ou status..." />
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           </div>
           <div class="form-field" style="display: flex; align-items: flex-end;">
             <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; flex: 1; text-align: center;">
@@ -231,12 +301,20 @@
             </thead>
             <tbody>
               <tr *ngFor="let ficha of fichasFiltradas; let i = index">
+<<<<<<< HEAD
                 <td>{{ ficha.dataCriacao | date:'dd/MM/yyyy HH:mm' }}</td>
+=======
+                <td>{{ ficha.dataHora || ficha.data | date:'dd/MM/yyyy HH:mm' }}</td>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                 <td style="font-family: monospace; font-weight: bold; font-size: 1.1em; color: #007bff;">
                   {{ ficha.codigo }}
                 </td>
                 <td>{{ ficha.cliente?.nome || 'N/A' }}</td>
+<<<<<<< HEAD
                 <td>R$ {{ ficha.saldo | number:'1.2-2' }}</td>
+=======
+                <td>R$ {{ ficha.valor | number:'1.2-2' }}</td>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                 <td>
                   <span class="status-badge" 
                         [style.background]="ficha.status === 'GERADA' || ficha.status === 'ATIVA' ? '#28a745' : '#dc3545'"
@@ -270,7 +348,11 @@
                             class="btn-action" 
                             style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;"
                             title="Remover registro">
+<<<<<<< HEAD
                       Excluir
+=======
+                      🗑️ Excluir
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
                     </button>
                   </div>
                 </td>

@@ -6,6 +6,7 @@
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
+      <a routerLink="/usuarios">Gerenciar Usuários</a>
       <a routerLink="/estoque">Estoque</a>
       <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
@@ -47,7 +48,10 @@
             <option value="EXECUCAO">Execução</option>
             <option value="PAUSADO">Pausado</option>
             <option value="FINALIZADO">Finalizado</option>
+<<<<<<< HEAD
             <option value="CANCELADO">Cancelado</option>
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
           </select>
         </div>
 
@@ -76,7 +80,10 @@
               <th>Nome</th>
               <th>Local</th>
               <th>Status</th>
+<<<<<<< HEAD
               <th>Alterar Status</th>
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
               <th>Início</th>
               <th>Fim</th>
               <th>Gerenciar</th>
@@ -92,6 +99,7 @@
                   {{ e.status }}
                 </span>
               </td>
+<<<<<<< HEAD
               <td>
                 <div class="status-actions">
                   <button 
@@ -158,6 +166,16 @@
       <div class="modal-footer">
         <button class="btn-secondary" (click)="cancelarEdicao()">Cancelar</button>
         <button class="btn-primary" (click)="salvarEdicao()">Salvar</button>
+=======
+              <td>{{ e.dataInicio }}</td>
+              <td>{{ e.dataFim }}</td>
+            </tr>
+            <tr *ngIf="listaEventos.length === 0">
+              <td colspan="6" class="no-data">Nenhum evento encontrado.</td>
+            </tr>
+          </tbody>
+        </table>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       </div>
     </div>
   </div>

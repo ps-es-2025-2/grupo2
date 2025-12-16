@@ -6,6 +6,7 @@
     <nav class="top-nav">
       <a routerLink="/produtos">Gerenciar Produtos</a>
       <a routerLink="/eventos">Gerenciar Eventos</a>
+      <a routerLink="/usuarios">Gerenciar Usuários</a>
       <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
       <a routerLink="/solicitacoes">Solicitações</a>
       <a routerLink="/venda">Nova Venda (PDV)</a>
@@ -19,6 +20,7 @@
     <div class="page-header">
       <h2>Controle de Estoque</h2>
       <p style="color: #666; margin-top: 8px;">Gerencie as quantidades de produtos disponíveis</p>
+<<<<<<< HEAD
     </div>
 
     <!-- Alertas de Estoque Baixo -->
@@ -56,6 +58,8 @@
           </ul>
         </div>
       </div>
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
     </div>
 
     <div class="table-section">
@@ -115,7 +119,11 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h3>{{ modalTipo === 'entrada' ? '➕ Entrada de Estoque' : '➖ Saída de Estoque' }}</h3>
+<<<<<<< HEAD
         <button class="btn-close" (click)="fecharModal()">X</button>
+=======
+        <button class="btn-close" (click)="fecharModal()">✕</button>
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       </div>
       
       <div class="modal-body">

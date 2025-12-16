@@ -82,6 +82,7 @@
 }
 
 .page-header h2 {
+<<<<<<< HEAD
   margin: 0;
   font-size: 28px;
   color: var(--primary);
@@ -156,9 +157,15 @@
 .alert-content ul {
   list-style: none;
   padding: 0;
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
   margin: 0;
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 700;
 }
 
+<<<<<<< HEAD
 .alert-content li {
   padding: 8px 0;
   display: flex;
@@ -216,6 +223,15 @@
   box-shadow: var(--shadow);
 }
 
+=======
+.table-section {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
 .table-header {
   display: flex;
   justify-content: space-between;

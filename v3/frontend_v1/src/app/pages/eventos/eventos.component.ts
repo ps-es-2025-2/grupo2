@@ -78,8 +78,11 @@ export class EventosComponent implements OnInit {
         return 'badge-pausado';
       case 'FINALIZADO':
         return 'badge-finalizado';
+<<<<<<< HEAD
       case 'CANCELADO':
         return 'badge-cancelado';
+=======
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
       default:
         return 'badge-default';
     }
@@ -90,6 +93,10 @@ export class EventosComponent implements OnInit {
       next: (res) => {
         alert('Evento criado com sucesso!');
         this.carregarEventos();
+<<<<<<< HEAD
+=======
+        // Limpa o form
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         this.novoEvento = { nome: '', descricao: '', local: '', dataInicio: '', dataFim: '', status: 'PLANEJADO' };
       },
       error: (erro) => {

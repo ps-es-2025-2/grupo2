@@ -70,6 +70,7 @@ export class ValidacaoComponent {
   entregarProduto() {
     if(!this.fichaEncontrada) return;
 
+<<<<<<< HEAD
     // Verifica se há saldo disponível
     if (this.fichaEncontrada.saldo <= 0) {
       alert('❌ Esta ficha não possui saldo disponível!');
@@ -108,6 +109,18 @@ export class ValidacaoComponent {
         } else {
           alert(`✅ PRODUTO ENTREGUE COM SUCESSO!\n\nSaldo restante: R$ ${saldoRestante.toFixed(2)}`);
         }
+=======
+    if (!confirm(`Confirma a entrega para ${this.fichaEncontrada.cliente.nome}?`)) {
+      return;
+    }
+
+    const urlConsumir = `${this.apiUrl}/${this.fichaEncontrada.codigo}/consumir`;
+    this.carregando = true;
+
+    this.http.post<FichaDigital>(urlConsumir, {}, { headers: this.getHeaders() }).subscribe({
+      next: (fichaAtualizada) => {
+        alert('✅ PRODUTO ENTREGUE COM SUCESSO!');
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         this.fichaEncontrada = fichaAtualizada;
         this.carregando = false;
       },
@@ -115,6 +128,7 @@ export class ValidacaoComponent {
         console.error('Erro ao consumir ficha:', erro);
         this.carregando = false;
         
+<<<<<<< HEAD
         const mensagemErro = erro.error || erro.message || 'Erro desconhecido';
         
         if (erro.status === 409) {
@@ -123,6 +137,12 @@ export class ValidacaoComponent {
           alert('❌ Ficha não encontrada!');
         } else if (erro.status === 400) {
           alert(`❌ ${mensagemErro}`);
+=======
+        if (erro.status === 409) {
+          alert('❌ Esta ficha já foi utilizada anteriormente!');
+        } else if (erro.status === 404) {
+          alert('❌ Ficha não encontrada!');
+>>>>>>> 7a918497ebee151fabee2fa8e53dade07b3544a5
         } else {
           alert('❌ Erro ao processar a entrega. Tente novamente.');
         }
