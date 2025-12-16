@@ -1,0 +1,46 @@
+@startuml Caneco_Cheio_Estados_EstoqueProduto
+title Diagrama de Estados - Entidade EstoqueProduto (Vertical simplificado)
+
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam ArrowThickness 1.3
+skinparam ArrowColor #444
+skinparam state {
+    BackgroundColor White
+    BorderColor #222
+    Padding 18
+    RoundCorner 10
+}
+
+top to bottom direction
+
+[*] --> NORMAL : configurarEstoque(qtdInicial, qtdMin)\n[Produto em estoque]
+
+NORMAL : entry / carregarEstoqueInicial()
+NORMAL : do / registrarVendas(), consultarQuantidade()
+NORMAL : exit / avaliarNivelEstoque()
+
+NORMAL --> CRITICO : estoqueAtingeMínimo()\n[qtdAtual ≤ qtdMínima]
+
+CRITICO : entry / gerarAlerta()
+CRITICO : do / exibirAlerta(), permitirSolicitacao()
+CRITICO : exit / encaminharSolicitacao()
+
+CRITICO --> SOLICITAR : operadorSolicita()\n[Cria SolicitacaoReposicao]
+
+SOLICITAR : entry / criarSolicitacaoReposicao()
+SOLICITAR : do / aguardandoAdmin()
+SOLICITAR : exit / validarSolicitacao()
+
+SOLICITAR --> NORMAL : solicitacaoAprovada()\n[Estoque aumentado]
+SOLICITAR --> CRITICO : solicitacaoNegada()\n[Sem alteração]
+
+CRITICO --> ESGOTADO : quantidadeChegaZero()\n[Sem disponibilidade]
+
+ESGOTADO : entry / marcarSemDisponibilidade()
+ESGOTADO : do / bloquearVendas(), exibirMensagem()
+ESGOTADO : exit / liberarReposicao()
+
+ESGOTADO --> NORMAL : reposicaoRealizada()\n[Estoque restaurado]
+
+@enduml
