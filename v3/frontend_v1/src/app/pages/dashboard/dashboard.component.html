@@ -6,12 +6,12 @@
     <nav class="top-nav">
       <a routerLink="/produtos" routerLinkActive="active">Gerenciar Produtos</a>
       <a routerLink="/eventos" routerLinkActive="active">Gerenciar Eventos</a>
+      <a routerLink="/usuarios" routerLinkActive="active">Gerenciar Usuários</a>
       <a routerLink="/estoque" routerLinkActive="active">Estoque</a>
+      <a routerLink="/solicitacoes" routerLinkActive="active">Solicitações</a>
       <a routerLink="/venda" routerLinkActive="active">Nova Venda (PDV)</a>
       <a routerLink="/caixa" routerLinkActive="active">Controle de Caixa</a>
-      <a routerLink="/validacao" routerLinkActive="active">Validar Ficha</a>
-      <a routerLink="/venda-fichas" routerLinkActive="active">Vender Ficha</a>
-      <a routerLink="/consultar-fichas" routerLinkActive="active">Relatório de Fichas</a>
+      <a routerLink="/fichas" routerLinkActive="active">Fichas</a>
     </nav>
     <button class="logout-btn" (click)="logout()">Sair</button>
   </header>
@@ -22,13 +22,13 @@
       <p>Selecione uma opção no menu acima para começar.</p>
       
       <div class="quick-cards">
-        <div class="card" routerLink="/venda-fichas">
-          <h3>💰 Vender Ficha</h3>
-          <p>Créditos em Valor</p>
+        <div class="card" routerLink="/fichas">
+          <h3>🎫 Gestão de Fichas</h3>
+          <p>Vender, validar e consultar fichas</p>
         </div>
-        <div class="card" routerLink="/consultar-fichas">
-          <h3>📋 Relatório de Fichas</h3>
-          <p>Ver todas emitidas</p>
+        <div class="card" routerLink="/venda">
+          <h3>🛒 PDV - Nova Venda</h3>
+          <p>Registrar vendas de produtos</p>
         </div>
       </div>
     </div>

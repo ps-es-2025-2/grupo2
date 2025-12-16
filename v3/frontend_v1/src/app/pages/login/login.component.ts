@@ -23,7 +23,7 @@ export class LoginComponent {
 
   login() {
     const payload = { email: this.username, senha: this.password };
-    const urlBackend = 'http://localhost:8080/api/auth/login';
+    const urlBackend = '/api/auth/login';
 
     this.loading = true;
     this.loginResponse = '';
@@ -32,11 +32,12 @@ export class LoginComponent {
       next: (res) => {
         this.loading = false;
         localStorage.setItem('token', res.token);
+        localStorage.setItem('userEmail', this.username); // Salva o email do usuário
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.loading = false;
-        this.loginResponse = 'Erro ao logar: ' + (err.error?.message || 'Falha');
+        this.loginResponse = 'Erro ao logar: ' + (err.error?.message || err.error || 'Falha ao conectar');
       }
     });
   }

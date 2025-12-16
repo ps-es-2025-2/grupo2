@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-caixa',
@@ -22,8 +23,15 @@ export class CaixaComponent implements OnInit {
   // Controle visual para mostrar a tabela
   mostrarDetalhes: boolean = false;
 
+  constructor(private http: HttpClient) {}
+
   ngOnInit() {
     this.carregarDados();
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', 'Bearer ' + token).set('Content-Type', 'application/json');
   }
 
   carregarDados() {
@@ -56,19 +64,85 @@ export class CaixaComponent implements OnInit {
 
     const valorStr = prompt('Informe o Fundo de Troco (R$):', '0.00');
     if (valorStr === null) return;
-    
+
     const valor = parseFloat(valorStr.replace(',', '.'));
     if (isNaN(valor)) {
       alert('Valor inválido!');
       return;
     }
 
-    this.status = 'ABERTO';
-    this.saldo = valor;
-    
-    this.registrarMovimento('ABERTURA', valor, 'Abertura de Caixa');
-    this.salvarDados();
-    alert('Caixa Aberto! Pode iniciar as vendas.');
+    // Tenta abrir o caixa no backend e salva o caixaId retornado
+    this.openCaixaBackend(valor).then((novoId) => {
+      // sucesso
+      this.status = 'ABERTO';
+      this.saldo = valor;
+      this.registrarMovimento('ABERTURA', valor, 'Abertura de Caixa');
+      this.salvarDados();
+      alert('Caixa Aberto! ID: ' + novoId + '. Pode iniciar as vendas.');
+    }).catch((err) => {
+      console.error('Falha ao abrir caixa no backend:', err);
+      alert('Falha ao abrir caixa no servidor. Caixa local não foi alterado. Verifique o servidor.');
+    });
+  }
+
+  private async openCaixaBackend(fundoInicial: number): Promise<number> {
+    const operadorEmail = localStorage.getItem('userEmail') || 'admin@local';
+    const operadorId = localStorage.getItem('operadorId');
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Usuário não autenticado. Faça login antes de abrir o caixa.');
+    }
+
+    const endpoint = '/api/caixa/abrir';
+    const payload = { saldoInicial: fundoInicial, operadorEmail };
+
+    try {
+      console.debug('Abrir caixa - endpoint', endpoint, 'payload', payload);
+      const res: any = await this.http.post(endpoint, payload, { headers: this.getHeaders() }).toPromise();
+      console.debug('Abrir caixa - resposta', res);
+      const id = res?.id || res?.caixaId || res?.data?.id || null;
+      if (id) {
+        localStorage.setItem('caixaId', String(id));
+        return id;
+      }
+      // Se não retornou id explícito, tenta extrair um número da resposta
+      if (res && typeof res === 'object') {
+        const possible = Object.values(res).find(v => typeof v === 'number');
+        if (possible) {
+          localStorage.setItem('caixaId', String(possible));
+          return Number(possible);
+        }
+      }
+      // Se chegou aqui, o backend respondeu sem id — lançar para UI tentar abrir localmente
+      throw new Error('Resposta inesperada do servidor ao abrir caixa');
+    } catch (err: any) {
+      // Mostra a mensagem do servidor quando disponível
+      const serverMsg = err?.error ?? err?.message ?? err;
+      console.debug('Abrir caixa - erro', serverMsg, 'status', err?.status);
+
+      // Se o servidor informou que já existe caixa aberto, propagar mensagem específica
+      if (typeof serverMsg === 'string' && serverMsg.toLowerCase().includes('já existe') ) {
+        throw new Error(serverMsg);
+      }
+
+      // Se foi um Bad Request/Validation, repassar o corpo do erro
+      if (err?.error) {
+        throw new Error(typeof err.error === 'string' ? err.error : JSON.stringify(err.error));
+      }
+
+      throw new Error('Falha ao abrir caixa no servidor: ' + (err?.status ?? 'erro desconhecido'));
+    }
+    // Se todos os endpoints falharem, pergunta ao usuário se deseja abrir caixa localmente
+    const abrirLocal = confirm('Não foi possível abrir o caixa no servidor (erros 400/500). Deseja abrir o caixa localmente para permitir vendas offline?');
+    if (abrirLocal) {
+      const tempId = -Date.now();
+      localStorage.setItem('caixaId', String(tempId));
+      console.warn('Caixa aberto localmente com id temporário', tempId);
+      return tempId;
+    }
+
+    throw new Error('Nenhum endpoint de abertura de caixa respondeu com sucesso');
   }
 
   realizarSangria() {
